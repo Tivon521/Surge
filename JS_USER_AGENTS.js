@@ -19,7 +19,7 @@ function randPhoneId() {
       Math.random().toString(36).slice(2, 10);
 }
 
-const USER_AGENT = `jdltapp;iPhone;3.6.8;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randPhoneId()};network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 14_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`;
+const USER_AGENT = `jdltapp;iPhone;3.7.8;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randPhoneId()};network/wifi;Mozilla/5.0 (iPhone; CPU iPhone OS 14_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`;
 
 module.exports = {
   USER_AGENT
