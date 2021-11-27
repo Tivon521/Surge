@@ -181,3 +181,5 @@
 1 10 1,20 * * node /scripts/jd_halfYearRed.js >> /scripts/logs/jd_halfYearRed.log 2>&1
 # 集勋章、赢好礼
 14 7,21 * * * node /scripts/jd_fruit_medal.js >> /scripts/logs/jd_fruit_medal.log 2>&1
+# 京豆兑换喜豆
+1 23 * * * node /scripts/jd_jd2xd.js >> /scripts/logs/jd_jd2xd.log 2>&1
