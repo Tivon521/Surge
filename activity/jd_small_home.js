@@ -1,6 +1,9 @@
 /*
 东东小窝 jd_small_home.js
 Last Modified time: 2021-6-27 13:27:20
+
+https://prodev.m.jd.com/mall/active/26veB8NqhBRusx75SqVvhRJaf3vG/index.html
+
 现有功能：
 做日常任务任务，每日抽奖（有机会活动京豆，使用的是免费机会，不消耗WO币）
 自动使用WO币购买装饰品可以获得京豆，分别可获得5,20，50,100,200,400,700，1200京豆）
