@@ -356,7 +356,7 @@ async function rewardMain() {
       if ($.myRewardList[i].status === 3) {
         $.rewardRecordId = $.myRewardList[i].id;
         console.log(`${$.time('yyyy-MM-dd HH:mm:ss.S', $.myRewardList[i]['createdDate'])} ${$.myRewardList[i].beanQuantity}京豆未领取，开始领取！`);
-        const rewardBeanRes = rewardBean();
+        const rewardBeanRes = await rewardBean();
         if (rewardBeanRes.success) {
           if ($.myRewardList[i].beanQuantity) $.beans += parseInt($.myRewardList[i].beanQuantity);
         }
