@@ -183,3 +183,5 @@
 14 7,21 * * * node /scripts/jd_fruit_medal.js >> /scripts/logs/jd_fruit_medal.log 2>&1
 # 京豆兑换喜豆
 1 23 * * * node /scripts/jd_jd2xd.js >> /scripts/logs/jd_jd2xd.log 2>&1
+# 京东购物车商品转链
+0 6,18 * * * node /scripts/jd_jingfen.js >> /scripts/logs/jd_jingfen.log 2>&1
