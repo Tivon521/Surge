@@ -68,6 +68,9 @@ async function main() {
         if (jd2xdRes && jd2xdRes.errId === 0) {
           console.log(`成功兑换 ${todayExp}个喜豆`);
           message += `京东账号 ${$.index} ${$.UserName}\n今日要过期的${todayExp}个京豆兑换成喜豆成功\n\n`;
+        } else if (jd2xdRes && jd2xdRes.errId === 8746) {
+          console.log(`成功兑换 ${todayExp}个喜豆`);
+          message += `京东账号 ${$.index} ${$.UserName}\n今日要过期的${todayExp}个京豆兑换成喜豆成功\n\n`;
         } else {
           console.log('京豆兑换喜豆失败：', $.toStr(jd2xdRes));
         }
