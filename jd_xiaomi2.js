@@ -236,6 +236,8 @@ function task(function_id, body, isCommon = 0) {
                 case 'dingzhi/xiaomi/sign/shareRecord':
                   console.log(`助力好友结果：${$.toStr(data)}\n`);
                   if (data && data.data && data.data['assistStatus'] === 1) console.log(`助力成功！`)
+                  if (data && data.data && data.data['assistStatus'] === 2) console.log(`助力失败，已助力过该好友！`)
+                  if (data && data.data && data.data['assistStatus'] === 3) console.log(`助力失败，已助力其他好友了！`)
                   break
                 case 'crm/pageVisit/insertCrmPageVisit':
                   console.log('insertCrmPageVisit', data);
