@@ -179,7 +179,7 @@ function task(function_id, body, isCommon = 0) {
                   break;
                 case 'dingzhi/xiaomi/sign/activityContent':
                   if (data.result) {
-                    const { allSignDay = [], activeTask = {}, actorUuid = '' } = data['data'];
+                    const { allSignDay = [], activeTask = {}, actorUuid = '', isFollowShop, opencard } = data['data'];
                     console.log(`好友邀请码：${actorUuid}\n`);
                     if (actorUuid && !firstActorUuid) firstActorUuid = actorUuid;
                     $.actorUuid = actorUuid;
@@ -187,6 +187,23 @@ function task(function_id, body, isCommon = 0) {
                       console.log(`已签到日期：${item}`)
                     }
                     $.activeTask = activeTask;
+                    if (!isFollowShop) {
+                      console.log(`未关注店铺，开始关注店铺`)
+                      await task('dingzhi/xiaomi/sign/followShop', `activityId=${$.activityId}&actorUuid=${$.actorUuid}&pin=${encodeURIComponent($.secretPin)}`, 1)
+                    }
+                    if (!opencard) {
+                      console.log(`未加入店铺会员，开始加入店铺会员`)
+                      const res = await openCard($.venderId, $.shopId);
+                      if (res && res.code === 0) {
+                        if (res.busiCode === "0") {
+                          console.log(`【账号${$.index}:${$.nickName || $.UserName}】加入店铺会员成功！`);
+                        } else {
+                          console.log(`加入店铺会员失败：${res['message']}，busiCode：${res.busiCode}`);
+                        }
+                      } else {
+                        console.log(`加入店铺会员异常：${$.toStr(res)}\n`);
+                      }
+                    }
                   } else {
                     console.log(`获取活动详情失败：${$.toStr(data)}\n`);
                   }
