@@ -41,7 +41,7 @@
 # 奔跑的小美
 31 3,4 1-30 11 * node /scripts/jd_meidi.js >> /scripts/logs/jd_meidi.log 2>&1
 # 小米双十二瓜分百万京豆(12.2-12.9)
-1 1,19 * * * 31 3,4 1-30 11 * node /scripts/jd_xiaomi2.js >> /scripts/logs/jd_xiaomi2.log 2>&1
+1 1,19,21 * * * 31 3,4 1-30 11 * node /scripts/jd_xiaomi2.js >> /scripts/logs/jd_xiaomi2.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1

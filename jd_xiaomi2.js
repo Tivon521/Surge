@@ -4,7 +4,7 @@
 会加购物车
 活动地址：
 https://lzdz1-isv.isvjcloud.com/dingzhi/xiaomi/sign/activity/5362652?activityId=dz2111100000412301&shareUuid=&adsource=null&shareuserid4minipg=tAKO3dzQ70qygS64JzCCaauhWjX4no4HCmbJz2FBEt+c5yVo3wKCr/48TYT+0/J8&shopid=1000004123&sid=&un_area=
-1 1,19 * * * jd_xiaomi2.js
+1 1,19,21 * * * jd_xiaomi2.js
 */
 const $ = new Env('小米双十二瓜分百万京豆');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
