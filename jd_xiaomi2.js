@@ -13,6 +13,7 @@ let cookiesArr = [], cookie = '', message = '';
 let lz_cookie = {}, originCookie = '', activityCookie = '';
 let activityUrl = 'https://lzdz1-isv.isvjcloud.com';
 let activityId = 'dz2111100000412301'
+let firstActorUuid = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -132,8 +133,8 @@ async function shopDraw() {
           console.log(`账号 ${$.index} ${$.UserName} 开始助力 作者\n`);
           await task('dingzhi/xiaomi/sign/shareRecord', `activityId=${$.activityId}&actorUuid=${$.actorUuid}&pin=${pin}&shareUuid=7c1c6c2e11804d38aa225cf7a524ccdb`, 1);
         } else {
-          console.log(`账号 ${$.index} ${$.UserName} 开始助力 账号 1邀请码： ${$.actorUuid}\n`);
-          await task('dingzhi/xiaomi/sign/shareRecord', `activityId=${$.activityId}&actorUuid=${$.actorUuid}&pin=${pin}&shareUuid=${$.actorUuid}`, 1);
+          console.log(`账号 ${$.index} ${$.UserName} 开始助力 账号 1邀请码： ${firstActorUuid}\n`);
+          await task('dingzhi/xiaomi/sign/shareRecord', `activityId=${$.activityId}&actorUuid=${$.actorUuid}&pin=${pin}&shareUuid=${firstActorUuid}`, 1);
         }
       } else {
         $.log("没有成功获取到用户信息")
@@ -180,7 +181,8 @@ function task(function_id, body, isCommon = 0) {
                   if (data.result) {
                     const { allSignDay = [], activeTask = {}, actorUuid = '' } = data['data'];
                     console.log(`好友邀请码：${actorUuid}\n`);
-                    if (actorUuid && !$.actorUuid) $.actorUuid = actorUuid;
+                    if (actorUuid && !firstActorUuid) firstActorUuid = actorUuid;
+                    $.actorUuid = actorUuid;
                     for (let item of allSignDay) {
                       console.log(`已签到日期：${item}`)
                     }

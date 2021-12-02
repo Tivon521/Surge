@@ -8,6 +8,16 @@ let cookiesArr = [];
 Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
 })
+function getRandomArrayElements(arr = [], count = 0) {
+  let shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
+  while (i-- > min) {
+    index = Math.floor((i + 1) * Math.random());
+    temp = shuffled[index];
+    shuffled[index] = shuffled[i];
+    shuffled[i] = temp;
+  }
+  return shuffled.slice(min);
+}
 let activityID = '',cookie = '',userName = '';
 let token = '',LZ_TOKEN_KEY = '',LZ_TOKEN_VALUE = '',Referer = '',nickname = '';
 let Host = '', venderId = ``,shopId = ``,pin =  ``,lz_jdpin_token = ``;
