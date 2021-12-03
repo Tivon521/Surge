@@ -42,7 +42,7 @@ let message = '';
             continue
         }
         await main();
-        await $.wait(1000);
+        await $.wait(3000);
     }
     if(message){
         await notify.sendNotify(`种植园`, message);
@@ -89,7 +89,7 @@ async function main() {
         let collectInfo = await takePost('collect_water',`{"position":${Number(key)}}`);
         //if(JSON.stringify(collectInfo) === '{}'){}
         console.log(`收取结果：\n${JSON.stringify(collectInfo)}`)
-        await $.wait(1000);
+        await $.wait(3000);
       }
       if(onePlant.data.status === 0){
         plantList.push(onePlant.data);
@@ -98,9 +98,9 @@ async function main() {
     if(plantList.length === 0){
       // message +=`账号 ${$.index} ${userName}\n还未种植，请先进京东APP手动种植（美妆馆->美丽研究院->种植园）\n\n`;
     }
-    await $.wait(1000);
+    await $.wait(3000);
     await doTask();
-    await $.wait(1000);
+    await $.wait(3000);
     //let plantInfo = await takeGet('get_samples');
     //console.log(JSON.stringify(plantInfo));
     let waterTime = Math.floor($.allWater/10);
@@ -110,7 +110,7 @@ async function main() {
       console.log(`进行一次浇水，${onePlant.name}`);
       let wateringInfo = await takePost('watering',`{"plant_id":${onePlant.id}}`);
       console.log(`浇水成功，当前等级:${wateringInfo.level},目标等级：${wateringInfo.complete_level}，当前等级已浇水：${wateringInfo.progress}，当前等级还需要浇水：${wateringInfo.need_water}`)
-      await $.wait(1000);
+      await $.wait(3000);
     }
     for (let i = 0; i < plantList.length; i++) {
       let onePlant = plantList[i];
@@ -121,7 +121,7 @@ async function main() {
         console.log(`收取化肥`);
         let collectertilizerInfo = await takePost('collect_fertilizer',`{"shop_id":${onePlant.shop_id}}`);
         console.log(`收取结果：\n${JSON.stringify(collectertilizerInfo)}`);
-        await $.wait(1000);
+        await $.wait(3000);
       }
 
       let fertilizerTime = Math.floor($.allFertilizer/10);
@@ -130,7 +130,7 @@ async function main() {
         console.log(`进行一次施肥，${onePlant.name}`);
         let treeInfo = await takePost('fertilization',`{"plant_id":${Number(onePlant.id)}}`);
         console.log(`施肥成功，当前等级:${treeInfo.level},目标等级：${treeInfo.complete_level}，当前等级已浇水：${treeInfo.progress}，当前等级还需要浇水：${treeInfo.need_water}`)
-        await $.wait(1000);
+        await $.wait(3000);
       }
       await $.wait(3000);
     }
@@ -141,7 +141,7 @@ async function main() {
 async function doShopTask(shop_id){
     let taskStatus = await takeGet(`fertilizer_state?shop_id=${shop_id}`);
     let taskInfo = await takeGet(`fertilizer_task_info?shop_id=${shop_id}`);
-    await $.wait(1000);
+    await $.wait(3000);
     let oneInfo = {};
     let doInfo = {};
     let taskList = [];
@@ -149,7 +149,7 @@ async function doShopTask(shop_id){
     if(taskStatus.view_shop === 0){
         console.log(`任务：关注浏览店铺，${taskInfo.shop.name}`);
         doInfo = await takeGet(`fertilizer_shop_view?shop_id=${shop_id}`);
-        await $.wait(1000);
+        await $.wait(3000);
         console.log(`执行成功，获得肥料：${doInfo.inc || 'null'}g，现共有肥料${doInfo.store_fertilizer || 'null'}g`);
         $.allFertilizer = doInfo.store_fertilizer || '0';
     }
@@ -157,7 +157,7 @@ async function doShopTask(shop_id){
         for (let i = taskStatus.exchange; i < 5; i++) {
             console.log(`任务：美妆币兑换`);
             doInfo = await takeGet(`fertilizer_exchange?shop_id=${shop_id}`);
-            await $.wait(1000);
+            await $.wait(3000);
             console.log(`执行成功，获得肥料：${doInfo.inc || 'null'}g，现共有肥料${doInfo.store_fertilizer || 'null'}g`);
             $.allFertilizer = doInfo.store_fertilizer || '0';
         }
@@ -169,7 +169,7 @@ async function doShopTask(shop_id){
         if(isFinishList.indexOf(oneInfo.id.toString()) === -1){
             console.log(`任务：浏览货品，${oneInfo.name}`);
             doInfo = await takeGet(`fertilizer_product_view?product_id=${oneInfo.id}&shop_id=${shop_id}`);
-            await $.wait(1000);
+            await $.wait(3000);
             console.log(`执行成功，获得肥料：${doInfo.inc || 'null'}g，现共有肥料${doInfo.store_fertilizer || 'null'}g`);
             $.allFertilizer = doInfo.store_fertilizer || '0';
         }
@@ -181,7 +181,7 @@ async function doShopTask(shop_id){
         if(isFinishList.indexOf(oneInfo.id.toString()) === -1){
             console.log(`任务：浏览会场，${oneInfo.name}`);
             doInfo = await takeGet(`fertilizer_meetingplace_view?meetingplace_id=${oneInfo.id}&shop_id=${shop_id}`);
-            await $.wait(1000);
+            await $.wait(3000);
             console.log(`执行成功，浏览会场：${doInfo.inc || 'null'}g，现共有肥料${doInfo.store_fertilizer || 'null'}g`);
             $.allFertilizer = doInfo.store_fertilizer || '0';
         }
@@ -189,14 +189,14 @@ async function doShopTask(shop_id){
     if(taskStatus.chanel_view === 0){
         console.log(`任务：关注浏览美妆馆`);
         doInfo = await takeGet(`fertilizer_chanel_view?shop_id=${shop_id}`);
-        await $.wait(1000);
+        await $.wait(3000);
         console.log(`执行成功，获得肥料：${doInfo.inc || 'null'}g，现共有肥料${doInfo.store_fertilizer || 'null'}g`);
         $.allFertilizer = doInfo.store_fertilizer || '0';
     }
     if(taskStatus.sample_view === 0){
         console.log(`任务：看看其他小样`);
         doInfo = await takeGet(`fertilizer_sample_view?shop_id=${shop_id}`);
-        await $.wait(1000);
+        await $.wait(3000);
         console.log(`执行成功，获得肥料：${doInfo.inc || 'null'}g，现共有肥料${doInfo.store_fertilizer || 'null'}g`);
         $.allFertilizer = doInfo.store_fertilizer || '0';
     }
@@ -204,7 +204,7 @@ async function doShopTask(shop_id){
 async function doTask(){
     let taskStatus = await takeGet('water_task_state');
     let taskInfo = await takeGet('water_task_info');
-    await $.wait(1000);
+    await $.wait(3000);
     let oneInfo = {};
     let doInfo = {};
     let taskList = [];
@@ -216,7 +216,7 @@ async function doTask(){
         if(isFinishList.indexOf(oneInfo.id.toString()) === -1){
             console.log(`任务：浏览店铺，${oneInfo.name}`);
             doInfo = await takeGet(`water_shop_view?shop_id=${oneInfo.id}`);
-            await $.wait(1000);
+            await $.wait(3000);
             console.log(`执行成功，获得水滴：${doInfo.inc || 'null'}滴，现共有水滴${doInfo.store_water || 'null'}滴`);
             $.allWater = doInfo.store_water || '0';
         }
@@ -229,7 +229,7 @@ async function doTask(){
         if(isFinishList.indexOf(oneInfo.id.toString()) === -1){
             console.log(`任务：浏览会场，${oneInfo.name}`);
             doInfo = await takeGet(`water_meetingplace_view?meetingplace_id=${oneInfo.id}`);
-            await $.wait(1000);
+            await $.wait(3000);
             console.log(`执行成功，获得水滴：${doInfo.inc || 'null'}滴，现共有水滴${doInfo.store_water || 'null'}滴`);
             $.allWater = doInfo.store_water || '0';
         }
@@ -241,7 +241,7 @@ async function doTask(){
         if(isFinishList.indexOf(oneInfo.id.toString()) === -1){
             console.log(`任务：浏览货品，${oneInfo.name}`);
             doInfo = await takeGet(`water_product_view?product_id=${oneInfo.id}`);
-            await $.wait(1000);
+            await $.wait(3000);
             console.log(`执行成功，获得水滴：${doInfo.inc || 'null'}滴，现共有水滴${doInfo.store_water || 'null'}滴`);
             $.allWater = doInfo.store_water || '0';
         }
