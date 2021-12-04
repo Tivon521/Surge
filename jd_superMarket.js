@@ -17,6 +17,7 @@ cron "11 * * * *" script-path=jd_superMarket.js,tag=东东超市
 ==============小火箭=============
 东东超市 = type=cron,script-path=jd_superMarket.js, cronexpr="11 * * * *", timeout=3600, enable=true
  */
+process.env.SUPERMARKET_LOTTERY = 'true'
 const $ = new Env('东东超市');
 //Node.js用户请在jdCookie.js处填写京东ck;
 //IOS等用户直接用NobyDa的jd cookie
@@ -125,7 +126,9 @@ async function drawLottery() {
       if (result.blueCoins > result.costCoins && result.remainedDrawTimes > 0) {
         const drawLotteryRes = await smtg_drawLottery();
         console.log(`\n花费${result.costCoins}蓝币抽奖结果${JSON.stringify(drawLotteryRes)}`);
-        await drawLottery();
+        if (drawLotteryRes && drawLotteryRes.data.bizCode === 0) {
+          await drawLottery();
+        }
       } else {
         console.log(`\n抽奖失败:已抽奖或者蓝币不足`);
         console.log(`失败详情：\n现有蓝币:${result.blueCoins},抽奖次数:${result.remainedDrawTimes}`)
