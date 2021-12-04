@@ -74,7 +74,7 @@ $.post = validator.injectToRequest($.post.bind($), 'channelSign')
       subTitle = '';
       $.lkt = Date.now().toString();
       await signRun()
-      await $.wait(5000)
+      await $.wait(1000)
       const UTC8 = new Date().getTime() + new Date().getTimezoneOffset() * 60000 + 28800000;
       $.beanSignTime = new Date(UTC8).toLocaleString('zh', {hour12: false});
       let msg = '';
@@ -111,7 +111,7 @@ async function signRun() {
       break
     }
     await Login(i)
-    await $.wait(5000)
+    await $.wait(2000)
     if (signFlag) {
       successNum++;
     } else {
@@ -170,6 +170,7 @@ function Sign(i) {
                 }
                 console.log(`${turnTableId[i].name} 签到失败： ${data.errorMessage}\n`)
                 if (data.errorMessage && data.errorMessage.includes('火爆')) $.hotAccount = true;
+                if (data.errorMessage && data.errorMessage.includes('系统繁忙')) $.hotAccount = true;
               } else {
                 console.log(`${turnTableId[i].name} 签到异常： ${JSON.stringify(data)}\n`)
               }
