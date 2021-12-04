@@ -68,7 +68,6 @@ let nowTimes = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 
         }
         continue
       }
-      await shareCodesFormat()
       await jdWish()
     }
   }
@@ -101,13 +100,10 @@ async function jdWish() {
     let task = $.taskList[i]
     if (task['taskId'] === 1 && task['status'] !== 2) {
       console.log(`去做任务：${task.taskName}`)
-      await doTask({"taskId": task['taskId'],"mpVersion":"3.4.0"})
+      await doTask({"itemId":task['itemId'],"taskId":task['taskId'], "actionType":0, "taskToken":task.taskToken, "mpVersion":"3.4.0"})
     } else if (task['taskId'] !== 3 && task['status'] !== 2) {
-      console.log(`去做任务：${task.taskName}`)
-      if(task['itemId'])
-        await doTask({"itemId":task['itemId'],"taskId":task['taskId'],"mpVersion":"3.4.0"})
-      else
-        await doTask({"taskId": task['taskId'],"mpVersion":"3.4.0"})
+      //console.log(`去做任务：${task.taskName} ${JSON.stringify(task)}`)
+      await doTask({"taskId":task['taskId'], "actionType":0, "taskToken":task.taskToken, "mpVersion":"3.4.0"})
       await $.wait(3000)
     }
   }
@@ -187,7 +183,6 @@ function getTaskList(flag = false) {
 
 // 完成
 function doTask(body, func = "doInteractTask") {
-  // console.log(taskUrl("doInteractTask", body))
   return new Promise(resolve => {
     $.get(taskUrl(func, body), async (err, resp, data) => {
       try {
@@ -197,7 +192,6 @@ function doTask(body, func = "doInteractTask") {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            // console.log(data)
             if (func === "doInteractTask") {
               if (data.subCode === "S000") {
                 console.log(`任务完成，获得 ${data.data.taskDetailResList[0].incomeAmountConf} 金币，${data.data.taskDetailResList[0].beanNum} 京豆`)
@@ -300,14 +294,14 @@ function requireConfig() {
 
 function taskUrl(functionId, body = {}) {
   return {
-    url: `${JD_API_HOST}?functionId=${functionId}&body=${escape(JSON.stringify(body))}&client=wh5&clientVersion=9.1.0`,
+    url: `${JD_API_HOST}?functionId=${functionId}&body=${escape(JSON.stringify(body))}&client=wh5&appid=wh5&loginType=2`,
     headers: {
       'Cookie': cookie,
       'Host': 'api.m.jd.com',
       'Connection': 'keep-alive',
       'Content-Type': 'application/json',
-      'Referer': 'http://wq.jd.com/wxapp/pages/hd-interaction/index/index',
-      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      'wqreferer': 'http://wq.jd.com/wxapp/pages/hd-interaction/index/index',
+      'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.16(0x18001033) NetType/WIFI Language/zh_CN',
       'Accept-Language': 'zh-cn',
       'Accept-Encoding': 'gzip, deflate, br',
     }
