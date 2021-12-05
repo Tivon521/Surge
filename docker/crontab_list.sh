@@ -37,7 +37,7 @@
 # 清风云养树
 15 4,15 * * * node /scripts/jd_tree.js >> /scripts/logs/jd_tree.log 2>&1
 # 奔跑的小美
-31 3,4 1-30 11 * node /scripts/jd_meidi.js >> /scripts/logs/jd_meidi.log 2>&1
+31 3,4 1-13 12 * node /scripts/jd_meidi.js >> /scripts/logs/jd_meidi.log 2>&1
 # 小米双十二瓜分百万京豆(12.2-12.9)
 1 1,19,21 * * * node /scripts/jd_xiaomi2.js >> /scripts/logs/jd_xiaomi2.log 2>&1
 ##############长期活动##############

@@ -2,7 +2,7 @@
 * 每日跑2次
 * 默认不加购物车
 * 环境变量PURCHASE_SHOPS为true则完成加购物车的任务
-31 3,4 1-30 11 * jd_meidi.js
+31 3,4 1-13 12 * jd_meidi.js
 * */
 const $ = new Env('奔跑的小美');
 const notify = $.isNode() ? require('./sendNotify') : '';
