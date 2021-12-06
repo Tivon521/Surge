@@ -1,8 +1,7 @@
 /*
 金榜年终奖
-脚本会给内置的码进行助力
 活动时间：2021-12-06到2021-12-12日结束
-活动地址：https://h5.m.jd.com/babelDiy/Zeus/4YHatHgm4VUm5QMxfVx32wJi71eJ/index.html?babelChannel=ttt7&inviteId=T0225KkcRk1N_FeCJhv3xvdfcQCjRQmoaX5kRrbA&sid=&un_area=
+活动地址：https://h5.m.jd.com/babelDiy/Zeus/4YHatHgm4VUm5QMxfVx32wJi71eJ/index.html?babelChannel=ttt7&inviteId=&sid=&un_area=
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
@@ -38,14 +37,13 @@ if ($.isNode()) {
     ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-$.newShareCodes = [`T0225KkcRk1N_FeCJhv3xvdfcQCjRQmoaX5kRrbA`, 'T027Zm_olqSxIOtH97BATGmKoWraLawCjRQmoaX5kRrbA'];
+$.newShareCodes = [];
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
   console.log('金榜年终奖\n' +
-      '脚本会给内置的码进行助力\n' +
       '活动时间：2021-12-06到2021-12-12日结束\n' +
       '活动入口：京东APP首页右边浮动飘窗\n' +
       '活动地址：https://h5.m.jd.com/babelDiy/Zeus/4YHatHgm4VUm5QMxfVx32wJi71eJ/index.html?babelChannel=ttt7&inviteId=&sid=&un_area=')
