@@ -1,49 +1,54 @@
 /*
 金榜年终奖
 脚本会给内置的码进行助力
-活动时间：2020-12-12日结束
-活动入口：京东APP首页右边浮动飘窗
+活动时间：2021-12-06到2021-12-12日结束
+活动地址：https://h5.m.jd.com/babelDiy/Zeus/4YHatHgm4VUm5QMxfVx32wJi71eJ/index.html?babelChannel=ttt7&inviteId=T0225KkcRk1N_FeCJhv3xvdfcQCjRQmoaX5kRrbA&sid=&un_area=
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
 [task_local]
 #金榜年终奖
-10 0 * * * jd_split.js, tag=年终奖, enabled=true
+10 0,20 * * * jd_split.js, tag=年终奖, enabled=true
 
 ================Loon==============
 [Script]
-cron "10 0 * * *" script-path=jd_split.js,tag=年终奖
+cron "10 0,20 * * *" script-path=jd_split.js,tag=年终奖
 
 ===============Surge=================
-金榜年终奖 = type=cron,cronexp="10 0 * * *",wake-system=1,timeout=3600,script-path=jd_split.js
+金榜年终奖 = type=cron,cronexp="10 0,20 * * *",wake-system=1,timeout=3600,script-path=jd_split.js
 
 ============小火箭=========
-金榜年终奖 = type=cron,script-path=jd_split.js, cronexpr="10 0 * * *", timeout=3600, enable=true
+金榜年终奖 = type=cron,script-path=jd_split.js, cronexpr="10 0,20 * * *", timeout=3600, enable=true
  */
 const $ = new Env('金榜年终奖');
 
 const notify = $.isNode() ? require('../sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
-let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
-const randomCount = $.isNode() ? 20 : 5;
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
-  cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
+  cookiesArr = [
+    $.getdata("CookieJD"),
+    $.getdata("CookieJD2"),
+    ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-$.newShareCodes = [`P04z54XCjVUnIaW5nJcXCCyoR8C6p8txXBH`, 'P04z54XCjVUnIaW5m9cZ2T6jChKki0Hfndla5k', 'P04z54XCjVUnIaW5u2ak7ZCdan1BT0NlbBGZ1-rnMYj', 'P04z54XCjVUnIaW5m9cZ2ariXVJwI64DaVTNXQ'];
+$.newShareCodes = [`T0225KkcRk1N_FeCJhv3xvdfcQCjRQmoaX5kRrbA`, 'T027Zm_olqSxIOtH97BATGmKoWraLawCjRQmoaX5kRrbA'];
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
+  console.log('金榜年终奖\n' +
+      '脚本会给内置的码进行助力\n' +
+      '活动时间：2021-12-06到2021-12-12日结束\n' +
+      '活动入口：京东APP首页右边浮动飘窗\n' +
+      '活动地址：https://h5.m.jd.com/babelDiy/Zeus/4YHatHgm4VUm5QMxfVx32wJi71eJ/index.html?babelChannel=ttt7&inviteId=&sid=&un_area=')
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -56,13 +61,24 @@ $.newShareCodes = [`P04z54XCjVUnIaW5nJcXCCyoR8C6p8txXBH`, 'P04z54XCjVUnIaW5m9cZ2
       console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
         continue
       }
       await jdSplit()
+    }
+  }
+  console.log(`\n=========================开始内部循环助力=======================\n`)
+  for (let i = 0; i < cookiesArr.length; i++) {
+    cookie = cookiesArr[i];
+    $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+    $.index = i + 1;
+    for (let code of $.newShareCodes) {
+      if (!code) continue
+      console.log(`\n账号 ${$.index} ${$.UserName}开始助力好友 ${code}`)
+      const helpRes = await jdsplit_collectScore(code,6,null);
+      if (helpRes.code === 0 && helpRes.data.bizCode === -7) {
+        console.log(`助力机会已耗尽，跳出`);
+        break
+      }
     }
   }
 })()
@@ -73,7 +89,7 @@ $.newShareCodes = [`P04z54XCjVUnIaW5nJcXCCyoR8C6p8txXBH`, 'P04z54XCjVUnIaW5m9cZ2
       $.done();
     })
 async function jdSplit() {
-  await helpFriends();
+  // await helpFriends();
   await jdsplit_getTaskDetail();
   await doTask();
   await showMsg();
@@ -137,7 +153,10 @@ async function doTask() {
 //领取做完任务的奖励
 function jdsplit_collectScore(taskToken, taskId, itemId, actionType=0) {
   return new Promise(resolve => {
-    let body = { "appId":"1EFRTwA","taskToken":taskToken,"taskId":taskId,"itemId":itemId,"actionType":actionType }
+    let body = { "appId":"1EFVXxg","taskToken":taskToken,"taskId":taskId,"actionType":actionType }
+    if (itemId) {
+      body['itemId'] = itemId;
+    }
     $.post(taskPostUrl("harmony_collectScore", body), async (err, resp, data) => {
       try {
         if (err) {
@@ -151,7 +170,7 @@ function jdsplit_collectScore(taskToken, taskId, itemId, actionType=0) {
             }
             else if (data.data.bizCode === 0) {
                 if(data.data.result.taskType===6){
-                  console.log(`助力好友：${data.data.result.itemId}成功！`)
+                  console.log(`助力好友：${data.data.result.masterPin}成功！`)
                 }else
                   console.log(`任务完成成功`);
             } else {
@@ -171,7 +190,7 @@ function jdsplit_collectScore(taskToken, taskId, itemId, actionType=0) {
 // 抽奖
 function jdsplit_getLottery(taskId) {
   return new Promise(resolve => {
-    let body = { "appId":"1EFRTwA","taskId":taskId}
+    let body = { "appId":"1EFVXxg","taskId":taskId}
     $.post(taskPostUrl("splitHongbao_getLotteryResult", body), async (err, resp, data) => {
       try {
         if (err) {
@@ -196,9 +215,9 @@ function jdsplit_getLottery(taskId) {
   })
 }
 
-function jdsplit_getTaskDetail() {
+function jdsplit_getTaskDetail(taskToken = '') {
   return new Promise(resolve => {
-    $.post(taskPostUrl("splitHongbao_getHomeData", {"appId":"1EFRTwA","taskToken":""}, ), async (err, resp, data) => {
+    $.post(taskPostUrl("splitHongbao_getHomeData", {"appId":"1EFVXxg","taskToken":taskToken}, ), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -211,6 +230,7 @@ function jdsplit_getTaskDetail() {
               $.taskVos.map(item => {
                 if (item.taskType === 6) {
                   console.log(`\n您的${$.name}好友助力邀请码：${item.assistTaskDetailVo.taskToken}\n`)
+                  if (item.assistTaskDetailVo.taskToken) $.newShareCodes.push(item.assistTaskDetailVo.taskToken);
                 }
               })
             }
@@ -219,7 +239,7 @@ function jdsplit_getTaskDetail() {
       } catch (e) {
         $.logErr(e, resp)
       } finally {
-        resolve();
+        resolve(data);
       }
     })
   })
@@ -295,17 +315,6 @@ function safeGet(data) {
     console.log(e);
     console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
     return false;
-  }
-}
-function jsonParse(str) {
-  if (typeof str == "string") {
-    try {
-      return JSON.parse(str);
-    } catch (e) {
-      console.log(e);
-      $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
-      return [];
-    }
   }
 }
 // prettier-ignore
