@@ -90,13 +90,17 @@ $.newShareCodes = [`T0225KkcRk1N_FeCJhv3xvdfcQCjRQmoaX5kRrbA`, 'T027Zm_olqSxIOtH
     })
 async function jdSplit() {
   // await helpFriends();
-  await jdsplit_getTaskDetail();
-  await doTask();
-  await showMsg();
+  try {
+    await jdsplit_getTaskDetail();
+    await doTask();
+    await showMsg();
+  } catch (e) {
+    $.logErr(e)
+  }
 }
 function showMsg() {
   return new Promise(resolve => {
-    message += `任务已做完：具体奖品去发活动页面查看\n活动入口：京东APP首页右边浮动飘窗`;
+    message += `任务已做完：具体奖品去发活动页面查看\n活动入口：https://h5.m.jd.com/babelDiy/Zeus/4YHatHgm4VUm5QMxfVx32wJi71eJ/index.html?babelChannel=ttt7&inviteId=&sid=&un_area=`;
     $.msg($.name, '', `京东账号${$.index}${$.nickName}\n${message}`);
     resolve()
   })
