@@ -91,6 +91,7 @@ async function jdSplit() {
   try {
     await jdsplit_getTaskDetail();
     await doTask();
+    await splitHongbao_getMyRecord();
     await showMsg();
   } catch (e) {
     $.logErr(e)
@@ -99,7 +100,7 @@ async function jdSplit() {
 function showMsg() {
   return new Promise(resolve => {
     message += `任务已做完：具体奖品去发活动页面查看\n活动入口：https://h5.m.jd.com/babelDiy/Zeus/4YHatHgm4VUm5QMxfVx32wJi71eJ/index.html?babelChannel=ttt7&inviteId=&sid=&un_area=`;
-    $.msg($.name, '', `京东账号${$.index}${$.nickName}\n${message}`);
+    $.msg($.name, '', `京东账号${$.index}${$.nickName || $.UserName}\n${message}`);
     resolve()
   })
 }
@@ -112,6 +113,39 @@ async function helpFriends() {
       break
     }
   }
+}
+function splitHongbao_getMyRecord() {
+  return new Promise(resolve => {
+    let body = { "appId":"1EFVXxg"};
+    $.post(taskPostUrl("splitHongbao_getMyRecord", body), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (safeGet(data)) {
+            data = JSON.parse(data);
+            if (data.data && data.data.bizCode === 0) {
+              const { userAwardsCacheDtos = [] } = data.data.result;
+              let userAwardsCach = userAwardsCacheDtos.filter(vo => vo['type'] === 4);
+              let sum = 0;
+              for (let item of userAwardsCach) {
+                sum += parseFloat(item['redPacketVO']['value']);
+              }
+              message += `累计活动红包：${sum.toFixed(2)}元\n`;
+              console.log(`京东账号${$.index} ${$.nickName || $.UserName} 累计活动红包：${sum.toFixed(2)}元\n`);
+            } else {
+              console.log(JSON.stringify(data))
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+  })
 }
 async function doTask() {
   for (let item of $.taskVos) {
