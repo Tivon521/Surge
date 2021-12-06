@@ -224,7 +224,7 @@ function jdsplit_collectScore(taskToken, taskId, itemId, actionType=0) {
 }
 
 // 抽奖
-function jdsplit_getLottery(taskId) {
+function jdsplit_getLottery(taskId = "") {
   return new Promise(resolve => {
     let body = { "appId":"1EFVXxg","taskId":taskId}
     $.post(taskPostUrl("splitHongbao_getLotteryResult", body), async (err, resp, data) => {
