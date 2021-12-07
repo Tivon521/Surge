@@ -3,7 +3,7 @@
 Last Modified time: 2021-11-5 14:27:18
 活动入口：京东APP首页-领券-锦鲤红包。[活动地址](https://happy.m.jd.com/babelDiy/zjyw/3ugedFa7yA6NhxLN5gw2L3PF9sQC/index.html)
 未实现功能：领3张券功能
-
+一个账号一天只有一次助力机会
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ================QuantumultX==================
 [task_local]
@@ -31,8 +31,6 @@ if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
-  if (JSON.stringify(process.env).indexOf('GITHUB') > -1) process.exit(0);
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
@@ -56,10 +54,6 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
       console.log(`\n****开始【京东账号${$.index}】${$.nickName || $.UserName}****\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
-
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
         continue
       }
       $.discount = 0;
@@ -77,7 +71,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
     if (cookiesArr && cookiesArr.length > 2) {
       for (let item of $.redPacketId) {
         if ($.index === 1) break;
-        console.log(`账号 ${$.index} ${$.UserName} 开始给 ${item} 进行助力`)
+        console.log(`\n账号 ${$.index} ${$.UserName} 开始给 ${item} 进行助力`)
         await jinli_h5assist(item);
         if (!$.canHelp) {
           console.log(`次数已用完或活动火爆，跳出助力`)
