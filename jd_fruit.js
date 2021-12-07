@@ -138,7 +138,7 @@ async function doDailyTask() {
   if (!$.farmTask.signInit.todaySigned) {
     await signForFarm(); //签到
     if ($.signResult.code === "0") {
-      console.log(`【签到成功】获得${$.signResult.amount}g💧\\n`)
+      console.log(`【签到成功】获得${$.signResult.amount}g💧\n`)
       //message += `【签到成功】获得${$.signResult.amount}g💧\n`//连续签到${signResult.signDay}天
     } else {
       // message += `签到失败,详询日志\n`;
@@ -596,13 +596,17 @@ async function turntableFarm() {
       }
       await lotteryMasterHelp(code);
       // console.log('天天抽奖助力结果',lotteryMasterHelpRes.helpResult)
-      if ($.lotteryMasterHelpRes.helpResult.code === '0') {
-        console.log(`天天抽奖-助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}成功\n`)
-      } else if ($.lotteryMasterHelpRes.helpResult.code === '11') {
-        console.log(`天天抽奖-不要重复助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}\n`)
-      } else if ($.lotteryMasterHelpRes.helpResult.code === '13') {
-        console.log(`天天抽奖-助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}失败,助力次数耗尽\n`);
-        break;
+      if ($.lotteryMasterHelpRes.helpResult) {
+        if ($.lotteryMasterHelpRes.helpResult.code === '0') {
+          console.log(`天天抽奖-助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}成功\n`)
+        } else if ($.lotteryMasterHelpRes.helpResult.code === '11') {
+          console.log(`天天抽奖-不要重复助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}\n`)
+        } else if ($.lotteryMasterHelpRes.helpResult.code === '13') {
+          console.log(`天天抽奖-助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}失败,助力次数耗尽\n`);
+          break;
+        }
+      } else {
+        console.log(`天天抽奖助力异常：${$.toStr($.lotteryMasterHelpRes)}\n`)
       }
     }
     console.log(`---天天抽奖次数remainLotteryTimes----${remainLotteryTimes}次`)
@@ -1016,9 +1020,7 @@ async function getFullCollectionReward() {
           console.log(JSON.stringify(err));
           $.logErr(err);
         } else {
-          if (safeGet(data)) {
-            $.duckRes = JSON.parse(data);
-          }
+          $.duckRes = $.toObj(data, {})
         }
       } catch (e) {
         $.logErr(e, resp)
@@ -1256,9 +1258,7 @@ async function initForFarm() {
           console.log(JSON.stringify(err));
           $.logErr(err);
         } else {
-          if (safeGet(data)) {
-            $.farmInfo = JSON.parse(data)
-          }
+          $.farmInfo = $.toObj(data, {})
         }
       } catch (e) {
         $.logErr(e, resp)
@@ -1341,9 +1341,7 @@ async function browse(advertId) {
           console.log(JSON.stringify(err));
           $.logErr(err);
         } else {
-          if (safeGet(data)) {
-            console.log('东东乐园做任务结果', data);
-          }
+          console.log('东东乐园做任务结果', data);
         }
       } catch (e) {
         $.logErr(e, resp)
@@ -1557,9 +1555,7 @@ function request(function_id, body = {}, timeout = 1000){
             console.log(`function_id:${function_id}`)
             $.logErr(err);
           } else {
-            if (safeGet(data)) {
-              data = JSON.parse(data);
-            }
+            data = $.toObj(data, {})
           }
         } catch (e) {
           $.logErr(e, resp);
@@ -1570,17 +1566,7 @@ function request(function_id, body = {}, timeout = 1000){
     }, timeout)
   })
 }
-function safeGet(data) {
-  try {
-    if (typeof JSON.parse(data) == "object") {
-      return true;
-    }
-  } catch (e) {
-    console.log(e);
-    console.log(`京东服务器访问数据为空，请检查自身设备网络情况`);
-    return false;
-  }
-}
+
 function taskUrl(function_id, body = {}) {
   return {
     url: `${JD_API_HOST}?functionId=${function_id}&appid=wh5&body=${escape(JSON.stringify(body))}`,

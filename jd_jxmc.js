@@ -456,7 +456,7 @@ async function doTask(){
       if (oneTask.awardStatus === 2 && oneTask.completedTimes === oneTask.targetTimes) {
         console.log(`完成任务：${oneTask.taskName}`);
         awardInfo = await takeRequest(`newtasksys`,`newtasksys_front/Award`,`source=jxmc&taskId=${oneTask.taskId}&bizCode=jxmc`,`bizCode%2Csource%2CtaskId`,true);
-        console.log(`领取金币成功，获得${JSON.parse(awardInfo.prizeInfo).prizeInfo}`);
+        console.log(`领取金币成功，获得${$.toObj(awardInfo.prizeInfo, {}).prizeInfo || 0}`);
         await $.wait(2000);
         $.freshFlag = true;
       }
@@ -467,7 +467,7 @@ async function doTask(){
         if(oneTask.awardStatus === 2 && oneTask.completedTimes === oneTask.targetTimes){
           console.log(`完成任务：${oneTask.taskName}`);
           awardInfo = await takeRequest(`newtasksys`,`newtasksys_front/Award`,`source=jxmc&taskId=${oneTask.taskId}&bizCode=jxmc`,`bizCode%2Csource%2CtaskId`,true);
-          console.log(`领取金币成功，获得${JSON.parse(awardInfo.prizeInfo).prizeInfo}`);
+          console.log(`领取金币成功，获得${$.toObj(awardInfo.prizeInfo, {}).prizeInfo || 0}`);
           await $.wait(2000);
           $.freshFlag = true;
         }else {
@@ -477,7 +477,7 @@ async function doTask(){
         if (Number(oneTask.completedTimes) > 0 && oneTask.completedTimes === oneTask.targetTimes) {
           console.log(`完成任务：${oneTask.taskName}`);
           awardInfo = await takeRequest(`newtasksys`,`newtasksys_front/Award`,`source=jxmc&taskId=${oneTask.taskId}&bizCode=jxmc`,`bizCode%2Csource%2CtaskId`,true);
-          console.log(`领取金币成功，获得${JSON.parse(awardInfo.prizeInfo).prizeInfo}`);
+          console.log(`领取金币成功，获得${$.toObj(awardInfo.prizeInfo, {}).prizeInfo || 0}`);
           await $.wait(2000);
           $.freshFlag = true;
         }
@@ -487,13 +487,13 @@ async function doTask(){
           await $.wait(5500);
           console.log(`完成任务：${oneTask.description}`);
           awardInfo = await takeRequest(`newtasksys`,`newtasksys_front/Award`,`source=jxmc&taskId=${oneTask.taskId}&bizCode=jxmc`,`bizCode%2Csource%2CtaskId`,true);
-          console.log(`领取金币成功，获得${JSON.parse(awardInfo.prizeInfo).prizeInfo}`);
+          console.log(`领取金币成功，获得${$.toObj(awardInfo.prizeInfo, {}).prizeInfo || 0}`);
           $.freshFlag = true;
         }
       } else if (oneTask.awardStatus === 2 && oneTask.completedTimes === oneTask.targetTimes) {
         console.log(`完成任务：${oneTask.taskName}`);
         awardInfo = await takeRequest(`newtasksys`,`newtasksys_front/Award`,`source=jxmc&taskId=${oneTask.taskId}&bizCode=jxmc`,`bizCode%2Csource%2CtaskId`,true);
-        console.log(`领取金币成功，获得${JSON.parse(awardInfo.prizeInfo).prizeInfo}`);
+        console.log(`领取金币成功，获得${$.toObj(awardInfo.prizeInfo, {}).prizeInfo || 0}`);
         $.freshFlag = true;
         await $.wait(2000);
       }
