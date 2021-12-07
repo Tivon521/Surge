@@ -1693,12 +1693,26 @@ function getUrlData(url, name) {
  * @returns {string}
  */
 function generateFp() {
-  let e = "0123456789";
-  let a = 13;
-  let i = '';
-  for (; a--; )
-    i += e[Math.random() * e.length | 0];
-  return (i + Date.now()).slice(0,16)
+  const str = "0123456789", rmStrLen = 3, rd = Math.random() * 10 | 0, fpLen = 16
+  let rmStr = "", notStr = ""
+  !((num, str) => {
+    let strArr = str.split(""), res = []
+    for (let i = 0; i < num; i++) {
+      let rd = Math.random() * (strArr.length - 1) | 0
+      res.push(strArr[rd])
+      strArr.splice(rd, 1)
+    }
+    rmStr = res.join(""), notStr = strArr.join("")
+  })(rmStrLen, str)
+
+  return ((size, num) => {
+    let u = size, u2 = (fpLen - rmStrLen - size.toString().length) - size, res = ""
+    while (u--) res += num[Math.random() * num.length | 0]
+    res += rmStr
+    while (u2--) res += num[Math.random() * num.length | 0]
+    res += size
+    return res
+  })(rd, notStr)
 }
 function jsonParse(str) {
   if (typeof str == "string") {
