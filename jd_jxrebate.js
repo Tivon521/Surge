@@ -94,13 +94,14 @@ $.groupidArr = [];
             console.log(`助力失败 未知情况：errcode ${data['errcode']}，${data['msg']}\n`)
           }
         }
+        await $.wait(3000);
       }
       console.log(`\n\n有剩余助力机会则给作者进行助力`);
       for (let item of ($.authorMyShareIds || [])) {
         if (!item) continue;
         console.log(`账号 ${$.index} ${$.UserName} 开始给作者 ${item} 进行助力`)
         await zhuli(item);
-        await $.wait(2000);
+        await $.wait(3000);
       }
     } catch (e) {
       $.logErr(e)
