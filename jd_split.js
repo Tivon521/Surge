@@ -73,11 +73,19 @@ $.newShareCodes = [];
       if (!code) continue
       console.log(`\n账号 ${$.index} ${$.UserName}开始助力好友 ${code}`)
       const helpRes = await jdsplit_collectScore(code,6,null);
-      if (helpRes.code === 0 && helpRes.data.bizCode === -7) {
+      if (helpRes.code === 0 && helpRes.data.bizCode === 108) {
         console.log(`助力机会已耗尽，跳出`);
         break
       }
     }
+  }
+  console.log(`\n=========================开始开红包=======================\n`)
+  for (let i = 0; i < cookiesArr.length; i++) {
+    cookie = cookiesArr[i];
+    $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+    $.index = i + 1;
+    console.log(`\n账号 ${$.index} ${$.UserName}开始开红包`)
+    await jdsplit_getTaskDetail();
   }
 })()
     .catch((e) => {
@@ -108,7 +116,7 @@ async function helpFriends() {
   for (let code of $.newShareCodes) {
     if (!code) continue
     const helpRes = await jdsplit_collectScore(code,6,null);
-    if (helpRes.code === 0 && helpRes.data.bizCode === -7) {
+    if (helpRes.code === 0 && helpRes.data.bizCode === 108) {
       console.log(`助力机会已耗尽，跳出`);
       break
     }
@@ -148,7 +156,7 @@ function splitHongbao_getMyRecord() {
   })
 }
 async function doTask() {
-  for (let item of $.taskVos) {
+  for (let item of $.taskVos || []) {
     if (item.taskType === 8) {
       //看看商品任务
       if (item.status === 1) {
@@ -236,9 +244,9 @@ function jdsplit_getLottery(taskId = "") {
           if (safeGet(data)) {
             data = JSON.parse(data);
             if (data.data.bizCode === 0) {
-              console.log(`红包领取结果：${data.data.result.userAwardsCacheDto.redPacketVO.name}`);
+              console.log(`红包领取结果：${data.data.result.userAwardsCacheDto.redPacketVO.name}：${data.data.result.userAwardsCacheDto.redPacketVO.value}元红包`);
             } else {
-              console.log(JSON.stringify(data))
+              console.log('红包领取失败：', JSON.stringify(data))
             }
           }
         }
@@ -269,6 +277,15 @@ function jdsplit_getTaskDetail(taskToken = '') {
                   if (item.assistTaskDetailVo.taskToken) $.newShareCodes.push(item.assistTaskDetailVo.taskToken);
                 }
               })
+              const { userInfo = {} } = data.data.result;
+              console.log(`当前可开红包次数：${userInfo.lotteryNum}\n`)
+              for (let i = 0; i < new Array(parseInt(userInfo.lotteryNum || 0)).fill('').length; i++) {
+                console.log(`\n开始第${i + 1}次开红包`)
+                await jdsplit_getLottery();//抽奖
+                await $.wait(5000)
+              }
+            } else if (data.data.bizCode === -2003) {
+              console.log(`${data.data.bizMsg}`)
             }
           }
         }
