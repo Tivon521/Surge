@@ -132,7 +132,7 @@ function Sign(i) {
     const h5stBody = await getH5stBody('turncardChannelSign', $.toStr(body));
     // const h5stBody = await getH5stBody(body);
     // console.log('h5stBody', h5stBody)
-    const url = `https://api.m.jd.com/api?clientVersion=1.2.5&client=jxh5&appid=jdchoujiang_h5&t=${Date.now()}&functionId=turncardChannelSign&body=${JSON.stringify(body)}&h5st=${h5stBody}&turnTableId=${turnTableId}&fp=${fp}&eid=${eid}&lks=${$.md5(invokeKey + $.lkt).toString()}&lkt=${$.lkt}&invokeKey=${invokeKey}`
+    const url = `https://api.m.jd.com/api?clientVersion=1.2.5&client=jxh5&appid=jdchoujiang_h5&t=${Date.now()}&functionId=turncardChannelSign&body=${JSON.stringify(body)}&turnTableId=${turnTableId}&fp=${fp}&eid=${eid}&lks=${$.md5(invokeKey + $.lkt).toString()}&lkt=${$.lkt}&invokeKey=${invokeKey}&h5st=`
     const op = {
       url,
       headers: {
@@ -194,7 +194,7 @@ function Login(i) {
     const h5stBody = await getH5stBody('turncardChannelDetail', $.toStr(body));
     // const h5stBody = await getH5stBody(body);
     // console.log('h5stBody', h5stBody)
-    const url = `https://api.m.jd.com/api?clientVersion=1.2.5&client=jxh5&appid=jdchoujiang_h5&t=${Date.now()}&functionId=turncardChannelDetail&body=${escape($.toStr(body))}&h5st=${h5stBody}`
+    const url = `https://api.m.jd.com/api?clientVersion=1.2.5&client=jxh5&appid=jdchoujiang_h5&t=${Date.now()}&functionId=turncardChannelDetail&body=${escape($.toStr(body))}&h5st=`
     const op = {
       url,
       headers: {
