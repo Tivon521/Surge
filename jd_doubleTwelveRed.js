@@ -92,13 +92,17 @@ function getCoupons() {
         } else {
           let res = $.toObj(data, {});
           if (res) {
-            if (res.code == 200) {
+            if (res.code === 200) {
               const { status = 0, discount = 0 } = res.data;
               if (status && status === 1) {
                 console.log(`\n账号${$.index} ${$.UserName} ${$.name} 领取失败：【${res.msg}】\n`)
                 return
               }
-              console.log(`\n账号${$.index} ${$.UserName} ${$.name} 【${discount}元无门槛红包${res.msg}】\n`)
+              if (discount) {
+                console.log(`\n账号${$.index} ${$.UserName} ${$.name} 【${discount}元无门槛红包${res.msg}】\n`)
+              } else {
+                console.log(`\n账号${$.index} ${$.UserName} ${$.name} 【${res.msg}】\n`)
+              }
             } else {
               console.log(`\n账号${$.index} ${$.UserName} ${$.name} 领取失败：${JSON.stringify(res)}`)
             }
