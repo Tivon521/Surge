@@ -85,6 +85,8 @@ async function shopDraw() {
         await task('common/accessLogWithAD', `venderId=${$.venderId}&code=${$.activityType}&pin=${pin}&activityId=${$.activityId}&pageUrl=${$.activityUrl}&subType=app&adSource=`, 1);
         await $.wait(500)
         await task('dingzhi/xiaomi/sign/activityContent', `activityId=${$.activityId}&pin=${pin}&pinImg=&nick=&cjyxPin=&cjhyPin=&shareUuid=`, 1);
+        //瓜分京豆
+        await task('dingzhi/xiaomi/sign/startDraw', `activityId=${$.activityId}&pin=${pin}&actorUuid=${$.actorUuid}`, 1);
         await $.wait(500)
         const { visitSku = {}, toShop = {}, shareActive = {}, sign = {}, addSku = {} } = $.activeTask;
         if (visitSku.allStatus) {
@@ -176,6 +178,9 @@ function task(function_id, body, isCommon = 0) {
                   $.venderId = data.data.venderId;
                   $.shopId = data.data.shopId;
                   $.activityType = data.data.activityType;
+                  break;
+                case 'dingzhi/xiaomi/sign/startDraw':
+                  console.log("瓜分京豆结果", data)
                   break;
                 case 'dingzhi/xiaomi/sign/activityContent':
                   if (data.result) {
