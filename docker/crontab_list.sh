@@ -38,8 +38,6 @@
 15 4,15 * * * node /scripts/jd_tree.js >> /scripts/logs/jd_tree.log 2>&1
 # 奔跑的小美
 31 3,4 1-13 12 * node /scripts/jd_meidi.js >> /scripts/logs/jd_meidi.log 2>&1
-# 小米双十二瓜分百万京豆(12.2-12.9)
-1 1,19,21 * * * node /scripts/jd_xiaomi2.js >> /scripts/logs/jd_xiaomi2.log 2>&1
 # 金榜年终奖（2021-12-06到2021-12-12日结束）
 10 0,20 * * * node /scripts/jd_split.js >> /scripts/logs/jd_split.log 2>&1
 # 京东12.12暖暖红包（2021-12-12日结束）
