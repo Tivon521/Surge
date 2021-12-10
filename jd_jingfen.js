@@ -26,8 +26,8 @@ if ($.isNode()) {
   })
   if (process.env.unionId) unionId = process.env.unionId;
   if (process.env.positionId) positionId = process.env.positionId;
-  if (process.env.appKey) positionId = process.env.appKey;
-  if (process.env.appSecret) positionId = process.env.appSecret;
+  if (process.env.appKey) appKey = process.env.appKey;
+  if (process.env.appSecret) appSecret = process.env.appSecret;
 } else {
   cookiesArr = [
     $.getdata("CookieJD"),
