@@ -87,6 +87,10 @@ jobs:
       DDEXCHANGE: ${{ secrets.DDEXCHANGE}}
       JD_CART: ${{ secrets.JD_CART}}
       BYTYPE: ${{ secrets.BYTYPE}}
+      UNIONID: ${{ secrets.UNIONID}}
+      POSITIONID: ${{ secrets.POSITIONID}}
+      APPKEY: ${{ secrets.APPKEY}}
+      APPSECRET: ${{ secrets.APPSECRET}}
       
     steps:
       - name: Checkout
@@ -188,6 +192,10 @@ jobs:
           if [ $DDEXCHANGE ]; then sed -i "/variables/a\      DDEXCHANGE: $DDEXCHANGE" serverless.yml; fi;
           if [ $JD_CART ]; then sed -i "/variables/a\      JD_CART: $JD_CART" serverless.yml; fi;
           if [ $BYTYPE ]; then sed -i "/variables/a\      BYTYPE: $BYTYPE" serverless.yml; fi;
+          if [ $UNIONID ]; then sed -i "/variables/a\      UNIONID: $UNIONID" serverless.yml; fi;
+          if [ $POSITIONID ]; then sed -i "/variables/a\      POSITIONID: $POSITIONID" serverless.yml; fi;
+          if [ $APPKEY ]; then sed -i "/variables/a\      APPKEY: $APPKEY" serverless.yml; fi;
+          if [ $APPSECRET ]; then sed -i "/variables/a\      APPSECRET: $APPSECRET" serverless.yml; fi;
           cat serverless.yml
           env
 

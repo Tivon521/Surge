@@ -101,8 +101,10 @@
 |    `DDEXCHANGE`      |    东东世界兑换京豆    | 非必须 | 默认`999`京豆从多到少兑换,<br>`6`只兑换1000京豆,`5`只兑换500京豆,`1`只兑换200京豆 |
 |    `JD_CART`      |    清空购物车    | 非必须 | 默认不清空,`true`表示清空,`false`表示不清空 |
 |    `BYTYPE`      |    京喜牧场购买小鸡    | 非必须 | 默认不购买,<br>`1`购买小黄鸡,`2`购买辣子鸡,`3`购买椰子鸡,`4`购买猪肚鸡,<br>`999`能买哪只买哪只,`888`不购买小鸡 |
-|    `unionId`      |    京东购物车商品转链<br>联盟id    | 非必须 | [联盟id](https://union.jd.com/user)（unionId） |
-|    `positionId`      |    京东购物车商品转链<br>推广位id    | 非必须 | [推广位id](https://union.jd.com/manager/promotionSite)（positionId） |
+|    `unionId`      |    京东购物车商品转链<br>联盟id    | 必须 | [联盟id](https://union.jd.com/user)（unionId） |
+|    `positionId`      |    京东购物车商品转链<br>推广位id    | 必须 | [推广位id](https://union.jd.com/manager/promotionSite)（positionId） |
+|    `appKey`      |    京东购物车商品转链<br>appKey    | 非必须 | [appKey](https://www.dgrlm.com/open/index) |
+|    `appSecret`      |    京东购物车商品转链<br>appSecret    | 非必须 | [appSecret](https://www.dgrlm.com/open/index) |
 
 
 ##### 互助码的填写规则
