@@ -3,6 +3,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 const activityList = [
+    {'appId': '1F11Vx64', 'endTime': 1640361599000,'name':'荣耀新品互动'},//https://h5.m.jd.com/babelDiy/Zeus/46NrCVxNK1WXzefcbF7SaRPi5tm8/index.html?activityId=46NrCVxNK1WXzefcbF7SaRPi5tm8
     {'appId': '1FFdSxqw', 'endTime': 1637423999000,'name':'烯新带电生活'},//京东赚赚小程序
     {'appId': '1FFVQyqw', 'endTime': 1666344063000,'name':'1111点心动'},//京东APP--》玩一玩---》1111点心动
     {'appId': '1FFRWwqg', 'endTime': 1638285803000,'name':'心动电波'},//https://h5.m.jd.com/babelDiy/Zeus/rAkfmGU5bg1rHa9kPnDre7Znru7/index.html
