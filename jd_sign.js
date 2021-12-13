@@ -103,7 +103,7 @@ async function signRun(){
 async function turncardChannelDetail(){
     let appId = '9a4de';
     let body = {"turnTableId":$.oneInfo.id}
-    body = `clientVersion=&appid=jdchoujiang_h5&t=${Date.now()}&functionId=turncardChannelDetail&body=${JSON.stringify(body)}&uuid=12282635814281946523573`
+    body = `clientVersion=&appid=jdchoujiang_h5&t=${Date.now()}&functionId=turncardChannelDetail&body=${JSON.stringify(body)}&uuid=${$.UUID}`
     let h5st = await h5Tool.getH5st($,`https://api.m.jd.com?${body}`,appId);
     let url = `https://api.m.jd.com?${body}&h5st=${h5st}`;
     let options = {
