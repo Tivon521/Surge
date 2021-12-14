@@ -21,11 +21,11 @@ const turnTableId = [
     {"name": "京东商城-母婴", "id": 458, "url": "https://prodev.m.jd.com/mall/active/3BbAVGQPDd6vTyHYjmAutXrKAos6/index.html"},
     {"name": "京东商城-数码", "id": 347, "url": "https://prodev.m.jd.com/mall/active/4SWjnZSCTHPYjE5T7j35rxxuMTb6/index.html"},
     //{"name": "京东超市", "id": 1204, "url": "https://pro.m.jd.com/mall/active/QPwDgLSops2bcsYqQ57hENGrjgj/index.html"},
-    // {
-    //     "name": "天天领京豆(PLUS会员专属)",
-    //     "id": 1265,
-    //     "url": "https://prodev.m.jd.com/mall/active/N9MpLQdxZgiczZaMx2SzmSfZSvF/index.html"
-    // },
+    {
+        "name": "天天领京豆(PLUS会员专属)",
+        "id": 1265,
+        "url": "https://prodev.m.jd.com/mall/active/N9MpLQdxZgiczZaMx2SzmSfZSvF/index.html"
+    },
 ]
 $.CryptoJS = require('crypto-js');
 !(async () => {
@@ -74,7 +74,7 @@ async function signRun(){
     //console.log(`开始执行：${$.oneInfo.name}`);
     let detailInfo = await turncardChannelDetail();
     await $.wait(3000);
-    if(detailInfo.data.hasSign){
+    if(detailInfo.data && detailInfo.data.hasSign){
         console.log(`${$.UserName},已签到`);
         return ;
     }
