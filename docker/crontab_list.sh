@@ -36,10 +36,6 @@
 35 */1 * * * node /scripts/jd_cow_mengniu.js >> /scripts/logs/jd_cow_mengniu.log 2>&1
 # 清风云养树
 15 4,15 * * * node /scripts/jd_tree.js >> /scripts/logs/jd_tree.log 2>&1
-# 奔跑的小美
-31 3,4 1-13 12 * node /scripts/jd_meidi.js >> /scripts/logs/jd_meidi.log 2>&1
-# 金榜年终奖（2021-12-06到2021-12-12日结束）
-10 0,20 * * * node /scripts/jd_split.js >> /scripts/logs/jd_split.log 2>&1
 # 京东12.12暖暖红包（2021-12-12日结束）
 0 0,12,22 * * * node /scripts/jd_doubleTwelveRed.js >> /scripts/logs/jd_doubleTwelveRed.log 2>&1
 ##############长期活动##############

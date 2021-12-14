@@ -195,9 +195,9 @@ async function changeLinks(urls) {
       } else {
         finalUrls.push(data['info'].replace(/\r\n/, ''))
       }
-      console.log('购物车商品名称:' + data.skuInfos[0].skuName)
+      console.log('购物车商品名称：', data.skuInfos[0].skuName)
     } catch (err) {
-      console.log('当前商品不在推广中')
+      console.log(`\n当前商品：${data['info'].replace(/\r\n/, '')}不在推广中\n`);
     }
   }
   return finalUrls
@@ -216,7 +216,7 @@ function qcSmartChain(url, sign, timestamp) {
     const options = {
       body: $.toStr(body),
       url: 'https://www.dgrlm.com/qcypopen/open/v1/qcSmartChain',
-      timeout: 10000,
+      timeout: 100 * 1000,
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
       }
@@ -228,7 +228,7 @@ function qcSmartChain(url, sign, timestamp) {
         } else {
           data = $.toObj(data);
           if (data['status'] === '200') {
-            console.log('info', data['data']['info'].replace(/\r\n/, ''))
+            if (data['data']['info'].includes('u.jd.com')) console.log('短链：', data['data']['info'].replace(/\r\n/, ''))
             resolve(data['data']);
           } else {
             console.log(`qcSmartChain请求失败：${$.toStr(data)}\n`);
