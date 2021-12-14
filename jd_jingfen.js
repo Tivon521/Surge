@@ -227,7 +227,7 @@ function qcSmartChain(url, sign, timestamp) {
         if (err) {
           console.log(`qcSmartChain 请求失败：${$.toStr(err)}\n`)
         } else {
-          console.log('data', data)
+          // console.log('data', data)
           data = $.toObj(data);
           if (data['status'] === '200') {
             if (data['data']['info'].includes('u.jd.com')) console.log('短链：', data['data']['info'].replace(/\r\n/, ''))
