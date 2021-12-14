@@ -38,8 +38,6 @@
 15 4,15 * * * node /scripts/jd_tree.js >> /scripts/logs/jd_tree.log 2>&1
 # 京东情书
 0 0,22 * * * node /scripts/jd_love.js >> /scripts/logs/jd_love.log 2>&1
-# 京东12.12暖暖红包（2021-12-12日结束）
-0 0,12,22 * * * node /scripts/jd_doubleTwelveRed.js >> /scripts/logs/jd_doubleTwelveRed.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
