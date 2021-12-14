@@ -190,7 +190,11 @@ async function changeLinks(urls) {
     const data = await qcSmartChain(url, sign, timestamp);
     await $.wait(parseInt(Math.random() * 500, 10))
     try {
-      finalUrls.push(data.skuInfos[0].skuUrl)
+      if (data.skuInfos[0].skuUrl.includes('u.jd.com')) {
+        finalUrls.push(data.skuInfos[0].skuUrl)
+      } else {
+        finalUrls.push(data['info'].replace(/\r\n/, ''))
+      }
       console.log('购物车商品名称:' + data.skuInfos[0].skuName)
     } catch (err) {
       console.log('当前商品不在推广中')
@@ -224,6 +228,7 @@ function qcSmartChain(url, sign, timestamp) {
         } else {
           data = $.toObj(data);
           if (data['status'] === '200') {
+            console.log('info', data['data']['info'].replace(/\r\n/, ''))
             resolve(data['data']);
           } else {
             console.log(`qcSmartChain请求失败：${$.toStr(data)}\n`);
