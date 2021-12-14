@@ -16,7 +16,7 @@ const fs = require('fs');
     .finally(() => {
       $.done();
     })
-function getInfo(url = 'https://prodev.m.jd.com/mall/active/2tZssTgnQsiUqhmg5ooLSHY9XSeN/index.html', type = 1) {
+function getInfo(type = 1, url = 'https://prodev.m.jd.com/mall/active/2tZssTgnQsiUqhmg5ooLSHY9XSeN/index.html') {
   return new Promise(resolve => {
     $.get({
       url,
@@ -31,15 +31,15 @@ function getInfo(url = 'https://prodev.m.jd.com/mall/active/2tZssTgnQsiUqhmg5ooL
           if (data && data[1]) {
             $.replHtml = `https://storage.360buyimg.com/${data[1]}`;
             console.log('$.replHtml：' + $.replHtml);
-            if ($.replHtml) await getInfo($.replHtml, 2);
+            if ($.replHtml) await getInfo(2, $.replHtml);
           }
         }
         if (type === 2) {
-          data = data && data.match(/src="([^\"]+)"/);
+          data = data && data.match(/type="text\/javascript" src="([^\"]+)"/);
           if (data && data[1]) {
             $.jsUrl = `https:${data[1]}`;
             console.log('$.jsUrl：' + $.jsUrl);
-            if ($.jsUrl) await getInfo($.jsUrl, 3);
+            if ($.jsUrl) await getInfo(3, $.jsUrl);
           }
         }
         if (type === 3) {
@@ -50,6 +50,12 @@ function getInfo(url = 'https://prodev.m.jd.com/mall/active/2tZssTgnQsiUqhmg5ooL
             return
           }
           res = data && data.match(/h=n\(\d+\),v="([^\"]+)"/);
+          if (res && res[1]) {
+            $.invokeKey = res[1];
+            console.log('\ninvokeKey获取成功：' + $.invokeKey);
+            return
+          }
+          res = data && data.match(/invokeKey: '([^\"]+)'/);
           if (res && res[1]) {
             $.invokeKey = res[1];
             console.log('\ninvokeKey获取成功：' + $.invokeKey);
