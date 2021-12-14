@@ -41,6 +41,7 @@ if ($.isNode()) {
     if (!cookies[i]) continue
     cookie = cookies[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+    $.JFCookie = getCookieStr(unionId);
     console.log(`\n*****开始【京东账号】${i + 1} ${$.UserName}*****\n`);
     let urls = []
     try {
@@ -90,7 +91,7 @@ function getUrl(url) {
       url,
       followRedirect: false,
       headers: {
-        'Cookie': `${cookie} ${newCookie}`,
+        'Cookie': `${cookie} ${newCookie} ${$.JFCookie}`,
         "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
       }
     }
@@ -113,7 +114,7 @@ function getUrl1(url1) {
       url: url1,
       followRedirect: false,
       headers: {
-        'Cookie': `${cookie} ${newCookie}`,
+        'Cookie': `${cookie} ${newCookie} ${$.JFCookie}`,
         "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
       }
     }
@@ -190,10 +191,14 @@ async function changeLinks(urls) {
     const data = await qcSmartChain(url, sign, timestamp);
     await $.wait(parseInt(Math.random() * 500, 10))
     try {
-      finalUrls.push(data.skuInfos[0].skuUrl)
-      console.log('购物车商品名称:' + data.skuInfos[0].skuName)
+      if (data.skuInfos[0].skuUrl.includes('u.jd.com')) {
+        finalUrls.push(data.skuInfos[0].skuUrl)
+      } else {
+        finalUrls.push(data['info'].replace(/\r\n/, ''))
+      }
+      console.log('购物车商品名称：', data.skuInfos[0].skuName)
     } catch (err) {
-      console.log('当前商品不在推广中')
+      console.log(`\n当前商品：${data['info'].replace(/\r\n/, '')}不在推广中\n`);
     }
   }
   return finalUrls
@@ -212,7 +217,7 @@ function qcSmartChain(url, sign, timestamp) {
     const options = {
       body: $.toStr(body),
       url: 'https://www.dgrlm.com/qcypopen/open/v1/qcSmartChain',
-      timeout: 10000,
+      timeout: 100 * 1000,
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
       }
@@ -222,8 +227,10 @@ function qcSmartChain(url, sign, timestamp) {
         if (err) {
           console.log(`qcSmartChain 请求失败：${$.toStr(err)}\n`)
         } else {
+          // console.log('data', data)
           data = $.toObj(data);
           if (data['status'] === '200') {
+            if (data['data']['info'].includes('u.jd.com')) console.log('短链：', data['data']['info'].replace(/\r\n/, ''))
             resolve(data['data']);
           } else {
             console.log(`qcSmartChain请求失败：${$.toStr(data)}\n`);
@@ -246,6 +253,53 @@ function makeSign(copywriting = '', timestamp) {
   let signPre = `appKey${appKey}copywriting${copywriting}positionId${positionId}timestamp${timestamp}unionId${unionId}version${version}`  // ascii值排序
   let signStr = appSecret + signPre + appSecret
   return $.md5(signStr).toUpperCase()
+}
+function getCookieStr(unionId) {
+  // let hash = getHash();
+  // let hash = 122270672;
+  let hash = 123;
+  let uuid = new Date().getTime() + '' + parseInt(2147483647 * Math.random());
+  // let lr = {
+  //   ckJda: '__jda',
+  //   ckJdb: '__jdb',
+  //   ckJdc: '__jdc',
+  //   ckJdv: '__jdv',
+  //   ckJdaExp: 15552000000,
+  //   ckJdbExp: 1800000,
+  //   ckDomain: 'jd.com',
+  //   ckJdvEmbeddedExp: 86400000,
+  //   ckJdvExp: 1296000000,
+  //   _mbaSidSeq: [],
+  // };
+  let shortTime = uuid.substr(0, 10);
+  let k = 1;
+  let j = 1;
+  let __jda = [hash, uuid, shortTime, shortTime, shortTime, j].join('.');
+  let __jdb = [hash, k, uuid + '|' + j, shortTime].join('.');
+  let __jdc = hash;
+  let __jdv = [
+    hash,
+    'kong',
+    `t_${unionId}_`,
+    'jingfen',
+    uuidRandom(32),
+    new Date().getTime(),
+  ].join('|');
+  let __jdu = uuid;
+  let mba_muid = uuid;
+  let MSid = new Date().getTime() + '' + parseInt(1e16 * Math.random());
+  let mba_sid = MSid + k;
+  // let strList = `__jda=${__jda}; __jdb=${__jdb}; __jdc=${__jdc}; __jdv=${__jdv}; __jdu=${__jdu}; mba_muid=${mba_muid}; mba_sid=${mba_sid}; `;
+  // return strList;
+  let strList = `__jda=${__jda};`;
+  return strList;
+}
+function uuidRandom(e = 40) {
+  let t = '0123456789abcde',
+      a = t.length,
+      n = '';
+  for (let i = 0; i < e; i++) n += t.charAt(Math.floor(Math.random() * a));
+  return n;
 }
 function matchall(pattern, string) {
   pattern = (pattern instanceof Array) ? pattern : [pattern];
