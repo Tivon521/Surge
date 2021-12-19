@@ -63,7 +63,7 @@ async function signRun(actInfo) {
         },
         "sourceCode":"aceaceqingzhan"
     };
-    let mainInfo = await takeRequest('queryInteractiveInfo',body);
+    let mainInfo = await takeRequest('queryInteractiveInfo',body,thisInfo.url);
     if(mainInfo.msg === 'success'){
         console.log(`获取详情成功`);
     }else{
@@ -86,7 +86,7 @@ async function signRun(actInfo) {
                 "sourceCode":"aceaceqingzhan"
             }
             console.log(JSON.stringify(info))
-            let signInfo = await takeRequest('doInteractiveAssignment',info);
+            let signInfo = await takeRequest('doInteractiveAssignment',info,thisInfo.url);
             console.log(JSON.stringify(signInfo));
         }
     }
@@ -112,7 +112,7 @@ async function getHtml(url) {
         })
     })
 }
-async function takeRequest(functionID,bodyInfo) {
+async function takeRequest(functionID,bodyInfo,Referer) {
     let url = `https://api.m.jd.com/client.action?functionId=${functionID}`;
     let body = `appid=babelh5&body=${encodeURIComponent(JSON.stringify(bodyInfo))}&sign=11&t=${Date.now()}`;
     let options = {
@@ -123,7 +123,7 @@ async function takeRequest(functionID,bodyInfo) {
             "Accept": "*/*",
             "Content-Type": "application/x-www-form-urlencoded",
             'Cookie': cookie,
-            "Referer": "https://pro.m.jd.com/mall/active/kPM3Xedz1PBiGQjY4ZYGmeVvrts/index.html",
+            "Referer": Referer,
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN",
             "User-Agent": UA,
