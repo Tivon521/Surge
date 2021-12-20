@@ -26,8 +26,6 @@
 20 * * * * node /scripts/jd_jxbfd_pear_game.js >> /scripts/logs/jd_jxbfd_pear_game.log 2>&1
 #京东小家福利社签到（2021年9月10日-2021年12月31日）
 5 0,1 * * * node /scripts/jd_flsSign.js >> /scripts/logs/jd_flsSign.log 2>&1
-# 集魔方 活动时间：2021-09-22 00:00:00 - 2022-09-21 00:00:00
-20 3,10,21 * * * node /scripts/jd_collect_mf.js >> /scripts/logs/jd_collect_mf.log 2>&1
 # 伊利养牛
 45 2,19 * * * node /scripts/jd_cow.js >> /scripts/logs/jd_cow.log 2>&1
 # 蒙牛养牛
