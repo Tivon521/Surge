@@ -181,3 +181,5 @@
 1 23 * * * node /scripts/jd_jd2xd.js >> /scripts/logs/jd_jd2xd.log 2>&1
 # 京东购物车商品转链
 0 6,18 * * * node /scripts/jd_jingfen.js >> /scripts/logs/jd_jingfen.log 2>&1
+# 频道签到
+10 8,20 * * * node /scripts/jd_pd_sign.js >> /scripts/logs/jd_pd_sign.log 2>&1
