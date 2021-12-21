@@ -16,10 +16,10 @@ if ($.isNode()) {
         return;
     }
     let activityList = [
-        {'code':'vMJHKwO','name':'陪伴频道签到'},// https://pro.m.jd.com/mall/active/kPM3Xedz1PBiGQjY4ZYGmeVvrts/index.html
-        {'code':'vtJUrZG','name':'箱包签到'},// https://pro.m.jd.com/mall/active/ZrH7gGAcEkY2gH8wXqyAPoQgk6t/index.html
-        {'code':'vIJ9Tmz','name':'鞋靴馆签到'},// https://pro.m.jd.com/mall/active/4RXyb1W4Y986LJW8ToqMK14BdTD/index.html
-        {'code':'vCJHuKn','name':'拍拍二手签到'},// https://pro.m.jd.com/mall/active/3S28janPLYmtFxypu37AYAGgivfp/index.html
+        {'code':'vL7Tz1i','name':'陪伴频道签到','url':'https://pro.m.jd.com/mall/active/kPM3Xedz1PBiGQjY4ZYGmeVvrts/index.html'},
+        {'code':'vtJUrZG','name':'箱包签到','url':'https://pro.m.jd.com/mall/active/ZrH7gGAcEkY2gH8wXqyAPoQgk6t/index.html'},
+        {'code':'vIJ9Tmz','name':'鞋靴馆签到','url':'https://pro.m.jd.com/mall/active/4RXyb1W4Y986LJW8ToqMK14BdTD/index.html'},
+        {'code':'vCJHuKn','name':'拍拍二手签到','url':'https://pro.m.jd.com/mall/active/3S28janPLYmtFxypu37AYAGgivfp/index.html'},
     ];
     $.info = {};
     for (let i = 0; i < cookiesArr.length; i++) {
