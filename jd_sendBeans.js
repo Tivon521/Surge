@@ -125,7 +125,7 @@ if ($.isNode()) {
     $.lkt = Date.now().toString();
     $.beans = 0;
     await rewardMain();
-    if ($.beans > 0) message += `京东账号 ${$.index} ${$.UserName}\n获得：${$.beans}京豆\n\n`;
+    if ($.beans > 1) message += `京东账号 ${$.index} ${$.UserName}\n获得：${$.beans}京豆\n\n`;
   }
   if (message) {
     $.msg($.name, '', message);
