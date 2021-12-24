@@ -265,7 +265,7 @@ function dealReturn(type, data) {
       break;
     case 'task':
       if (data.status === '0') {
-        $.taskList = data.body.task_vos;
+        $.taskList = data.body.task_component.task_vos;
       } else {
         console.log(`异常：${JSON.stringify(data)}\n`);
       }
