@@ -20,6 +20,9 @@ if ($.isNode()) {
         {'code':'vtJUrZG','name':'箱包签到','url':'https://pro.m.jd.com/mall/active/ZrH7gGAcEkY2gH8wXqyAPoQgk6t/index.html'},
         {'code':'vIJ9Tmz','name':'鞋靴馆签到','url':'https://pro.m.jd.com/mall/active/4RXyb1W4Y986LJW8ToqMK14BdTD/index.html'},
         {'code':'vCJHuKn','name':'拍拍二手签到','url':'https://pro.m.jd.com/mall/active/3S28janPLYmtFxypu37AYAGgivfp/index.html'},
+        {'code':'YICqZeO','name':'校园签到','url':'https://pro.m.jd.com/mall/active/2QUxWHx5BSCNtnBDjtt5gZTq7zdZ/index.html'},
+        {'code':'YMC3tZ2','name':'服饰签到','url':'https://pro.m.jd.com/mall/active/4RBT3H9jmgYg1k2kBnHF8NAHm7m8/index.html'},
+        {'co de':'YICcVq8','name':'京东小家','url':'https://prodev.m.jd.com/mall/active/whyxjHX23eNgT6Xvej19JnamfEH/index.html'},
     ];
     $.info = {};
     for (let i = 0; i < cookiesArr.length; i++) {
