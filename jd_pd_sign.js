@@ -22,7 +22,7 @@ if ($.isNode()) {
         {'code':'vCJHuKn','name':'拍拍二手签到','url':'https://pro.m.jd.com/mall/active/3S28janPLYmtFxypu37AYAGgivfp/index.html'},
         {'code':'YICqZeO','name':'校园签到','url':'https://pro.m.jd.com/mall/active/2QUxWHx5BSCNtnBDjtt5gZTq7zdZ/index.html'},
         {'code':'YMC3tZ2','name':'服饰签到','url':'https://pro.m.jd.com/mall/active/4RBT3H9jmgYg1k2kBnHF8NAHm7m8/index.html'},
-        {'code':'YICcVq8','name':'京东小家','url':'https://prodev.m.jd.com/mall/active/whyxjHX23eNgT6Xvej19JnamfEH/index.html'},
+        //{'code':'YICcVq8','name':'京东小家','url':'https://prodev.m.jd.com/mall/active/whyxjHX23eNgT6Xvej19JnamfEH/index.html'},
     ];
     $.info = {};
     for (let i = 0; i < cookiesArr.length; i++) {
