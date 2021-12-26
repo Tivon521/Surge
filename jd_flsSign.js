@@ -36,10 +36,20 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     return;
   }
   try {
-    let promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/3joSPpr7RgdHMbcuqoRQ8HbcPo9U/index.html'));
+    let promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/ZrH7gGAcEkY2gH8wXqyAPoQgk6t/index.html'));
     await Promise.all(promiseArr);
-    // promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/3joSPpr7RgdHMbcuqoRQ8HbcPo9U/index.html'));
-    // await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/3joSPpr7RgdHMbcuqoRQ8HbcPo9U/index.html'));
+    await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/3S28janPLYmtFxypu37AYAGgivfp/index.html'));
+    await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/4RXyb1W4Y986LJW8ToqMK14BdTD/index.html'));
+    await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/kPM3Xedz1PBiGQjY4ZYGmeVvrts/index.html'));
+    await Promise.all(promiseArr);
   } catch (e) {
     $.logErr(e)
   }
@@ -50,7 +60,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   .finally(() => {
     $.done();
   })
-function getActInfo(taskCookie, index, url='https://pro.m.jd.com/mall/active/3X4HMWmUigG689ZUZAg3Yo8Wtqf5/index.html') {
+function getActInfo(taskCookie, index, url='https://pro.m.jd.com/mall/active/3joSPpr7RgdHMbcuqoRQ8HbcPo9U/index.html') {
   if (index === 0) console.log(`活动地址：${url}`)
   const userName = decodeURIComponent(taskCookie.match(/pt_pin=([^; ]+)(?=;?)/) && taskCookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
   return new Promise(resolve => {
@@ -62,18 +72,19 @@ function getActInfo(taskCookie, index, url='https://pro.m.jd.com/mall/active/3X4
       }
     },async (err,resp,data)=>{
       try {
-        data = data.match(/window.__react_data__ = (.*)}\n/);
+        data = data.match(/window.__react_data__ = (.*)}/);
         if (data && data[1]) {
           data = $.toObj(data[1] + '}');
           if (data) {
-            let paramsArr = data.activityData.floorList.filter(vo => vo.template === 'signIn');
+            let paramsArr = data.activityData.floorList.filter(vo => vo.template === 'customcode');
             if (paramsArr && paramsArr[0]) {
-              const { params = "" } = paramsArr[0]["signInfos"];
-              if (!params) {
+              const { title = "", interaction = '' } = paramsArr[0]["boardParams"];
+              if (!interaction) {
                 console.log(`京东账号${index + 1} ${userName} 获取签到所需params失败，退出签到！\n`);
                 return
               }
-              await sign(taskCookie, index, params);
+              console.log(`京东账号${index + 1} ${userName} 开始【${title || '生活特权天天领京豆'}】签到`)
+              await sign(taskCookie, index, $.toObj(interaction, {}));
             } else {
               console.log(`paramsArr获取失败：${$.toStr(paramsArr)}\n`);
             }
@@ -92,43 +103,15 @@ function getActInfo(taskCookie, index, url='https://pro.m.jd.com/mall/active/3X4
 function sign(taskCookie, index, params) {
   return new Promise(resolve => {
     const body = {
-      "params": params,
-      "riskParam": {
-        "platform": "3",
-        "orgType": "2",
-        "openId": "-1",
-        "pageClickKey": "Babel_Sign",
-        "eid": "",
-        "fp": "-1",
-        "shshshfp": "",
-        "shshshfpa": "",
-        "shshshfpb": "",
-        "childActivityUrl": "https%3A%2F%2Fpro.m.jd.com%2Fmall%2Factive%2Fc46tGzwvXueH7uKSjpXmPQP9Nod%2Findex.html",
-        "userArea": "-1",
-        "client": "",
-        "clientVersion": "",
-        "uuid": "",
-        "osVersion": "",
-        "brand": "",
-        "model": "",
-        "networkType": "",
-        "jda": "-1"
-      },
-      "siteClient": "apple",
-      "mitemAddrId": "",
-      "geo": {"lng": "", "lat": ""},
-      "addressId": "",
-      "posLng": "",
-      "posLat": "",
-      "homeLng": "",
-      "homeLat": "",
-      "focus": "",
-      "innerAnchor": "",
-      "cv": "2.0"
+      "encryptProjectId":params.encryptProjectId,
+      "encryptAssignmentId":params.encryptAssignmentId,
+      "completionFlag":true,
+      "itemId": "1",
+      "sourceCode":"aceaceqingzhan"
     }
     const options = {
-      url: `${JD_API_HOST}?functionId=userSign`,
-      body: `body=${encodeURIComponent(JSON.stringify(body))}&client=wh5&clientVersion=1.0.0`,
+      url: `${JD_API_HOST}?functionId=doInteractiveAssignment`,
+      body: `appid=babelh5&body=${encodeURIComponent(JSON.stringify(body))}&sign=11&t=${Date.now()}`,
       headers: {
         'Host': 'api.m.jd.com',
         'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
@@ -149,13 +132,13 @@ function sign(taskCookie, index, params) {
           const userName = decodeURIComponent(taskCookie.match(/pt_pin=([^; ]+)(?=;?)/) && taskCookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
           data = $.toObj(data);
           if (data) {
-            if (data['code'] === '0' && data['msg'] === 'SUCCESS') {
-              console.log(`京东账号${index + 1} ${userName} ${data['signText']}，${data['btnText']}`);
-              if (data['awardList']) {
-                for (const item of data['awardList']) {
-                  console.log(`京东账号${index + 1} ${userName} 已获得：${item['text']}\n`);
-                }
-              }
+            if (data['code'] === '0' && data['subCode'] === '0') {
+              console.log(`京东账号${index + 1} ${userName} 签到成功：${$.toStr(data)}\n`);
+              // if (data['awardList']) {
+              //   for (const item of data['awardList']) {
+              //     console.log(`京东账号${index + 1} ${userName} 已获得：${item['text']}\n`);
+              //   }
+              // }
             } else {
               console.log(`京东账号${index + 1} ${userName} 签到失败：${$.toStr(data)}\n`);
             }
