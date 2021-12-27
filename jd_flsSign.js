@@ -37,6 +37,9 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   }
   try {
     let promiseArr = null;
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/4Vh5ybVr98nfJgros5GwvXbmTUpg/index.html'));
+    await Promise.all(promiseArr);
+
     promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://prodev.m.jd.com/mall/active/KcfFqWvhb5hHtaQkS4SD1UU6RcQ/index.html'));
     await Promise.all(promiseArr);
 
@@ -83,16 +86,20 @@ function getActInfo(taskCookie, index, url='') {
   return new Promise(resolve => {
     $.get({
       url: url,
-      headers:{
-        'Cookie': taskCookie,
-        'User-Agent': "jdapp;iPhone;9.3.0;14.2;88732f840b77821b345bf07fd71f609e6ff12f43;network/4g;ADID/0E38E9F1-4B4C-40A4-A479-DD15E58A5623;supportApplePay/0;hasUPPay/0;hasOCPay/0;model/iPhone11,8;addressid/2005183373;supportBestPay/0;appBuild/167436;pushNoticeIsOpen/0;jdSupportDarkMode/0;pv/142.46;apprpd/CouponCenter;ref/NewCouponCenterViewController;psq/44;ads/;psn/88732f840b77821b345bf07fd71f609e6ff12f43|551;jdv/0|kong|t_1000170135|tuiguang|notset|1607732510603|1607732510;adk/;app_device/IOS;pap/JA2015_311210|9.2.5|IOS 14.2;Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1 Edg/89.0.4389.90",
+      headers: {
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "zh-CN,zh;q=0.9",
+        "cookie": cookie,
+        "referer": url,
+        "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
       }
     },async (err,resp,data)=>{
       try {
         data = data.match(/window.__react_data__ = (.*)}/);
         if (data && data[1]) {
           data = $.toObj(data[1] + '}');
-          if (data) {
+          if (data && data.activityData && data.activityData.floorList) {
             let paramsArr = data.activityData.floorList.filter(vo => vo.template === 'customcode');
             for (const item of paramsArr) {
               if (item['boardParams'] && item['boardParams']['interaction']) {
@@ -111,6 +118,8 @@ function getActInfo(taskCookie, index, url='') {
             } else {
               console.log(`paramsArr获取失败：${$.toStr(paramsArr)}\n`);
             }
+          } else {
+            console.log(`京东账号${index + 1} ${userName} 签到数据获取异常！手动签到地址：${data.activityInfo.pageUrl}\n`)
           }
         }
       } catch (e) {
