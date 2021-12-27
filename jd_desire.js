@@ -1,16 +1,15 @@
 /*
 小魔方
-活动地址：https://u.jd.com/3tGMjdf
-活动时间：2021年10月20日 – 10月31日24:00
+活动时间：2021年12月27日 – 1月1日24:00
 
-cron 1 0,22 * * * jd_desire.js
+cron 1 0,19,22 * * * jd_desire.js
 
  */
 const $ = new Env('小魔方');
 
-const notify = $.isNode() ? require('../sendNotify') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
-const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = '', allMsg = '';
 
@@ -125,7 +124,7 @@ function getTaskList(flag = false) {
                     //浏览商品组多个商品(会场)
                     const skuIds = [100024975558, 100012927643, 100013608673, 100026806864, 100026483136, 100026286084, 100012821223, 100026330682];
                     for (const skuId of skuIds) {
-                      console.log(`\n去完成 【${vo.taskName}】 任务`);
+                      console.log(`\n去完成 【${vo.taskName}】 任务，taskId：${vo.taskId}，skuIds：${skuId}`);
                       await doTask(vo.taskId, vo.groupId, skuId);
                       if ($.hasDone) {
                         $.hasDone = false;
@@ -139,6 +138,30 @@ function getTaskList(flag = false) {
                       console.log(`\n去完成 【${vo.taskName}】 任务`)
                       await doTask(vo.taskId, bo)
                       if ($.hasDone) break
+                      await $.wait(1000)
+                    }
+                  }
+                  if (vo.taskId === 2004) {
+                    const skuIds = [100010927583, 10025690385788, 100027604000, 100029081460, 100029782984, 10036827144553];
+                    for (const skuId of skuIds) {
+                      console.log(`\n去完成 【${vo.taskName}】 任务，taskId：${vo.taskId}，skuIds：${skuId}`);
+                      await doTask(vo.taskId, skuId);
+                      if ($.hasDone) {
+                        $.hasDone = false;
+                        break;
+                      }
+                      await $.wait(1000)
+                    }
+                  }
+                  if (vo.taskId === 2006) {
+                    const skuIds = [2501602472, 2501602885];
+                    for (const skuId of skuIds) {
+                      console.log(`\n去完成 【${vo.taskName}】 任务，taskId：${vo.taskId}，skuIds：${skuId}`);
+                      await doTask(vo.taskId, skuId);
+                      if ($.hasDone) {
+                        $.hasDone = false;
+                        break;
+                      }
                       await $.wait(1000)
                     }
                   }
@@ -216,8 +239,10 @@ function getNewMyLotteryInfo() {
           data = $.toObj(data);
           if (data) {
             if (data['result'] && data['result']['code'] === 0) {
-              $.peasSum = data['result'].venueResult.peasResult.peasSum || 0;
-              console.log('当前已获得京豆：', $.peasSum)
+              if (data['result'].venueResult.peasResult) {
+                $.peasSum = data['result'].venueResult.peasResult.peasSum || 0;
+                console.log('当前已获得京豆：', $.peasSum)
+              }
             }
           }
         }
