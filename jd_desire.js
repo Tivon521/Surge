@@ -154,7 +154,7 @@ function getTaskList(flag = false) {
                     }
                   }
                   if (vo.taskId === 2006) {
-                    const skuIds = [2501602472, 2501602885];
+                    const skuIds = [2501602472, 2501602885,2501602893];
                     for (const skuId of skuIds) {
                       console.log(`\n去完成 【${vo.taskName}】 任务，taskId：${vo.taskId}，skuIds：${skuId}`);
                       await doTask(vo.taskId, skuId);
