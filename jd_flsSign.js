@@ -36,7 +36,23 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     return;
   }
   try {
-    let promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/ZrH7gGAcEkY2gH8wXqyAPoQgk6t/index.html'));
+    let promiseArr = null;
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://prodev.m.jd.com/mall/active/KcfFqWvhb5hHtaQkS4SD1UU6RcQ/index.html'));
+    await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/3SC6rw5iBg66qrXPGmZMqFDwcyXi/index.html'));
+    await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/2QUxWHx5BSCNtnBDjtt5gZTq7zdZ/index.html'));
+    await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://prodev.m.jd.com/mall/active/whyxjHX23eNgT6Xvej19JnamfEH/index.html'));
+    await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/4RBT3H9jmgYg1k2kBnHF8NAHm7m8/index.html'));
+    await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/ZrH7gGAcEkY2gH8wXqyAPoQgk6t/index.html'));
     await Promise.all(promiseArr);
 
     promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/3joSPpr7RgdHMbcuqoRQ8HbcPo9U/index.html'));
@@ -60,7 +76,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   .finally(() => {
     $.done();
   })
-function getActInfo(taskCookie, index, url='https://pro.m.jd.com/mall/active/3joSPpr7RgdHMbcuqoRQ8HbcPo9U/index.html') {
+function getActInfo(taskCookie, index, url='') {
+  // url = `https://pro.m.jd.com/mall/active/${url}/index.html`;
   if (index === 0) console.log(`活动地址：${url}`)
   const userName = decodeURIComponent(taskCookie.match(/pt_pin=([^; ]+)(?=;?)/) && taskCookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
   return new Promise(resolve => {
@@ -77,8 +94,14 @@ function getActInfo(taskCookie, index, url='https://pro.m.jd.com/mall/active/3jo
           data = $.toObj(data[1] + '}');
           if (data) {
             let paramsArr = data.activityData.floorList.filter(vo => vo.template === 'customcode');
-            if (paramsArr && paramsArr[0]) {
-              const { title = "", interaction = '' } = paramsArr[0]["boardParams"];
+            for (const item of paramsArr) {
+              if (item['boardParams'] && item['boardParams']['interaction']) {
+                $.boardParams = item['boardParams'];
+                break
+              }
+            }
+            if ($.boardParams) {
+              const { title = "", interaction = '' } = $.boardParams;
               if (!interaction) {
                 console.log(`京东账号${index + 1} ${userName} 获取签到所需params失败，退出签到！\n`);
                 return
