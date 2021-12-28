@@ -164,7 +164,7 @@ async function getCartUrls() {
           console.log(`提取购物车商品列表请求失败：${$.toStr(err)}\n`)
         } else {
           console.log("提取购物车商品列表请求成功：")
-          const pattern = /skuItemUrl":"(.*?)\&_fd/g
+          const pattern = /(?<="skuItemUrl":").*?(?=&_fd)/g
           const items = matchall(pattern, data)
           if (pattern.test(data)) {
             for (let item of items) {
