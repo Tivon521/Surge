@@ -32,8 +32,6 @@
 35 */1 * * * node /scripts/jd_cow_mengniu.js >> /scripts/logs/jd_cow_mengniu.log 2>&1
 # 清风云养树
 15 4,15 * * * node /scripts/jd_tree.js >> /scripts/logs/jd_tree.log 2>&1
-# 京东情书
-0 0,22 * * * node /scripts/jd_love.js >> /scripts/logs/jd_love.log 2>&1
 #小魔方（活动时间：2021年12月27日 – 1月1日24:00）
 1 0,19,22 * * * node /scripts/jd_desire.js >> /scripts/logs/jd_desire.log 2>&1
 ##############长期活动##############
@@ -70,7 +68,7 @@
 # 取关京东店铺商品
 45 23 * * * node /scripts/jd_unsubscribe.js >> /scripts/logs/jd_unsubscribe.log 2>&1
 # 京豆变动通知
-20 10 * * * node /scripts/jd_bean_change.js >> /scripts/logs/jd_bean_change.log 2>&1
+20 10,20 * * * node /scripts/jd_bean_change.js >> /scripts/logs/jd_bean_change.log 2>&1
 # 京东抽奖机
 0 0,12,23 * * * node /scripts/jd_lotteryMachine.js >> /scripts/logs/jd_lotteryMachine.log 2>&1
 # 天天提鹅
