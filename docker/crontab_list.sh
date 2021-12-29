@@ -177,3 +177,5 @@
 1 23 * * * node /scripts/jd_jd2xd.js >> /scripts/logs/jd_jd2xd.log 2>&1
 # 京东购物车商品转链
 0 6,18 * * * node /scripts/jd_jingfen.js >> /scripts/logs/jd_jingfen.log 2>&1
+# 京喜签到-喜豆
+10 2,9,21 * * * node /scripts/jd_jxsign_xd.js >> /scripts/logs/jd_jxsign_xd.log 2>&1
