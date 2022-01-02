@@ -3,9 +3,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 const activityList = [
-    {'appId': '1F11Vx64', 'endTime': 1640361599000,'name':'荣耀新品互动'},//https://h5.m.jd.com/babelDiy/Zeus/46NrCVxNK1WXzefcbF7SaRPi5tm8/index.html?activityId=46NrCVxNK1WXzefcbF7SaRPi5tm8
     {'appId': '1FFVQyqw', 'endTime': 1666344063000,'name':'1111点心动'},//京东APP--》玩一玩---》1111点心动
-    {'appId': '1E1NXxq0', 'endTime': 1641002400000,'name':'众筹许愿池'},//京东APP--》京东众筹---》众筹许愿池
     {'appId': '1EFRQwA', 'endTime': 1704038400000,'name':'疯狂砸金蛋'},//京东APP--》每日特价---》疯狂砸金蛋
     {'appId': '1EFRRxA', 'endTime': 1704038400000,'name':'没找到活动在哪'},
     {'appId': '1EFRXxg', 'endTime': 1672415999000,'name':'闪购盲盒'},//京东APP--》品牌闪购---》右下闪购盲盒
