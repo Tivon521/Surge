@@ -48,28 +48,28 @@ let invitelist = [];
         // }
         await main();
     }
-    console.log(JSON.stringify(invitelist));
-    cookiesArr = getRandomArrayElements(cookiesArr,cookiesArr.length);
-    console.log(`\n\n====================开始脚本内互助===============================`);
-    for (let i = 0; i < cookiesArr.length; i++) {
-        $.index = i + 1;
-        $.cookie = cookiesArr[i];
-        $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
-        if(!authorization[$.UserName]){
-            continue;
-        }
-        $.canHelp = true;
-        $.accessToken = authorization[$.UserName];
-        for (let j = 0; j < invitelist.length && $.canHelp; j++) {
-            $.oneInvite = invitelist[j];
-            if( $.oneInvite.user === $.UserName  ||   $.oneInvite.needTime === 0){
-                continue;
-            }
-            console.log(`\n${$.UserName}去助力${$.oneInvite.user},助力码:${$.oneInvite.inviter_id}`);
-            await takePostRequest('do_assist_task');
-        }
-        await $.wait(2000);
-    }
+    // console.log(JSON.stringify(invitelist));
+    // cookiesArr = getRandomArrayElements(cookiesArr,cookiesArr.length);
+    // console.log(`\n\n====================开始脚本内互助===============================`);
+    // for (let i = 0; i < cookiesArr.length; i++) {
+    //     $.index = i + 1;
+    //     $.cookie = cookiesArr[i];
+    //     $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+    //     if(!authorization[$.UserName]){
+    //         continue;
+    //     }
+    //     $.canHelp = true;
+    //     $.accessToken = authorization[$.UserName];
+    //     for (let j = 0; j < invitelist.length && $.canHelp; j++) {
+    //         $.oneInvite = invitelist[j];
+    //         if( $.oneInvite.user === $.UserName  ||   $.oneInvite.needTime === 0){
+    //             continue;
+    //         }
+    //         console.log(`\n${$.UserName}去助力${$.oneInvite.user},助力码:${$.oneInvite.inviter_id}`);
+    //         await takePostRequest('do_assist_task');
+    //     }
+    //     await $.wait(2000);
+    // }
 })()
     .catch((e) => {
         $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
