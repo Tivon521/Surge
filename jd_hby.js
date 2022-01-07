@@ -1,16 +1,17 @@
 /*
 主会场红包雨
-活动时间：11.1-11.11日的20-23点
+活动时间：1.9和1.24日的20点
 活动地址：https://prodev.m.jd.com/mall/active/31QzsgSooWDuebS3u31MxcSqZ7c2/index.html
-0 20-23 1-11 11 * jd_hby.js
+0 20 9,24 1 * jd_hby.js
 */
 const $ = new Env('主会场红包雨');
-const notify = $.isNode() ? require('../sendNotify') : '';
+const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
-const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = '';
-
+const babelProjectId = "01070253";
+const babelPageId = "3131222";
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -66,7 +67,7 @@ function draw(taskCookie, index) {
         'Accept-Language': 'zh-cn',
         'Cookie': taskCookie
       },
-      body: `functionId=hby_lottery&appid=publicUseApi&body={"babelProjectId":"01070253","babelPageId":"3131222"}&t=${+new Date()}&client=wh5&clientVersion=1.0.0&sid=&uuid=&area=&networkType=wifi`
+      body: `functionId=hby_lottery&appid=publicUseApi&body={"babelProjectId":"${babelProjectId}","babelPageId":"${babelPageId}"}&t=${+new Date()}&client=wh5&clientVersion=1.0.0&sid=&uuid=&area=&networkType=wifi`
     }, async (err, resp, data) => {
       try {
         if (err) {
@@ -77,10 +78,14 @@ function draw(taskCookie, index) {
           if (data) {
             if (data.code === 0) {
               if (data.data.bizCode === 0) {
-                console.log(`【京东账号${index + 1}】${userName}抽奖成功，获得 ${data?.data?.result?.hbInfo?.discount ?? 0} 红包`)
+                console.log(`【京东账号${index + 1}】${userName}领取红包雨成功，获得 ${data?.data?.result?.hbInfo?.discount ?? 0} 红包`)
                 message += `【京东账号${index + 1}】${userName}\n获得 ${data?.data?.result?.hbInfo?.discount ?? 0} 元红包\n\n`;
               } else {
-                console.log(`【京东账号${index + 1}】${userName}抽奖失败：${data.data.bizMsg}\n`)
+                console.log(`【京东账号${index + 1}】${userName} 领取红包雨失败：${data.data.bizMsg}\n`)
+                if (index + 1 === 1) {
+                  $.msg($.name, '', `${userName} 领取红包雨失败：${data.data.bizMsg}\n可抓包自行修改babelProjectId和babelPageId再执行一次！`)
+                  if ($.isNode()) await notify.sendNotify($.name, `${userName} 领取红包雨失败：${data.data.bizMsg}\n可抓包自行搜索functionId=hby_lottery修改babelProjectId和babelPageId再执行一次！`)
+                }
               }
             }
           }
