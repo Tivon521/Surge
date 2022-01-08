@@ -188,6 +188,10 @@ async function changeLinks(urls) {
   let finalUrls = []
   for (let url of urls) {
     // console.log("当前访问商品:" + url)
+    if (url.includes("m.jingxi")) {
+      id = url.match(/sku=(\d+)/)[1];
+      url = `https:\/\/wq.jd.com\/item\/view?sku=${id}`;
+    }
     let timestamp = (new Date()).valueOf()
     const sign = makeSign(url, timestamp)
     const data = await qcSmartChain(url, sign, timestamp);
