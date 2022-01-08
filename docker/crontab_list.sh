@@ -34,6 +34,8 @@
 15 4,15 * * * node /scripts/jd_tree.js >> /scripts/logs/jd_tree.log 2>&1
 #红包雨（1.9和1.24日的20点）
 0 20 9,24 1 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
+#城城分现金
+0 0-23/1 * * * node /scripts/jd_city.js >> /scripts/logs/jd_city.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
