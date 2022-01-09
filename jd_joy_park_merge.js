@@ -39,7 +39,7 @@ if ($.isNode()) {
       continue
     }
     await main();
-    await $.wait(2000);
+    await $.wait(5000);
   }
 
 })().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();})
@@ -57,11 +57,11 @@ async function main() {
     console.log(`请先手动执行初始任务，升到2级后再执行此脚本`);
     return;
   }
-  await $.wait(2000);
+  await $.wait(5000);
   //await takeRequest('getStaticResource');
   //await takeRequest('treasureShortUrl');
   await takeRequest('gameHeartbeat');
-  await $.wait(3000);
+  await $.wait(5000);
   $.joyMergeFlag = false;
   $.joyListFlag = true;
   $.joyListInfo = {};
@@ -70,28 +70,28 @@ async function main() {
     await dealJoyOne();
     runTime++;
   }while ($.joyMergeFlag && runTime < 10)
-  await $.wait(2000);
+  await $.wait(5000);
   $.joyMergeFlag = false;
   runTime = 0;
   do{
     await dealJoyTwo();
     runTime++;
   }while ($.joyMergeFlag && runTime < 10)
-  await $.wait(2000);
+  await $.wait(5000);
   runTime = 0;
   if(Number($.joyCoin) > Number($.mainInfo.fastBuyCoin)){
     do{
       await buyJoy();
-      await $.wait(2000);
+      await $.wait(5000);
       await dealJoyOne();
-      await $.wait(2000);
+      await $.wait(5000);
       await dealJoyTwo();
-      await $.wait(2000);
+      await $.wait(5000);
       await takeRequest('joyBaseInfo');
       runTime++;
     }while (Number($.joyCoin) > Number($.mainInfo.fastBuyCoin) && runTime < 30)
   }
-  await $.wait(2000);
+  await $.wait(5000);
   await removeJoy();
   //$.taskList = [];
   //await takeRequest('apTaskList');
@@ -100,7 +100,7 @@ async function main() {
 
 async function removeJoy(){
   if($.joyListFlag) await takeRequest('joyList');
-  await $.wait(2000);
+  await $.wait(5000);
   $.joyList = [...$.joyListInfo.activityJoyList];
   $.joyList = $.joyList.sort(function (a, b) {
     return (b.level - a.level);
@@ -113,7 +113,7 @@ async function removeJoy(){
         $.joyId = $.joyList[i].id;
         console.log(`开始把汪汪【ID：${$.joyId}】移入坑位【${$.location}】`);
         await takeRequest('joyMove');
-        await $.wait(2000);
+        await $.wait(5000);
         break;
       }
     }
@@ -123,7 +123,7 @@ async function dealJoyOne(){
   //await takeRequest('gameHeartbeat');
   //await $.wait(500);
   if($.joyListFlag) await takeRequest('joyList');
-  await $.wait(2000);
+  await $.wait(5000);
   //console.log(JSON.stringify($.joyListInfo));
   $.joyList = [...$.joyListInfo.activityJoyList];
   $.joyList = $.joyList.sort(function (a, b) {
@@ -141,7 +141,7 @@ async function dealJoyTwo(){
   //await takeRequest('gameHeartbeat');
   //await $.wait(500);
   if($.joyListFlag) await takeRequest('joyList');
-  await $.wait(2000);
+  await $.wait(5000);
   //console.log(JSON.stringify($.joyListInfo));
   $.joyList = [...$.joyListInfo.activityJoyList];
   for (let i = 0; i < $.joyListInfo.workJoyInfoList.length; i++) {
@@ -160,7 +160,7 @@ async function dealJoyTwo(){
     $.fastBuyLevel = $.joyList[0].level;
     console.log(`存在一只低等级汪汪，购买一只相同等级的汪汪进行合成，购买等级为：${$.fastBuyLevel}的汪汪`);
     await buyJoy();
-    await $.wait(2000);
+    await $.wait(5000);
     $.fastBuyLevel = max;
   }
   //console.log(`已有汪汪信息\n`+JSON.stringify($.joyList));
@@ -174,7 +174,7 @@ async function dealJoyTwo(){
 }
 async function buyJoy(){
   if($.joyListFlag) await takeRequest('joyList');
-  await $.wait(2000);
+  await $.wait(5000);
   $.buyFlag = true;
   for (let i = $.joyListInfo.activityJoyList.length; i <7 && $.buyFlag; i++) {
     console.log(`购买${$.fastBuyLevel}级汪汪`)
@@ -192,14 +192,14 @@ async function joyMerge(joyOneInfo,joyTwoInfo){
     $.joyId = joyOneInfo.id;
     $.location = 0;
     await takeRequest('joyMove');
-    await $.wait(2000);
+    await $.wait(5000);
   }
   if(joyTwoInfo.location){
     console.log(`开始移出坑位【${joyTwoInfo.location}】上的汪汪`);
     $.joyId = joyTwoInfo.id;
     $.location = 0;
     await takeRequest('joyMove');
-    await $.wait(2000);
+    await $.wait(5000);
   }
   $.joyOneId = joyOneInfo.id;
   $.joyTwoId = joyTwoInfo.id;
@@ -230,7 +230,7 @@ async function takeRequest(type) {
       break;
     case 'joyMerge':
       console.log(`准备合成汪汪`)
-      await $.wait(2000);
+      await $.wait(5000);
       url = `https://api.m.jd.com/?functionId=joyMergeGet&body={%22joyOneId%22:${$.joyOneId},%22joyTwoId%22:${$.joyTwoId},%22linkId%22:%22LsQNxL7iWDlXUs6cFl-AAg%22}&_t=${Date.now()}&appid=activities_platform`
       break;
     case 'joyBuy':
