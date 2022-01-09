@@ -2,7 +2,7 @@
 主会场红包雨
 活动时间：1.9和1.24日的20点
 活动地址：https://prodev.m.jd.com/mall/active/31QzsgSooWDuebS3u31MxcSqZ7c2/index.html
-0 20,21,22,23 9,24 1 * jd_hby.js
+1 20,21,22,23 7,9,10,24,25,26 1,2 * jd_hby.js
 */
 const $ = new Env('主会场红包雨');
 const notify = $.isNode() ? require('./sendNotify') : '';
