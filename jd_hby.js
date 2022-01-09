@@ -2,7 +2,7 @@
 主会场红包雨
 活动时间：1.9和1.24日的20点
 活动地址：https://prodev.m.jd.com/mall/active/31QzsgSooWDuebS3u31MxcSqZ7c2/index.html
-0 20 9,24 1 * jd_hby.js
+0 20,21,22,23 9,24 1 * jd_hby.js
 */
 const $ = new Env('主会场红包雨');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -10,8 +10,8 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = '';
-const babelProjectId = "01070253";
-const babelPageId = "3131222";
+const babelProjectId = "01161674";
+const babelPageId = "3316202";
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
