@@ -33,7 +33,7 @@
 # 清风云养树
 15 4,15 * * * node /scripts/jd_tree.js >> /scripts/logs/jd_tree.log 2>&1
 #红包雨（1.9和1.24日的20点）
-0 20 9,24 1 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
+0 20,21,22,23 9,24 1 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
 #城城分现金
 0 0-23/1 * * * node /scripts/jd_city.js >> /scripts/logs/jd_city.log 2>&1
 #年货红包🧧
