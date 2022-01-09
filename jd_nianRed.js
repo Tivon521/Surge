@@ -119,7 +119,7 @@ function getCoupons(shareId = '') {
           // console.log(data)
           let res = $.toObj(data, data);
           if (typeof res == 'object') {
-            if (res.msg) console.log(res.msg)
+            if (res.msg) console.log("红包领取结果：", res.msg)
             if (res.msg.indexOf('上限') === -1) {
               $.flag = 1
             }
