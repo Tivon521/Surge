@@ -144,7 +144,7 @@ function getCoupons(shareId = '') {
               }
             }
           } else {
-            console.log(data)
+            console.log("领取红包🧧失败：", data)
           }
         }
       } catch (e) {
@@ -184,7 +184,7 @@ function shareUnionCoupon() {
               if ($.shareCode) console.log(`以下账号会助力账号${$.index} ${$.UserName}的分享码：${$.shareCode}`)
             }
           } else {
-            console.log(data)
+            console.log("获取分享码失败：", data)
           }
         }
       } catch (e) {
