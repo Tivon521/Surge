@@ -3,7 +3,7 @@
 
 https://u.jd.com/SKL7aBY
 
-0 0 0,20,23 * * * jd_nianRed.js
+0 0,5 0,20,23 * * * jd_nianRed.js
 */
 const $ = new Env('京东年货京享红包');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';

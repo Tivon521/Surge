@@ -37,7 +37,7 @@
 #城城分现金
 0 0-23/1 * * * node /scripts/jd_city.js >> /scripts/logs/jd_city.log 2>&1
 #年货红包🧧
-0 0,20,23 * * * node /scripts/jd_nianRed.js >> /scripts/logs/jd_nianRed.log 2>&1
+0,10 0,20,23 * * * node /scripts/jd_nianRed.js >> /scripts/logs/jd_nianRed.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
