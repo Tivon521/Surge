@@ -34,6 +34,8 @@
 15 4,15 * * * node /scripts/jd_tree.js >> /scripts/logs/jd_tree.log 2>&1
 #红包雨（1.9和1.24日的20点）
 1 20,21,22,23 7,9,10,24,25,26 1,2 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
+#红包雨2.7日整点
+1 * 7 2 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
 #城城分现金
 0 0-23/1 * * * node /scripts/jd_city.js >> /scripts/logs/jd_city.log 2>&1
 #年货红包🧧
