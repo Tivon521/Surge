@@ -40,12 +40,12 @@ inputs:
           cronExpression: "0 3 */1 * * * *"
           enable: true
           argument: jd_moneyTree&jd_plantBean&jd_dreamFactory&jd_jdfactory&jd_jddj_fruit_collect&jd_jddj_plantBeans_collect&jd_cow_mengniu&jd_big_winner&jd_city
-    - timer: #签到领现金 #京喜财富岛 #京东直播 #女装魔盒 #东东电竞经理 #京东到家农场 #京东到家鲜豆庄园 #发财挖宝 #集勋章赢好礼 #京喜签到-喜豆 #主会场红包雨 #年货红包
+    - timer: #签到领现金 #京喜财富岛 #京东直播 #女装魔盒 #东东电竞经理 #京东到家农场 #京东到家鲜豆庄园 #发财挖宝 #集勋章赢好礼 #京喜签到-喜豆 #主会场红包雨 #年货红包 #特务Z
         parameters:
-          name: cash_jxbfd_live_nzmh_esManager_jddjfruit_jddjplantBeans_fcwb_fruitmedal_jxsignxd_hby_nianRed
+          name: cash_jxbfd_live_nzmh_esManager_jddjfruit_jddjplantBeans_fcwb_fruitmedal_jxsignxd_hby_nianRed_productZ4Brand
           cronExpression: "0 0 0-16/8,20 * * * *"
           enable: true
-          argument: jd_cash&jd_jxbfd&jd_live&jd_nzmh&jd_esManager&jd_jddj_fruit&jd_jddj_plantBeans&jd_fcwb&jd_fruit_medal&jd_jxsign_xd&jd_hby&jd_nianRed
+          argument: jd_cash&jd_jxbfd&jd_live&jd_nzmh&jd_esManager&jd_jddj_fruit&jd_jddj_plantBeans&jd_fcwb&jd_fruit_medal&jd_jxsign_xd&jd_hby&jd_nianRed&jd_productZ4Brand
     - timer: #京东全民开红包 #进店领豆 #取关京东店铺商品 #京东抽奖机 #京东汽车 #京东秒秒币 #东东健康社区 #幸运大转盘 #美丽研究院种植园 #清空购物车 #京豆兑换喜豆
         parameters:
           name: redPacket_shop_unsubscribe_lotteryMachine_car_ms_health_marketlottery_beautyplantation_clearcart_jd2xd
