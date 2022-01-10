@@ -183,3 +183,5 @@
 0 6,18 * * * node /scripts/jd_jingfen.js >> /scripts/logs/jd_jingfen.log 2>&1
 # 京喜签到-喜豆
 10 2,9,21 * * * node /scripts/jd_jxsign_xd.js >> /scripts/logs/jd_jxsign_xd.log 2>&1
+# 首页特务
+23 11,14,20 * * * node /scripts/jd_productZ4Brand.js >> /scripts/logs/jd_productZ4Brand.log 2>&1
