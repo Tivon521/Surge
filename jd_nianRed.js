@@ -73,6 +73,7 @@ async function run() {
         break
       }
       $.actId = $.url2.match(/mall\/active\/([^/]+)\/index\.html/) && $.url2.match(/mall\/active\/([^/]+)\/index\.html/)[1] || '2UboZe4RXkJPrpkp6SkpJJgtRmod'
+      console.log('$.actId', $.actId)
       // let arr = await Faker.getBody($.UA, $.url2)
       // await getEid(arr)
       if (!$.eid) {
