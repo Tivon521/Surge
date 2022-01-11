@@ -10,6 +10,7 @@ const activityList = [
     {'appId': '1E1xZy6s', 'endTime': 1661356799000,'name':'PLUS生活特权'},//京东APP--》PLUS会员--》生活特权---》天天赚京豆（https://h5.m.jd.com/babelDiy/Zeus/6Z5oyrCaX6U7cZw8eNKABiYKKXx/index.html）
     {'appId': '1GVFUx6g', 'endTime': 1646063999000,'name':'Joy的年味之旅'},//https://h5.m.jd.com/babelDiy/Zeus/Yk1NhYbyEAwUuJG3Vfa6KvEcgA5/index.html
     {'appId': '1GVJWyqg', 'endTime': 1644249599000,'name':'虎娃迎福献好礼'},//https://h5.m.jd.com/babelDiy/Zeus/3DrSBr56ErsVxzB6KWg2jYydduTs/index.html
+    {'appId': '1GFRRyqo', 'endTime': 1644249600000,'name':'开新年礼'},
 ];
 let inviteInfo = {};
 let loginInfo = {};
