@@ -180,9 +180,9 @@ function shareUnionCoupon() {
             if (res.code == 0 && res.data && res.data.shareUrl) {
               const reg = new RegExp($.hbCode + '\\?s=([^&]+)')
               const shareCode = res.data.shareUrl.match(reg) && res.data.shareUrl.match(reg)[1] || ''
-              $.shareCode = shareCode;
-              console.log(`账号${$.index} ${$.UserName}` + ' 分享码:' + shareCode)
-              if ($.shareCode) console.log(`以下账号会助力账号${$.index} ${$.UserName}的分享码：${$.shareCode}`)
+              // $.shareCode = shareCode;
+              // console.log(`账号${$.index} ${$.UserName}` + ' 分享码:' + shareCode)
+              // if ($.shareCode) console.log(`以下账号会助力账号${$.index} ${$.UserName}的分享码：${$.shareCode}`)
             }
           } else {
             console.log("获取分享码失败：", data)
