@@ -17,6 +17,8 @@ if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
+  if (process.env.hbCode) $.hbCode = process.env.hbCode;
+  if (process.env.shareCode) $.shareCode = process.env.shareCode;
 } else {
   cookiesArr = [
     $.getdata("CookieJD"),
