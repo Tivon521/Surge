@@ -146,8 +146,8 @@ async function main() {
         }
       }
     } else {
-      //默认10.30开启抽奖
-      if ((new Date().getMonth()  + 1) === 10 && new Date().getDate() >= 30 && new Date().getHours() >= 22) {
+      //默认1.18日20点开启抽奖
+      if ((new Date().getMonth()  + 1) === 1 && new Date().getDate() >= 18 && new Date().getHours() >= 20) {
         const res = await city_lotteryAward();//抽奖
         if (res && res > 0) {
           for (let i = 0; i < new Array(res).fill('').length; i++) {
