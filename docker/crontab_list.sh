@@ -36,12 +36,14 @@
 1 20,21,22,23 7,9,10,24,25,26 1,2 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
 #红包雨2.7日整点
 1 * 7 2 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
-#城城分现金
+#城城分现金2022年1月18日截止）
 0 0-23/1 * * * node /scripts/jd_city.js >> /scripts/logs/jd_city.log 2>&1
 #年货红包🧧
 0,10 0,20,23 * * * node /scripts/jd_nianRed.js >> /scripts/logs/jd_nianRed.log 2>&1
-#超级盒子
+#超级盒子（2022年1月25日截止）
 0 0,22,23 * * * node /scripts/jd_super_box.js >> /scripts/logs/jd_super_box.log 2>&1
+#轩辕虎越（2022年1月6日-2022年1月31日）
+1 0,21 6-31 1 * node /scripts/jd_xy.js >> /scripts/logs/jd_xy.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
