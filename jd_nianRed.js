@@ -12,7 +12,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = '';
 $.shareCode = 'jCh4o'
-$.hbCode = 'StG87f3'
+$.hbCode = 'SCpxOlH'
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
