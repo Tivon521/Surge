@@ -133,7 +133,7 @@ async function main() {
   console.log(`当前有${blood}滴血`);
   if ($.index === 1 && !process.env.FCWB_HELP) {
     $.msg($.name, '', `账号 ${$.index} ${$.UserName}\n当前生命值：${blood}滴血，需手动去活动页面完成游戏\n活动入口：极速版APP->我的->发财挖宝\n如需自己内部账号助力，请添加环境变量 FCWB_HELP为true`);
-    if ($.isNode()) await notify.sendNotify($.name, `账号 ${$.index} ${$.UserName}\n当前生命值：${blood}滴血，需手动去活动页面完成游戏\n活动入口：极速版APP->我的->发财挖宝\n如需自己内部账号助力，请添加环境变量 FCWB_HELP为true`)
+    // if ($.isNode()) await notify.sendNotify($.name, `账号 ${$.index} ${$.UserName}\n当前生命值：${blood}滴血，需手动去活动页面完成游戏\n活动入口：极速版APP->我的->发财挖宝\n如需自己内部账号助力，请添加环境变量 FCWB_HELP为true`)
   }
 }
 
