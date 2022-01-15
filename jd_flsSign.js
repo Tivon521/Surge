@@ -38,6 +38,9 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   try {
     let promiseArr = null;
     
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/3EVVqbSAdb1jWkED4D6rhVX1Xyf4/index.html'));
+    await Promise.all(promiseArr);
+    
     promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://prodev.m.jd.com/mall/active/297D8EdMPuCqPDERRYdN2D1e39oe/index.html'));
     await Promise.all(promiseArr);
     
