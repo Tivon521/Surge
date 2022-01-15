@@ -27,14 +27,11 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message;
+let cookiesArr = [], cookie = '', message = '', allMsg = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   })
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {
-  };
-  if(JSON.stringify(process.env).indexOf('GITHUB')>-1) process.exit(0)
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
@@ -58,12 +55,16 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/`, {"open-url": "https://bean.m.jd.com/"});
 
         if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+          //await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
         }
         continue
       }
       await jdMs()
     }
+  }
+  if (allMsg) {
+    $.msg($.name, '', allMsg);
+    if ($.isNode()) await notify.sendNotify($.name, allMsg);
   }
 })()
   .catch((e) => {
@@ -121,7 +122,12 @@ function getUserInfo(info=true) {
             data = JSON.parse(data)
             if (data.code === 2041) {
               $.score = data.result.assignment.assignmentPoints || 0
-              if(info) console.log(`当前秒秒币${$.score}`)
+              if(info) {
+                console.log(`当前秒秒币${$.score}`)
+                if (new Date().getDate() === 15 || new Date().getDate() === 17) {
+                  allMsg += `账号 ${$.index} ${$.UserName}\n当前秒秒币${$.score}，可兑换无门槛红包${($.score / 100).toFixed(2)}元\n秒秒币将于1.18日清空，请尽快兑换使用\n兑换入口：京东app-首页-京东秒杀-签到领红包\n\n`;
+                }
+              }
             }
           }
         }
