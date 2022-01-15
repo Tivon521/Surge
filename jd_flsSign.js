@@ -1,22 +1,15 @@
 /*
-京东小家福利社签到
-活动地址：https://pro.m.jd.com/mall/active/3X4HMWmUigG689ZUZAg3Yo8Wtqf5/index.html，活动已过期
-活动地址2：https://pro.m.jd.com/mall/active/3joSPpr7RgdHMbcuqoRQ8HbcPo9U/index.html 2021年9月10日-2021年12月31日
-1.每日签到：每个用户限每日签到一次；
-2.连续签到奖励：第一天签到可领取5个京豆，连续签到第四天可领取10个京豆， 其他连续签到日（连续签到第2、3、5、6日）均可获得5个京豆；连续七日签到可领取京豆超级大礼包；
-3.先抢先得：签到活动每日每小时限量发放京豆，先抢先得，每小时发完，可等下一小时开始再来；
-5.活动时间：本轮签到活动时间为 例：2021年9月16日-2021年9月30日；
-
+签到集合
+适合类型：通天塔签到共建
 0 0,1 * * * jd_flsSign.js
-
  */
-const $ = new Env('京东小家福利社签到');
+const $ = new Env('通天塔签到集合');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = [], cookie = '', message;
+let cookiesArr = [], cookie = '', message = '';
 
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -37,13 +30,13 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   }
   try {
     let promiseArr = null;
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://prodev.m.jd.com/mall/active/dHKkhs2AYLCeCH3tEaHRtC1TnvH/index.html'));
+    await Promise.all(promiseArr);
     
     promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/3EVVqbSAdb1jWkED4D6rhVX1Xyf4/index.html'));
     await Promise.all(promiseArr);
-    
-    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://prodev.m.jd.com/mall/active/297D8EdMPuCqPDERRYdN2D1e39oe/index.html'));
-    await Promise.all(promiseArr);
-    
+
     promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/4Vh5ybVr98nfJgros5GwvXbmTUpg/index.html'));
     await Promise.all(promiseArr);
 
@@ -54,9 +47,6 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     await Promise.all(promiseArr);
 
     promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/2QUxWHx5BSCNtnBDjtt5gZTq7zdZ/index.html'));
-    await Promise.all(promiseArr);
-
-    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://prodev.m.jd.com/mall/active/whyxjHX23eNgT6Xvej19JnamfEH/index.html'));
     await Promise.all(promiseArr);
 
     promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/4RBT3H9jmgYg1k2kBnHF8NAHm7m8/index.html'));
@@ -99,7 +89,8 @@ function getActInfo(taskCookie, index, url='') {
         "accept-language": "zh-CN,zh;q=0.9",
         "cookie": cookie,
         "referer": url,
-        "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
+        // "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
+        "user-agent": $.isNode() ? process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : require('./USER_AGENTS').USER_AGENT : $.getdata('JDUA') ? $.getdata('JDUA') : 'jdjchapp;jdlog;iPhone;1.2.0;15.2;09f660807a77e6a31f1ddad5beec9a56b194c0a5;Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;'
       }
     },async (err,resp,data)=>{
       try {
@@ -173,11 +164,10 @@ function sign(taskCookie, index, params) {
           if (data) {
             if (data['code'] === '0' && data['subCode'] === '0') {
               console.log(`京东账号${index + 1} ${userName} 签到成功：${$.toStr(data)}\n`);
-              // if (data['awardList']) {
-              //   for (const item of data['awardList']) {
-              //     console.log(`京东账号${index + 1} ${userName} 已获得：${item['text']}\n`);
-              //   }
-              // }
+              if (data['rewardsInfo']) {
+                const { successRewards = {} } = data['rewardsInfo'];
+                console.log(`京东账号${index + 1} ${userName} 签到获得：${$.toStr(successRewards)}\n`);
+              }
             } else {
               console.log(`京东账号${index + 1} ${userName} 签到失败：${$.toStr(data)}\n`);
             }
