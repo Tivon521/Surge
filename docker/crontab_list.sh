@@ -26,12 +26,6 @@
 20 * * * * node /scripts/jd_jxbfd_pear_game.js >> /scripts/logs/jd_jxbfd_pear_game.log 2>&1
 #京东小家福利社签到（2021年9月10日-2021年12月31日）
 5 0,1 * * * node /scripts/jd_flsSign.js >> /scripts/logs/jd_flsSign.log 2>&1
-# 伊利养牛
-45 2,19 * * * node /scripts/jd_cow.js >> /scripts/logs/jd_cow.log 2>&1
-# 蒙牛养牛
-35 */1 * * * node /scripts/jd_cow_mengniu.js >> /scripts/logs/jd_cow_mengniu.log 2>&1
-# 清风云养树
-15 4,15 * * * node /scripts/jd_tree.js >> /scripts/logs/jd_tree.log 2>&1
 #红包雨（1.9和1.24日的20点）
 1 20,21,22,23 7,9,10,24,25,26 1,2 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
 #红包雨2.7日整点
