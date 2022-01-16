@@ -78,6 +78,7 @@ async function jdMs() {
   $.score = 0
   await getActInfo()
   await getUserInfo()
+  return
   $.cur = $.score
   if ($.encryptProjectId) {
     await getTaskList()
@@ -125,7 +126,7 @@ function getUserInfo(info=true) {
               if(info) {
                 console.log(`当前秒秒币${$.score}`)
                 if (new Date().getDate() === 16 || new Date().getDate() === 17) {
-                  allMsg += `账号 ${$.index} ${$.UserName}\n当前秒秒币${$.score}，可兑换无门槛红包${($.score / 100).toFixed(2)}元\n秒秒币将于1.18日清空，请尽快兑换使用\n兑换入口：京东app-首页-京东秒杀-签到领红包\n\n`;
+                  allMsg += `账号 ${$.index} ${$.UserName}\n当前秒秒币${$.score}，可兑换无门槛红包${($.score / 100).toFixed(2)}元\n秒秒币将于1.18日清空，请尽快兑换使用\n兑换入口：京东app-首页-京东秒杀-签到领红包\n复制链接浏览器打开：https://h5.m.jd.com/babelDiy/Zeus/3u9n1VYXKeYrZm1qbkWpy58KuNRf/index.html\n\n`;
                 }
               }
             }
