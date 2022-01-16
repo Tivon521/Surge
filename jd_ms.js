@@ -76,9 +76,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
 async function jdMs() {
   $.score = 0
-  //await getActInfo()
+  await getActInfo()
   await getUserInfo()
-  return
   $.cur = $.score
   if ($.encryptProjectId) {
     await getTaskList()
@@ -113,7 +112,12 @@ function getActInfo() {
 }
 function getUserInfo(info=true) {
   return new Promise(resolve => {
-    $.post(taskPostUrl('homePageV2', {}, 'appid=SecKill2020'), (err, resp, data) => {
+    const body = {
+      "random": `${randomString(8)}`,
+      "log": "4817e3a2~8,~1wsv3ig",
+      "sceneid": "MShPageh5"
+    }
+    $.post(taskPostUrl('homePageV2', `${encodeURIComponent($.toStr(body))}`, 'appid=SecKill2020'), (err, resp, data) => {
       try {
         if (err) {
           console.log(`${err},${jsonParse(resp.body)['message']}`)
@@ -211,9 +215,22 @@ function getTaskList() {
     })
   })
 }
-
+function randomString(e) {
+  e = e || 32;
+  let t = "0123456789", a = t.length, n = "";
+  for (i = 0; i < e; i++)
+    n += t.charAt(Math.floor(Math.random() * a));
+  return n
+}
 function doTask(body) {
-  body = {...body, "encryptProjectId": $.encryptProjectId, "sourceCode": "wh5", "ext": {}}
+  body = {...body, "encryptProjectId": $.encryptProjectId, "sourceCode": "ace35880", "ext": {}}
+  let extParam = {
+    "businessData": {"random": `${randomString(8)}`},
+    // "signStr": "1642313134042~13kyCFixVPjMDFacmVUeTAxMQ==.a0RRZkprQVRmS2JBVio9NiADIy8fGAw7B2teU3hOdkMbZgdrDBEXMS0GUCMVaj4pMy8rRRwEKDchCxUoZ08b.95fa85d6~7,1~325FDBC05F3DFD091BBC0F657D7E1589741B16FD~074l0l4~C~SRJFXRMOaG0eE0RdXhMIaBFUBh0Kfx92YBxpcx1VH0QQHRJXBBwLfB92YRxqZh9RHkQTHBNQAh0LYRx1YR0DA3YcRhxHEm4cEFdDXhMOBxwQQkMRCRMDBQcCAAEAAQABAwgECAcFCxIeE0dWVxMIEUdER0RHVkZWEBwTR1RVEQoQV1ZHR0VGRlISHxJDVF0SCGsAAB0GAwgLHQcfCx0DHwZtHxJZWhEKARwTU0IWCRIDCFYKUAQFVgsHVQBRAlUCAAEGBFRSUFFUB1MKBlcGUREcEV5DEgkSW2BZX19RERwQRRIJAgcGAQABAAEABAMEABwTWloWCRIKCQcAAVcKBwNSBAcLAgJSAQQEUlcEBFZWBgFVBQELVgVWVQEBVgcDEBwTVkFWEQoQRXN7REUHRF8Af3xUZkIHS2BgXWJacmEPDBIfEV9EEQkSckBDXFYQcV9cQERAVkIeEXldUB8QHxFeUkYRChEBBAcIAgMWHxJBUkIRCWoKCgUcBwEHbR8SQF8TCmoWWmBaXl5WAgAeCxEcEVl8YxEcEAEEHgMWHxIDAR4AHQMQHxEBBQcKAgESHhIJCAYHAVYKBQBRBAYKAQJSAAQGUlUABVZVBwBSBQALVAZVVQAAVQcDERwRURFtHhJYX1AWCRJUV1ZVVVdGRxEcEVFZEgkSRxIdElJdEQoQRgMdAR8BER8SUFZsRhEKEAAAEh0WUVQQCxJBUl9WXF4NCwgABQYHAgUTHBNZWRIIagEfAx0Cbh8SUVxcVxEKEAEHBAMHAgMDAwICCgNMAl9GdUBLVloGRkR8dHdyV10DZ2V3ckl8cg4NHVR2cmlqAH4BYndmWWp6AHVrcEVeUGF ZXhhAUt8cUdGfFt6UnYBXQZSZlJmakoFA3NyBFJ2cHV2fnNxA3VgcAl2cXRWdERbWXhacWJnY3FBdGVhcXVxUkBhcARcY1thZ3hyfXh8WghkdANyAGRaVh9yW2hKeHFEXXRYCHVqcHpEf3B1WHVVdAlwSnAHe2UAQWlnR3hycFRbfVh dXdmWnpyS2ADel4BB3NyDQ4eAAYCCVcGAwNMSxwCTU9McU1kWGprZ2Fle3ZddXlgclNkdmV9ZndVRGRoS1R6dlREenZWCXZyW0dkY1hqendecnZ0VFR3d0tqZGVcXHVmVAV3c0dma2JwaXB2YldkdXFYc2h0ZWljS2V3dldidHNkYmRjW2ZldgIEZXVaXwxKAgVLV1xZCxMeEV5DVBIJEhFN~0u28lvk",
+    "signStr": "4817e3a2~8,~1wsv3ig",
+    "sceneid": "MShPageh5"
+  }
+  Object.assign(body, { "extParam": $.toStr(extParam) })
   return new Promise(resolve => {
     $.post(taskPostUrl('doInteractiveAssignment', body), (err, resp, data) => {
       try {
