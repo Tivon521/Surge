@@ -4,9 +4,6 @@
 保价期限是以物流签收时间为准的，30天是最长保价期。
 所以订单下单时间以及发货、收货时间，也可能占用很多天，60天内的订单进行保价是正常的。
 没进行过保价的60天内的订单。查询一次，不符合保价的，不会再次申请保价。
-支持云端cookie使用
-修改自：https://raw.githubusercontent.com/ZCY01/daily_scripts/main/jd/jd_priceProtect.js
-修改自：https://raw.githubusercontent.com/id77/QuantumultX/master/task/jdGuaranteedPrice.js
 
 京东保价页面脚本：https://static.360buyimg.com/siteppStatic/script/priceskus-phone.js
 活动地址：https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu
@@ -46,6 +43,11 @@ if ($.isNode()) {
     );
     return;
   }
+  $.CryptoJS = require('crypto-js');
+  $.appId = 'd2f64'
+  $.fingerprint = await generateFp();
+  $.tk = '';
+  await requestAlgo();
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       $.cookie = cookiesArr[i];
@@ -94,15 +96,31 @@ if ($.isNode()) {
 
 //  一键申请保价
 function skuApply() {
-  return new Promise((resolve, reject) => {
-    let paramObj = {
+  return new Promise(async (resolve, reject) => {
+    let body = {
       sid: '',
       type: '25',
       forcebot: '',
       token: $.token,
       feSt: 's'
     };
-    $.post(taskUrl('siteppM_skuOnceApply', paramObj), async (err, resp, data) => {
+    const h5st = await getH5stBody('siteppM_skuOnceApply', $.toStr(body));
+    const opt = {
+      url: `https://api.m.jd.com/api?appid=siteppM&functionId=siteppM_skuOnceApply&forcebot=&t=${+ new Date()}`,
+      headers: {
+        'Accept': '*/*',
+        'Accept-Language': 'zh-cn',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Origin': 'https://msitepp-fm.jd.com',
+        'Connection': 'keep-alive',
+        'Referer': 'https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
+        'Cookie': $.cookie,
+      },
+      body: `body=${encodeURIComponent(JSON.stringify(body))}&h5st=${h5st}`,
+    };
+    $.post(opt, async (err, resp, data) => {
       try {
         if (err) {
           console.log(
@@ -136,8 +154,23 @@ function skuApply() {
 
 function getApplyResult() {
   return new Promise((resolve, reject) => {
-    let paramObj = {"sid":"","type":"3","forcebot":"","num":15}
-    $.post(taskUrl('siteppM_appliedSuccAmount', paramObj), (err, resp, data) => {
+    let body = {"sid":"","type":"3","forcebot":"","num":15}
+    const opt = {
+      url: `https://api.m.jd.com/api?appid=siteppM&functionId=siteppM_appliedSuccAmount&forcebot=&t=${+ new Date()}`,
+      headers: {
+        'Accept': '*/*',
+        'Accept-Language': 'zh-cn',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Origin': 'https://msitepp-fm.jd.com',
+        'Connection': 'keep-alive',
+        'Referer': 'https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu',
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
+        'Cookie': $.cookie,
+      },
+      body: `body=${encodeURIComponent(JSON.stringify(body))}`,
+    };
+    $.post(opt, (err, resp, data) => {
       try {
         if (err) {
           console.log(
@@ -165,25 +198,6 @@ function getApplyResult() {
       }
     });
   });
-}
-
-function taskUrl(functionid, body) {
-  const urlStr = `https://api.m.jd.com/api?appid=siteppM&functionId=${functionid}&forcebot=&t=${+ new Date()}`
-  return {
-    url: urlStr,
-    headers: {
-      'Accept': '*/*',
-      'Accept-Language': 'zh-cn',
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Origin': 'https://msitepp-fm.jd.com',
-      'Connection': 'keep-alive',
-      'Referer': 'https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu',
-      'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
-      'Cookie': $.cookie,
-    },
-    body: `body=${encodeURIComponent(JSON.stringify(body))}`,
-  };
 }
 
 async function showMsg() {
@@ -278,6 +292,144 @@ function totalBean() {
       }
     });
   });
+}
+async function getH5stBody(functionId, bodyInfo) {
+  const signtime = Date.now();
+  const stk = "appid,body,t,functionId";
+  const bodySign = $.CryptoJS.SHA256(bodyInfo).toString($.CryptoJS.enc.Hex);
+  let url = `https://api.m.jd.com?functionId=${functionId}&appid=siteppM&t=${signtime}&body=${bodySign}&forcebot=`;
+  const timestamp = new Date(signtime).Format("yyyyMMddhhmmssSSS");
+  let hash1 = $.enCryptMethodJD($.tk, $.fingerprint.toString(), timestamp.toString(), $.appId.toString(), $.CryptoJS).toString($.CryptoJS.enc.Hex);
+  let st = '';
+  stk.split(',').map((item, index) => {
+    st += `${item}:${getUrlData(url, item)}${index === stk.split(',').length - 1 ? '' : '&'}`;
+  })
+  const hash2 = $.CryptoJS.HmacSHA256(st, hash1.toString()).toString($.CryptoJS.enc.Hex);
+  let h5st = ["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.tk), "".concat(hash2), "".concat('3.0'), "".concat(signtime)].join(";");
+  // console.log(h5st)
+  return `${encodeURIComponent(h5st)}`
+}
+
+async function requestAlgo() {
+  const options = {
+    "url": `https://cactus.jd.com/request_algo?g_ty=ajax`,
+    "headers": {
+      'Authority': 'cactus.jd.com',
+      'Pragma': 'no-cache',
+      'Cache-Control': 'no-cache',
+      'Accept': 'application/json',
+      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      'Content-Type': 'application/json',
+      'Origin': 'https://st.jingxi.com',
+      'Sec-Fetch-Site': 'cross-site',
+      'Sec-Fetch-Mode': 'cors',
+      'Sec-Fetch-Dest': 'empty',
+      'Referer': 'https://st.jingxi.com/',
+      'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7'
+    },
+    'body': JSON.stringify({
+      "version": "3.0",
+      "fp": $.fingerprint,
+      "appId": $.appId,
+      "timestamp": Date.now(),
+      "platform": "web",
+      "expandParams": ""
+    })
+  }
+  return new Promise(async resolve => {
+    $.post(options, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`request_algo 签名参数API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+            if (data['status'] === 200) {
+              $.tk = data.data.result.tk;
+              let enCryptMethodJDString = data.data.result.algo;
+              console.log(enCryptMethodJDString);
+              if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
+              console.log(`获取签名参数成功！`)
+              console.log(`tk: ${$.tk}`)
+            } else {
+              console.log('request_algo 签名参数API请求失败:')
+            }
+          } else {
+            console.log(`京东服务器返回空数据`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
+function generateFp() {
+  const str = "0123456789", rmStrLen = 3, rd = Math.random() * 10 | 0, fpLen = 16
+  let rmStr = "", notStr = ""
+  !((num, str) => {
+    let strArr = str.split(""), res = []
+    for (let i = 0; i < num; i++) {
+      let rd = Math.random() * (strArr.length - 1) | 0
+      res.push(strArr[rd])
+      strArr.splice(rd, 1)
+    }
+    rmStr = res.join(""), notStr = strArr.join("")
+  })(rmStrLen, str)
+
+  return ((size, num) => {
+    let u = size, u2 = (fpLen - rmStrLen - size.toString().length) - size, res = ""
+    while (u--) res += num[Math.random() * num.length | 0]
+    res += rmStr
+    while (u2--) res += num[Math.random() * num.length | 0]
+    res += size
+    return res
+  })(rd, notStr)
+}
+function getUrlData(url, name) {
+  if (typeof URL !== "undefined") {
+    let urls = new URL(url);
+    let data = urls.searchParams.get(name);
+    return data ? data : '';
+  } else {
+    const query = url.match(/\?.*/)[0].substring(1)
+    const vars = query.split('&')
+    for (let i = 0; i < vars.length; i++) {
+      const pair = vars[i].split('=')
+      if (pair[0] === name) {
+        // return pair[1];
+        return vars[i].substr(vars[i].indexOf('=') + 1);
+      }
+    }
+    return ''
+  }
+}
+Date.prototype.Format = function (fmt) {
+  var e,
+      n = this, d = fmt, l = {
+        "M+": n.getMonth() + 1,
+        "d+": n.getDate(),
+        "D+": n.getDate(),
+        "h+": n.getHours(),
+        "H+": n.getHours(),
+        "m+": n.getMinutes(),
+        "s+": n.getSeconds(),
+        "w+": n.getDay(),
+        "q+": Math.floor((n.getMonth() + 3) / 3),
+        "S+": n.getMilliseconds()
+      };
+  /(y+)/i.test(d) && (d = d.replace(RegExp.$1, "".concat(n.getFullYear()).substr(4 - RegExp.$1.length)));
+  for (var k in l) {
+    if (new RegExp("(".concat(k, ")")).test(d)) {
+      var t, a = "S+" === k ? "000" : "00";
+      d = d.replace(RegExp.$1, 1 == RegExp.$1.length ? l[k] : ("".concat(a) + l[k]).substr("".concat(l[k]).length))
+    }
+  }
+  return d;
 }
 // https://github.com/chavyleung/scripts/blob/master/Env.js
 // prettier-ignore
