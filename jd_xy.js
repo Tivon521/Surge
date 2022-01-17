@@ -10,6 +10,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 let ownCode = null;
+let lz_cookie = {}, originCookie = '';
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -138,6 +139,15 @@ function task(function_id, body, isCommon = 0) {
         if (err) {
           $.log('请求失败：',function_id, err)
         } else {
+          if (resp['headers']['set-cookie']) {
+            cookie = `${originCookie};`
+            for (let sk of resp['headers']['set-cookie']) {
+              lz_cookie[sk.split(";")[0].substr(0, sk.split(";")[0].indexOf("="))] = sk.split(";")[0].substr(sk.split(";")[0].indexOf("=") + 1)
+            }
+            for (const vo of Object.keys(lz_cookie)) {
+              cookie += vo + '=' + lz_cookie[vo] + ';'
+            }
+          }
           if (data) {
             data = $.toObj(data);
             if (data.result) {
