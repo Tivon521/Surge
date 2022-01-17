@@ -110,6 +110,37 @@ function getActInfo() {
     })
   })
 }
+function assignmentPointsTransferRedPackage(assignmentPointsNum) {
+  return new Promise(resolve => {
+    const body = {
+      "assignmentPointsNum": `${assignmentPointsNum}`,
+      "random": `${randomString(8)}`,
+      "log": "4817e3a2~8,~1wsv3ig",
+      "sceneid": "MShPageh5"
+    }
+    $.post(taskPostUrl('assignmentPointsTransferRedPackage', body, 'appid=jwsp'), (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${err},${jsonParse(resp.body)['message']}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          data = $.toObj(data);
+          if (data.code === 200) {
+            const { discountTotal } = data.result
+            console.log(`兑换成功：${discountTotal}元红包`)
+            allMsg += `账号 ${$.index} ${$.UserName}\n${discountTotal}元无门槛红包🧧自动兑换成功\n⚠️⚠️秒秒币将于1.18日清空⚠️⚠️，请尽快使用\n兑换入口：京东app-首页-京东秒杀-签到领红包\n复制链接浏览器打开：https://h5.m.jd.com/babelDiy/Zeus/3u9n1VYXKeYrZm1qbkWpy58KuNRf/index.html\n\n`;
+          } else {
+            console.log(`自动兑换失败：${$.toStr(data)}\n`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
 function getUserInfo(info=true) {
   return new Promise(resolve => {
     const body = {
@@ -117,7 +148,7 @@ function getUserInfo(info=true) {
       "log": "4817e3a2~8,~1wsv3ig",
       "sceneid": "MShPageh5"
     }
-    $.post(taskPostUrl('homePageV2', `${encodeURIComponent($.toStr(body))}`, 'appid=SecKill2020'), (err, resp, data) => {
+    $.post(taskPostUrl('homePageV2', `${encodeURIComponent($.toStr(body))}`, 'appid=SecKill2020'), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${err},${jsonParse(resp.body)['message']}`)
@@ -130,7 +161,8 @@ function getUserInfo(info=true) {
               if(info) {
                 console.log(`当前秒秒币${$.score}`)
                 if (new Date().getDate() === 16 || new Date().getDate() === 17) {
-                  allMsg += `账号 ${$.index} ${$.UserName}\n当前秒秒币${$.score}，可兑换无门槛红包🧧${($.score / 1000).toFixed(2)}元\n⚠️⚠️秒秒币将于1.18日清空⚠️⚠️，请尽快兑换使用\n兑换入口：京东app-首页-京东秒杀-签到领红包\n复制链接浏览器打开：https://h5.m.jd.com/babelDiy/Zeus/3u9n1VYXKeYrZm1qbkWpy58KuNRf/index.html\n\n`;
+                  const num = Math.floor($.score / 100) * 100;
+                  await assignmentPointsTransferRedPackage(num);
                 }
               }
             }
