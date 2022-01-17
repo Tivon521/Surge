@@ -20,7 +20,28 @@ cron "0,30 0-23/1 * * *" script-path=jd_live_redrain.js,tag=超级直播间红�
 */
 const $ = new Env('超级直播间红包雨');
 let allMessage = '', id = 'RRA2cUocg5uYEyuKpWNdh4qE4NW1bN2';
-let bodyList = {"7":{"url":"https://api.m.jd.com/client.action?functionId=liveActivityV946&uuid=8888888&client=apple&clientVersion=9.4.1&st=1641449402337&sv=111&sign=816022071c535ea1ae620cb39b376c5f","body":"body=%7B%22liveId%22%3A%226656530%22%7D"},"9":{"url":"https://api.m.jd.com/client.action?functionId=liveActivityV946&uuid=8888888&client=apple&clientVersion=9.4.1&st=1641449402180&sv=111&sign=197cac554286d5f92651389d0dcbd14f","body":"body=%7B%22liveId%22%3A%226738679%22%7D"},"11":{"url":"https://api.m.jd.com/client.action?functionId=liveActivityV946&uuid=8888888&client=apple&clientVersion=9.4.1&st=1641449402036&sv=111&sign=b8f84c04ac8f585e86e76543809790ca","body":"body=%7B%22liveId%22%3A%226764960%22%7D"}}
+let bodyList = {
+  "18": {
+    "url": "https://api.m.jd.com/client.action?functionId=liveActivityV946&uuid=8888888&client=apple&clientVersion=9.4.1&st=1642402803907&sv=111&sign=56752977560d76e6cb4657da139be313",
+    "body": "body=%7B%22liveId%22%3A%226782171%22%7D"
+  },
+  "21": {
+    "url": "https://api.m.jd.com/client.action?functionId=liveActivityV946&uuid=8888888&client=apple&clientVersion=9.4.1&st=1642402803743&sv=111&sign=2b974284f820e1000625ace8442fe5fb",
+    "body": "body=%7B%22liveId%22%3A%226799982%22%7D"
+  },
+  "24": {
+    "url": "https://api.m.jd.com/client.action?functionId=liveActivityV946&uuid=8888888&client=apple&clientVersion=9.4.1&st=1642402803504&sv=111&sign=7ca564f277e925badb2da54f47b43419",
+    "body": "body=%7B%22liveId%22%3A%226800002%22%7D"
+  },
+  "25": {
+    "url": "https://api.m.jd.com/client.action?functionId=liveActivityV946&uuid=8888888&client=apple&clientVersion=9.4.1&st=1642402803346&sv=111&sign=d004f583140bf6254d3cf025a145fc90",
+    "body": "body=%7B%22liveId%22%3A%226782186%22%7D"
+  },
+  "26": {
+    "url": "https://api.m.jd.com/client.action?functionId=liveActivityV946&uuid=8888888&client=apple&clientVersion=9.4.1&st=1642402803138&sv=111&sign=54e9a0018acfaeb80d1ca0bd59ed36f4",
+    "body": "body=%7B%22liveId%22%3A%226782212%22%7D"
+  }
+}
 let ids = {}
 for (let i = 0; i < 24; i++) {
   ids[i] = id;
