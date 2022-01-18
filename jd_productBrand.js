@@ -1,6 +1,6 @@
 /*
 特务Z，做任务抽奖，不定期出现活动、
-23 19,23 * * * jd_productBrand.js, tag=特务Z, enabled=true
+23 14,19,23 * * * jd_productBrand.js, tag=特务Z, enabled=true
 要跑2次
 */
 const $ = new Env('特务Z');
@@ -38,7 +38,7 @@ if ($.isNode()) {
     if (!$.isLogin) {
       $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
       if ($.isNode()) {
-        await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+        // await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
       }
       continue
     }
@@ -131,6 +131,16 @@ async function doTask() {
       await takeRequest('superBrandDoTask');
       await $.wait(2000);
       $.runFlag = true;
+    } else if ($.oneTask.assignmentType === 1) {
+      console.log(`任务：${$.oneTask.assignmentName}，去执行`);
+      if ($.oneTask.ext && $.oneTask.ext.shoppingActivity && $.oneTask.ext.shoppingActivity[0]) {
+        $.runInfo = $.oneTask.ext.shoppingActivity[0]
+      } else {
+        $.runInfo = {'itemId': null};
+      }
+      await takeRequest('superBrandDoTask');
+      await $.wait(2000);
+      $.runFlag = true;
     } else if ($.oneTask.assignmentType === 2) {
       console.log(`助力码：${$.oneTask.ext.assistTaskDetail.itemId}`);
       $.allInvite.push({
@@ -149,6 +159,9 @@ async function doTask() {
       }
     } else if ($.oneTask.assignmentType === 7) {
       console.log(`任务：${$.oneTask.assignmentDesc}，跳过！`);
+    } else if ($.oneTask.assignmentType !== 30) {
+      // assignmentType 30为抽奖
+      console.log(`未知新增任务，assignmentType：${$.oneTask.assignmentType}，任务：${$.oneTask.assignmentName}`)
     }
   }
 }
