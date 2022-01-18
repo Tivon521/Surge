@@ -1,6 +1,6 @@
 /*
 特务Z，做任务抽奖，不定期出现活动、
-23 14,19,23 * * * jd_productBrand.js, tag=特务Z, enabled=true
+3 14,19,23 * * * jd_productBrand.js, tag=特务Z, enabled=true
 要跑2次
 */
 const $ = new Env('特务Z');
@@ -103,6 +103,10 @@ async function main() {
     await takeRequest('superBrandSecondFloorMainPage');
     $.callNumber = $.activityInfo.activityUserInfo.userStarNum;
     console.log(`可抽奖次数:${$.callNumber}`);
+  }
+  if (new Date().getHours() < 22) {
+    console.log(`\n当前时间：${$.time('yyyy-MM-dd HH:mm:ss')}，不抽奖，晚上22点开始进行抽奖！`)
+    return
   }
   for (let i = 0; i < $.callNumber; i++) {
     console.log(`进行抽奖`);
