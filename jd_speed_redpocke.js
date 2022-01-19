@@ -198,12 +198,12 @@ async function redPacket() {
                 if (data.code === 0) {
                   if (data.data.received.prizeType !== 1) {
                     message += `获得${data.data.received.prizeDesc}\n`
-                    console.log(`获得${data.data.received.prizeDesc}`)
+                    console.log(`领红包🧧：获得${data.data.received.prizeDesc}`)
                   } else {
-                    console.log("获得优惠券")
+                    console.log("领红包🧧：获得优惠券")
                   }
                 } else {
-                  console.log('领红包提现失败：' + $.toStr(data))
+                  console.log('领红包失败：' + $.toStr(data))
                 }
               }
             }
