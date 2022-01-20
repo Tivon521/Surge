@@ -29,7 +29,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '', message;
-const linkId = "7ya6o83WSbNhrbYJqsMfFA";
+const linkId = "Eu7-E0CUzqYyhZJo9d3YkQ";
 const signLinkId = '9WA12jYGulArzWS7vcrwhw';
 
 if ($.isNode()) {
@@ -65,7 +65,7 @@ if ($.isNode()) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
         if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+          //await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
         }
         continue
       }
@@ -155,7 +155,7 @@ async function sign() {
 function reward_query() {
   return new Promise(resolve => {
     $.get(taskGetUrl("spring_reward_query", {
-      "inviter": ["hJyuwiDvDEc5-jIeec4Iyg", "r3yIDGE86HSsdtyFlrPHJHu_0mNpX_AnBREYO-c3BFY"][Math.floor((Math.random() * 2))],
+      "inviter": "r3yIDGE86HSsdtyFlrPHJHu_0mNpX_AnBREYO-c3BFY",
       linkId
     }), async (err, resp, data) => {
       try {
@@ -186,7 +186,7 @@ function reward_query() {
 }
 async function redPacket() {
   return new Promise(resolve => {
-    $.get(taskGetUrl("spring_reward_receive",{"inviter":["hJyuwiDvDEc5-jIeec4Iyg","r3yIDGE86HSsdtyFlrPHJHu_0mNpX_AnBREYO-c3BFY"][Math.floor((Math.random()*2))],linkId}),
+    $.get(taskGetUrl("spring_reward_receive",{"inviter":"r3yIDGE86HSsdtyFlrPHJHu_0mNpX_AnBREYO-c3BFY",linkId}),
         async (err, resp, data) => {
           try {
             if (err) {
@@ -198,12 +198,12 @@ async function redPacket() {
                 if (data.code === 0) {
                   if (data.data.received.prizeType !== 1) {
                     message += `获得${data.data.received.prizeDesc}\n`
-                    console.log(`获得${data.data.received.prizeDesc}`)
+                    console.log(`领红包🧧：获得${data.data.received.prizeDesc}`)
                   } else {
-                    console.log("获得优惠券")
+                    console.log("领红包🧧：获得优惠券")
                   }
                 } else {
-                  console.log('领红包提现失败：' + $.toStr(data))
+                  console.log('领红包失败：' + $.toStr(data))
                 }
               }
             }
