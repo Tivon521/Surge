@@ -88,10 +88,14 @@ function request(url = '', timeout = 0){
       const options = {
         url,
         headers: {
-          'Cookie': cookie,
-          'ContentType': 'application/json',
-          'Referer': 'https://wqs.jd.com/promote/201801/bean/mybean.html',
-          'UserAgent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+          "Accept": "*/*",
+          "Accept-Encoding": "gzip, deflate, br",
+          "Accept-Language": "zh-cn",
+          "Connection": "keep-alive",
+          "Cookie": cookie,
+          "Host": "wq.jd.com",
+          "Referer": "https://wqs.jd.com/promote/201801/bean/mybean.html",
+          "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Mobile/15E148 Safari/604.1"
         },
         timeout: 10000,
       };
