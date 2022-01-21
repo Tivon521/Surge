@@ -304,7 +304,7 @@ async function getH5stBody(functionId, bodyInfo, time = null) {
   const signtime = time || Date.now();
   const bodySign = $.CryptoJS.SHA256(decodeURIComponent(bodyInfo)).toString();
   // $.fingerprint = 1171233728428164
-  console.log('bodySign', bodySign)
+  // console.log('bodySign', bodySign)
   let url = `https://api.m.jd.com/api?functionId=${functionId}&appid=jdchoujiang_h5&t=${signtime}&body=${bodySign}&client&clientVersion`;
   const timestamp = new Date(signtime).Format("yyyyMMddhhmmssSSS");
   let hash1 = $.enCryptMethodJD($.tk, $.fingerprint.toString(), timestamp.toString(), $.appId.toString(), $.CryptoJS).toString($.CryptoJS.enc.Hex);

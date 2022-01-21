@@ -68,6 +68,10 @@ let joyRunNotify = true;//宠汪汪赛跑获胜后是否推送通知，true推�
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
+  $.CryptoJS = require('crypto-js');
+  $.appId = 'd67c8'
+  $.fingerprint = await generateFp();
+  await requestAlgo();
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -106,15 +110,20 @@ let joyRunNotify = true;//宠汪汪赛跑获胜后是否推送通知，true推�
   })
 async function jdJoy() {
   try {
-    await launchInvite();
-    await feedPets(FEED_NUM);//喂食
-    await Promise.all([
-      getPetTaskConfig(),//做日常任务
-      appGetPetTaskConfig(),//做APP特有的任务
-      deskGoodsTask(),//限时货柜
-      joinTwoPeopleRun(),//参加双人赛跑
-      getInviteFood()
-    ])
+    // await launchInvite();
+    // await feedPets(FEED_NUM);//喂食
+    // await Promise.all([
+    //   getPetTaskConfig(),//做日常任务
+    //   appGetPetTaskConfig(),//做APP特有的任务
+    //   deskGoodsTask(),//限时货柜
+    //   joinTwoPeopleRun(),//参加双人赛跑
+    //   getInviteFood()
+    // ])
+    await getPetTaskConfig()
+    await appGetPetTaskConfig()
+    await deskGoodsTask()
+    await joinTwoPeopleRun()
+    await getInviteFood()
     await enterRoom();
   } catch (e) {
     $.logErr(e)
@@ -394,9 +403,126 @@ async function petTask() {
         }
       }
     }
+    if (item['taskType'] === 'DianQi') {
+      console.log(`\n-----${item['taskName']}----- 任务进度：${item['joinedCount'] || 0}/${item['taskChance']}`);
+      if (item.taskChance === joinedCount) {
+        console.log(`任务：${item['taskName']}已完成！`)
+        if (item['receiveStatus'] === 'unreceive') {
+          const InviteUser = await getFood('DianQi');
+          console.log(`领取京东电器狗粮结果::${JSON.stringify(InviteUser)}`);
+        }
+      } else {
+        await receiveDQTask()
+        await doDQTask()
+        await queryVkComponent()
+      }
+    }
   }
 }
-
+function receiveDQTask() {
+  return new Promise(resolve => {
+    const options = {
+      "url": `https://jdjoy.jd.com/common/pet/receiveDQTask?reqSource=h5&invokeKey=${invokeKey}`,
+      "headers":  {
+        "Host": "jdjoy.jd.com",
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+        "Content-Type": "application/json",
+        "Origin": "https://h5.m.jd.com",
+        "User-Agent": "jdapp;iPhone;10.3.2;;;M/5.0;appBuild/167922;jdSupportDarkMode/0;ef/1;ep/%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22ud%22%3A%22ENq3CzTwENGmYtc3ENSnYtC0DWTwCNdwZNcnZtYmEWU2ZwYnCwY0Cm%3D%3D%22%2C%22sv%22%3A%22CJUkCq%3D%3D%22%2C%22iad%22%3A%22%22%7D%2C%22ts%22%3A1642763422%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D;Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;",
+        "Connection": "keep-alive",
+        'lkt': $.lkt,
+        'lks': $.md5(invokeKey + $.lkt),
+        "Referer": "https://h5.m.jd.com/",
+        "Cookie": cookie
+      },
+      "timeout": 10000,
+    }
+    $.get(options, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          console.log('receiveDQTask', data)
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function doDQTask() {
+  return new Promise(resolve => {
+    const options = {
+      "url": `https://jdjoy.jd.com/common/pet/doDQTask?invokeKey=${invokeKey}`,
+      "headers":  {
+        "Host": "jdjoy.jd.com",
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+        "Content-Type": "application/json",
+        "Origin": "https://h5.m.jd.com",
+        "User-Agent": "jdapp;iPhone;10.3.2;;;M/5.0;appBuild/167922;jdSupportDarkMode/0;ef/1;ep/%7B%22ciphertype%22%3A5%2C%22cipher%22%3A%7B%22ud%22%3A%22ENq3CzTwENGmYtc3ENSnYtC0DWTwCNdwZNcnZtYmEWU2ZwYnCwY0Cm%3D%3D%22%2C%22sv%22%3A%22CJUkCq%3D%3D%22%2C%22iad%22%3A%22%22%7D%2C%22ts%22%3A1642763422%2C%22hdid%22%3A%22JM9F1ywUPwflvMIpYPok0tt5k9kW4ArJEU3lfLhxBqw%3D%22%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%2C%22ridx%22%3A-1%7D;Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1;",
+        "Connection": "keep-alive",
+        'lkt': $.lkt,
+        'lks': $.md5(invokeKey + $.lkt),
+        "Referer": "https://h5.m.jd.com/",
+        "Cookie": cookie
+      },
+      "timeout": 10000,
+    }
+    $.get(options, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          console.log('doDQTask', data)
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function queryVkComponent() {
+  return new Promise(resolve => {
+    const options = {
+      "url": `https://api.m.jd.com/?client=wh5&clientVersion=1.0.0&functionId=queryVkComponent&body=%7B%22businessId%22%3A%22babel%22%2C%22componentId%22%3A%224f953e59a3af4b63b4d7c24f172db3c3%22%2C%22taskParam%22%3A%22%257B%2522actId%2522%3A%25228tHNdJLcqwqhkLNA8hqwNRaNu5f%2522%257D%22%7D&_timestamp=1642763462380`,
+      "headers":  {
+        "Cookie": cookie,
+        "Accept": `*/*`,
+        "Connection": `keep-alive`,
+        "Content-Type": `application/x-www-form-urlencoded`,
+        "Accept-Encoding": `gzip, deflate, br`,
+        "Host": `api.m.jd.com`,
+        "User-Agent": "jdapp;iPhone;9.3.4;14.3;88732f840b77821b345bf07fd71f609e6ff12f43;network/4g;ADID/1C141FDD-C62F-425B-8033-9AAB7E4AE6A3;supportApplePay/0;hasUPPay/0;hasOCPay/0;model/iPhone11,8;addressid/2005183373;supportBestPay/0;appBuild/167502;jdSupportDarkMode/0;pv/414.19;apprpd/Babel_Native;ref/TTTChannelViewContoller;psq/5;ads/;psn/88732f840b77821b345bf07fd71f609e6ff12f43|1701;jdv/0|iosapp|t_335139774|appshare|CopyURL|1610885480412|1610885486;adk/;app_device/IOS;pap/JA2015_311210|9.3.4|IOS 14.3;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1",
+        "Accept-Language": `zh-Hans-CN;q=1, en-CN;q=0.9`,
+      },
+      "timeout": 10000,
+    }
+    $.get(options, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          console.log('queryVkComponent', data)
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
 function getDeskGoodDetails() {
   return new Promise(resolve => {
     // const url = `${JD_API_HOST}/getDeskGoodDetails`;
@@ -654,25 +780,28 @@ function followShop(shopId) {
   })
 }
 function enterRoom() {
-  return new Promise(resolve => {
-    // const url = `${weAppUrl}/enterRoom/h5?reqSource=weapp&invitePin=&openId=`;
-    const host = `draw.jdfcloud.com`;
-    const reqSource = 'weapp';
-    let opt = {
-      url: `//draw.jdfcloud.com/common/pet/enterRoom/h5?invitePin=&openId=&invokeKey=${invokeKey}`,
-      method: "GET",
-      data: {},
-      credentials: "include",
-      header: {"content-type": "application/json"}
-    }
-    const url = "https:"+ taroRequest(opt)['url'] + $.validate;
-    $.post({...taskUrl(url.replace(/reqSource=h5/, 'reqSource=weapp'), host, reqSource),body:'{}'}, (err, resp, data) => {
+  return new Promise(async resolve => {
+    const body = {invitePin: "", reqSource: "h5"};
+    const time = Date.now()
+    $.appId = '2bba1'
+    const h5st = await getH5stBody('petEnterRoom', $.toStr(body));
+    const opt = {
+      url: `https://api.m.jd.com/api?client&clientVersion&appid=jdchoujiang_h5&t=${time}&functionId=petEnterRoom&body=${$.toStr(body)}&h5st=${h5st}`,
+      headers: {
+        'Cookie': cookie,
+        "accept": "*/*",
+        "origin": "https://h5.m.jd.com",
+        "referer": "https://h5.m.jd.com/",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      },
+      timeout: 10000
+    };
+    $.post(opt, (err, resp, data) => {
       try {
         if (err) {
           console.log('\n京东宠汪汪: API查询请求失败 ‼️‼️')
         } else {
-          // console.log('JSON.parse(data)', JSON.parse(data))
-          $.roomData = JSON.parse(data);
+          $.roomData = $.toObj(data, {});
           if ($.roomData && $.roomData.success && $.roomData.data) {
             console.log(`现有狗粮: ${$.roomData.data.petFood}\n`)
             subTitle = `【用户名】${$.roomData.data.pin}`
@@ -690,40 +819,48 @@ function enterRoom() {
   })
 }
 function appGetPetTaskConfig() {
-  return new Promise(resolve => {
-    const host = `jdjoy.jd.com`;
-    const reqSource = 'h5';
-    let opt = {
-      url: `//jdjoy.jd.com/common/pet/getPetTaskConfig?invokeKey=${invokeKey}`,
-      method: "GET",
-      data: {},
-      credentials: "include",
-      header: {"content-type": "application/json"}
-    }
-    const url = "https:"+ taroRequest(opt)['url'] + $.validate;
-    $.get(taskUrl(url, host, reqSource), async (err, resp, data) => {
+  return new Promise(async resolve => {
+    const body = {reqSource: "h5"};
+    const time = Date.now()
+    $.appId = '922a5'
+    const h5st = await getH5stBody('petGetPetTaskConfig', $.toStr(body));
+    const opt = {
+      url: `https://api.m.jd.com/api?client&clientVersion&appid=jdchoujiang_h5&t=${time}&functionId=petGetPetTaskConfig&body=${$.toStr(body)}&h5st=${h5st}`,
+      headers: {
+        'Cookie': cookie,
+        "accept": "*/*",
+        "origin": "https://h5.m.jd.com",
+        "referer": "https://h5.m.jd.com/",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      },
+      timeout: 10000
+    };
+    $.post(opt, async (err, resp, data) => {
       try {
         if (err) {
           console.log('\n京东宠汪汪: API查询请求失败 ‼️‼️')
         } else {
           data = $.toObj(data);
           if (data) {
-            if (data['success']) {
+            if (data['success'] && data['datas']) {
+              console.log('获取APP任务列表成功！')
               if (data['datas'] && data['datas'].length) {
-                $.appGetPetTaskConfigRes = data;
-                for (let item of $.appGetPetTaskConfigRes.datas) {
-                  if (item['taskType'] === 'ScanMarket' && item['receiveStatus'] === 'chance_left') {
-                    const scanMarketList = item.scanMarketList;
-                    for (let scan of scanMarketList) {
-                      if (!scan.status && scan.showDest === 'h5') {
-                        console.log(`逛会场-做APP特有任务：${scan['marketName']}`);
-                        const body = { marketLink: scan.marketLinkH5, taskType: 'ScanMarket', reqSource: 'h5' }
-                        await appScanMarket('scan', body);
-                        await $.wait(5000);
-                      }
-                    }
-                  }
-                }
+                $.getPetTaskConfigRes = data;
+                await petTask();
+                // $.appGetPetTaskConfigRes = data;
+                // for (let item of $.appGetPetTaskConfigRes.datas) {
+                //   if (item['taskType'] === 'ScanMarket' && item['receiveStatus'] === 'chance_left') {
+                //     const scanMarketList = item.scanMarketList;
+                //     for (let scan of scanMarketList) {
+                //       if (!scan.status && scan.showDest === 'h5') {
+                //         console.log(`逛会场-做APP特有任务：${scan['marketName']}`);
+                //         const body = { marketLink: scan.marketLinkH5, taskType: 'ScanMarket', reqSource: 'h5' }
+                //         await appScanMarket('scan', body);
+                //         await $.wait(5000);
+                //       }
+                //     }
+                //   }
+                // }
               } else {
                 console.log(`获取APP任务列表失败：${$.toStr(data)}\n`);
               }
@@ -802,21 +939,23 @@ function feedPets(feedNum) {
   })
 }
 function getPetTaskConfig() {
-  return new Promise(resolve => {
-    // const url = `${weAppUrl}/getPetTaskConfig?reqSource=weapp`;
-    // const host = `jdjoy.jd.com`;
-    // const reqSource = 'h5';
-    const host = `draw.jdfcloud.com`;
-    const reqSource = 'weapp';
-    let opt = {
-      url: `//draw.jdfcloud.com//common/pet/getPetTaskConfig?invokeKey=${invokeKey}`,
-      method: "GET",
-      data: {},
-      credentials: "include",
-      header: {"content-type": "application/json"}
-    }
-    const url = "https:"+ taroRequest(opt)['url'] + $.validate;
-    $.get(taskUrl(url.replace(/reqSource=h5/, 'reqSource=weapp'), host, reqSource), async (err, resp, data) => {
+  return new Promise(async resolve => {
+    const body = {reqSource: "h5"};
+    const time = Date.now()
+    $.appId = '922a5'
+    const h5st = await getH5stBody('petGetPetTaskConfig', $.toStr(body));
+    const opt = {
+      url: `https://api.m.jd.com/api?client&clientVersion&appid=jdchoujiang_h5&t=${time}&functionId=petGetPetTaskConfig&body=${$.toStr(body)}&h5st=${h5st}`,
+      headers: {
+        'Cookie': cookie,
+        "accept": "*/*",
+        "origin": "https://h5.m.jd.com",
+        "referer": "https://h5.m.jd.com/",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      },
+      timeout: 10000
+    };
+    $.post(opt, async (err, resp, data) => {
       try {
         if (err) {
           console.log('\n京东宠汪汪: API查询请求失败 ‼️‼️')
@@ -825,7 +964,8 @@ function getPetTaskConfig() {
           // $.getPetTaskConfigRes = JSON.parse(data);
           data = $.toObj(data);
           if (data) {
-            if (data['success']) {
+            if (data['success'] && data['datas']) {
+              console.log(`获取任务列表成功\n`);
               if (data['datas'] && data['datas'].length) {
                 $.getPetTaskConfigRes = data;
                 await petTask();
@@ -833,7 +973,7 @@ function getPetTaskConfig() {
                 console.log(`获取任务列表失败：${$.toStr(data)}\n`);
               }
             } else {
-              console.log(`获取任务列表异常：${$.toStr(data)}\n`);
+              console.log(`获取小程序端任务列表异常：${$.toStr(data)}\n`);
             }
           }
         }
@@ -1225,6 +1365,148 @@ function jsonParse(str) {
     }
   }
 }
+
+async function getH5stBody(functionId, bodyInfo, time = null) {
+  const signtime = time || Date.now();
+  const bodySign = $.CryptoJS.SHA256(decodeURIComponent(bodyInfo)).toString();
+  // $.fingerprint = 1171233728428164
+  // console.log('bodySign', bodySign)
+  let url = `https://api.m.jd.com/api?functionId=${functionId}&appid=jdchoujiang_h5&t=${signtime}&body=${bodySign}&client&clientVersion`;
+  const timestamp = new Date(signtime).Format("yyyyMMddhhmmssSSS");
+  let hash1 = $.enCryptMethodJD($.tk, $.fingerprint.toString(), timestamp.toString(), $.appId.toString(), $.CryptoJS).toString($.CryptoJS.enc.Hex);
+  let st = '';
+  const stk = "appid,body,client,clientVersion,functionId,t";
+  stk.split(',').map((item, index) => {
+    st += `${item}:${getUrlData(url, item)}${index === stk.split(',').length - 1 ? '' : '&'}`;
+  })
+  const hash2 = $.CryptoJS.HmacSHA256(st, hash1.toString()).toString($.CryptoJS.enc.Hex);
+  let h5st = ["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.tk), "".concat(hash2), "".concat('3.0'), "".concat(signtime)].join(";");
+  // console.log(h5st)
+  return `${encodeURIComponent(h5st)}`
+}
+
+async function requestAlgo() {
+  const options = {
+    "url": `https://cactus.jd.com/request_algo?g_ty=ajax`,
+    "headers": {
+      'Authority': 'cactus.jd.com',
+      'Pragma': 'no-cache',
+      'Cache-Control': 'no-cache',
+      'Accept': 'application/json',
+      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      'Content-Type': 'application/json',
+      'Origin': 'https://st.jingxi.com',
+      'Sec-Fetch-Site': 'cross-site',
+      'Sec-Fetch-Mode': 'cors',
+      'Sec-Fetch-Dest': 'empty',
+      'Referer': 'https://st.jingxi.com/',
+      'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7'
+    },
+    'body': JSON.stringify({
+      "version": "3.0",
+      "fp": $.fingerprint,
+      "appId": $.appId,
+      "timestamp": Date.now(),
+      "platform": "web",
+      "expandParams": ""
+    })
+  }
+  return new Promise(async resolve => {
+    $.post(options, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`request_algo 签名参数API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+            if (data['status'] === 200) {
+              $.tk = data.data.result.tk;
+              let enCryptMethodJDString = data.data.result.algo;
+              console.log(enCryptMethodJDString);
+              if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
+              console.log(`获取签名参数成功！`)
+              console.log(`tk: ${$.tk}`)
+            } else {
+              console.log('request_algo 签名参数API请求失败:')
+            }
+          } else {
+            console.log(`京东服务器返回空数据`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
+function generateFp() {
+  const str = "0123456789", rmStrLen = 3, rd = Math.random() * 10 | 0, fpLen = 16
+  let rmStr = "", notStr = ""
+  !((num, str) => {
+    let strArr = str.split(""), res = []
+    for (let i = 0; i < num; i++) {
+      let rd = Math.random() * (strArr.length - 1) | 0
+      res.push(strArr[rd])
+      strArr.splice(rd, 1)
+    }
+    rmStr = res.join(""), notStr = strArr.join("")
+  })(rmStrLen, str)
+
+  return ((size, num) => {
+    let u = size, u2 = (fpLen - rmStrLen - size.toString().length) - size, res = ""
+    while (u--) res += num[Math.random() * num.length | 0]
+    res += rmStr
+    while (u2--) res += num[Math.random() * num.length | 0]
+    res += size
+    return res
+  })(rd, notStr)
+}
+function getUrlData(url, name) {
+  if (typeof URL !== "undefined") {
+    let urls = new URL(url);
+    let data = urls.searchParams.get(name);
+    return data ? data : '';
+  } else {
+    const query = url.match(/\?.*/)[0].substring(1)
+    const vars = query.split('&')
+    for (let i = 0; i < vars.length; i++) {
+      const pair = vars[i].split('=')
+      if (pair[0] === name) {
+        // return pair[1];
+        return vars[i].substr(vars[i].indexOf('=') + 1);
+      }
+    }
+    return ''
+  }
+}
+Date.prototype.Format = function (fmt) {
+  var e,
+      n = this, d = fmt, l = {
+        "M+": n.getMonth() + 1,
+        "d+": n.getDate(),
+        "D+": n.getDate(),
+        "h+": n.getHours(),
+        "H+": n.getHours(),
+        "m+": n.getMinutes(),
+        "s+": n.getSeconds(),
+        "w+": n.getDay(),
+        "q+": Math.floor((n.getMonth() + 3) / 3),
+        "S+": n.getMilliseconds()
+      };
+  /(y+)/i.test(d) && (d = d.replace(RegExp.$1, "".concat(n.getFullYear()).substr(4 - RegExp.$1.length)));
+  for (var k in l) {
+    if (new RegExp("(".concat(k, ")")).test(d)) {
+      var t, a = "S+" === k ? "000" : "00";
+      d = d.replace(RegExp.$1, 1 == RegExp.$1.length ? l[k] : ("".concat(a) + l[k]).substr("".concat(l[k]).length))
+    }
+  }
+  return d;
+}
+
 function taroRequest(e) {
   const a = $.isNode() ? require('crypto-js') : CryptoJS;
   const i = "98c14c997fde50cc18bdefecfd48ceb7"
