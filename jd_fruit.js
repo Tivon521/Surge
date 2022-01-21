@@ -135,6 +135,7 @@ async function jdFruit() {
 async function doDailyTask() {
   await taskInitForFarm();
   console.log(`开始签到`);
+  if (!$.farmTask) return
   if (!$.farmTask.signInit.todaySigned) {
     await signForFarm(); //签到
     if ($.signResult.code === "0") {
@@ -299,6 +300,7 @@ async function predictionFruit() {
   console.log('开始预测水果成熟时间\n');
   await initForFarm();
   await taskInitForFarm();
+  if (!$.farmTask) return
   let waterEveryDayT = $.farmTask.totalWaterTaskInit.totalWaterTaskTimes;//今天到到目前为止，浇了多少次水
   message += `【今日共浇水】${waterEveryDayT}次\n`;
   message += `【剩余 水滴】${$.farmInfo.farmUserPro.totalEnergy}g💧\n`;
@@ -369,6 +371,7 @@ async function doTenWater() {
 async function getFirstWaterAward() {
   await taskInitForFarm();
   //领取首次浇水奖励
+  if (!$.farmTask) return
   if (!$.farmTask.firstWaterInit.f && $.farmTask.firstWaterInit.totalWaterTimes > 0) {
     await firstWaterTaskForFarm();
     if ($.firstWaterReward.code === '0') {
@@ -889,6 +892,7 @@ async function doFriendsWater() {
   await friendListInitForFarm();
   console.log('开始给好友浇水...');
   await taskInitForFarm();
+  if (!$.farmTask) return
   const { waterFriendCountKey, waterFriendMax } = $.farmTask.waterFriendTaskInit;
   console.log(`今日已给${waterFriendCountKey}个好友浇水`);
   if (waterFriendCountKey < waterFriendMax) {
@@ -944,6 +948,7 @@ async function doFriendsWater() {
 //领取给3个好友浇水后的奖励水滴
 async function getWaterFriendGotAward() {
   await taskInitForFarm();
+  if (!$.farmTask) return
   const { waterFriendCountKey, waterFriendMax, waterFriendSendWater, waterFriendGotAward } = $.farmTask.waterFriendTaskInit
   if (waterFriendCountKey >= waterFriendMax) {
     if (!waterFriendGotAward) {
@@ -1273,7 +1278,7 @@ async function initForFarm() {
 async function taskInitForFarm() {
   console.log('\n初始化任务列表')
   const functionId = arguments.callee.name.toString();
-  $.farmTask = await request(functionId, {"version":14,"channel":1,"babelChannel":"120"});
+  $.farmTask = await request(functionId, {"version":14,"channel":1,"babelChannel": 0});
 }
 //获取好友列表API
 async function friendListInitForFarm() {
