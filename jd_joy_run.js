@@ -50,9 +50,9 @@ const JD_BASE_API = `https://draw.jdfcloud.com//pet`;
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
 //下面给出好友邀请助力的示例填写规则
-let invite_pins = ['jd_6cd93e613b0e5,被折叠的记忆33,jd_45a6b5953b15b,jd_66f5cecc1efcd,jd_41345a6f96aa5,jd_sIhNpDXJehOr,jd_mCbhXxmqzYJC,wddpzLSxORvLGo,jd_7bb2be8dbd65c,jd_42ad078104f47'];
+let invite_pins = ['jd_qhsBrqHDPgNj'];
 //下面给出好友赛跑助力的示例填写规则
-let run_pins = ['jd_6cd93e613b0e5,被折叠的记忆33,jd_45a6b5953b15b,jd_66f5cecc1efcd,jd_41345a6f96aa5,jd_sIhNpDXJehOr,jd_mCbhXxmqzYJC,wddpzLSxORvLGo,jd_7bb2be8dbd65c,jd_6423ed8a93620,wduCeTewiZbRUd,jd_42ad078104f47,jd_706149c3ca11c,jd_604ddb1259203'];
+let run_pins = ['jd_qhsBrqHDPgNj'];
 //friendsArr内置太多会导致IOS端部分软件重启,可PR过来(此处目的:帮别人助力可得30g狗粮)
 let friendsArr = ["jd_41345a6f96aa5", "jd_45a6b5953b15b", "jd_45a6b5953b15b", "jd_704a2e5e28a66", "jd_66f5cecc1efcd", "jd_sIhNpDXJehOr", "jd_5851f32d4a083", "yhr_19820404", "13008094886_p", "13966269193_p", "jd_4e4d9825e5fb1", "jd_5ff306cf94512", "ququkoko", "jd_59a9823f35496", "529577509-275616", "18923155789_p", "jd_455da88071d1e", "dreamscometrue5120", "蒋周南19620607", "jd_620ceca400151", "杉雨2011", "MARYMY88", "13682627696_p", "jd_6777ee65f9fcc", "夏海东12315", "jd_437b4f3fa5d83", "zyjyc9998", "meoygua", "MLHK7288", "jd_42d9ce3001acd", "jd_57650a30ef6eb", "jd_44ca1016e0f96", "jd_74332d1d62a97", "jd_7dbe4f8a40a7d", "jd_4fa238e4e3039", "elbereth1122", "jd_4d9be23908e41", "jd_51f0d43d78900", "13588108107_p", "123by456", "09niuniuma", "143798682-947527", "jd_560c6f30e6951", "jd_54ddb8af5374a", "夏革平", "247466310", "wang2011", "chensue", "1362245003-624122", "wdGefYCBlyOuvz", "jd_412f7eb363cd8", "18311575050_p", "1307976-34738981", "wdgOGLtOJjjbnp", "klhzdx", "jd_5fdcdcb183d7d", "jd_5862fd8834680", "jd_51a64a9da6b94", "302990512-553401", "jd_4078f69a72873", "jd_ewYCRdmukzQH", "13348822441_p", "hlcx86021", "390823571-784974", "jd_79af2bc7a56a3", "15053231812_p", "jd_6f53253d117c5", "jd_5bf29dffa62ea", "jd_47a1c4ad02103", "刘凤苓", "145391572-102667", "yanglan0409", "jd_4b8a70f3b06c3", "弑神X", "jd_59d962a076126", "sjw3000", "jd_4d4def8b59787", "L1518235423", "jd_579b891fbea9b", "frank818", "hellohuhua", "jd_4cf1918577871", "jd_akYbyiXqrIDC", "李纪红", "jd_54a4260ca986c", "jd_4cba35cfa8220", "13654075776_p", "13916051043", "jd_6f9b9a6769afb", "iamkgbfox", "jd_5fbda9be54d5b", "jd_76763ba485c5e", "jd_485c757b79422", "xiaojingang_0", "lanye1545", "chenzhiyun2002", "lmpbjs1988", "jd_SmPxpudoGYOb", "jwl19690905", "荷舞弄清影88", "jd_750d6a9734717", "jd_64e37854e713f", "jd_573c9832d8989", "wdkplHVQlgowTW", "wwk232323", "jd_6bfe51f915c90", "我手机号码", "13681610268_p", "ss836580793", "15868005933_p", "zooooo58", "陌上花开花又落", "jd_701f52f8badbb", "jd_462f9229c20e4", "jd_42193689987a0", "jd_7dc5829121bcc", "13656692651_phz", "jd_47f49f22f1dc3", "handechun959", "13775208986_p", "guoyizhang", "jd_677dd20bf2749", "jd_FfAnqFVEoBul", "jd_4e59841cae4f9", "jd_5279d593e7803", "思绪随风2011", "jd_62e335d785872", "suyugen", "jd_4e68b48d16f7b", "jd_56b7a4e092e85", "cocoty", "jd_7b6d6e7dc98f1", "jd_63423cd594e8b", "greatyunyun", "4349小丢丢", "18027486801_p", "15207695569_p", "llbai11", "wdNRUvbJItetlvB", "jd_54154982c707f", "85192cool", "jd_60d497271825b", "greatyunyun9320", "ky252571504", "jd_74e60dbcae365", "wdiicnSbYSHWwE", "jd_529a0a309d418", "jd_7be92b11b7e8f", "13486659225_p", "jd_iFnquhpWWAzO", "jd_6e348ece13e20", "jd_6f5b49bb757cb", "znz传奇", "418001066_m", "jd_67ded5748c3ab", "361372-27819972", "jd_5fafb631c98af", "jd_76dd04e844d63", "小鹿Jenny", "00数字方程式", "jd_77a82b603c6c3", "勇敢的小泪", "jd_4481f68984466", "jd_758f5224ee957", "mwb1992062_m", "15975229552_p", "zdj8341", "pet_virtual_friend_胡皋三", "pet_virtual_friend_绿茶sama", "pet_virtual_friend_Ainio", "jd_4915949b7bfa1", "jd_7ca74ed9224ef", "jd_42764f5ea2341", "5317123-63418293", "jd_40a2d9485cbdb", "qazmcl1230", "jd_7ced325aba4fd", "jd_402fe7425fcaf", "95581245-627991", "luffy-314_m", "jd_BCXgLlmxHdiS", "jd_610b3d00928e5", "你要醒来", "338379384-148135", "pet_virtual_friend_乔治桑", "jd_54130a3e282ea", "jd_6169b3411ed5b", "jd_428d930ca56a5", "qq6924309", "pet_virtual_friend_路遇狗与少年", "jd_712bd3bfd55d6", "jd_4e97fe5ca4003", "tommy_he1", "13981372001_p", "129867657-673064", "jd_525d6e7a57e7c", "wdZuirGekSHKmF", "jd_75e1da74980ab", "jd_RVMXldNSQNOP", "jd_5f94da0265e0d", "jd_67ab629be7e61", "13887490621_p", "jd_4e0d529ba3c35", "jd_493918e314b50", "jd_71a220104187a", "jd_vVhhkdUpTkJQ", "gary388jingdong", "wdjQkAbFobMTyo", "cloud_kim", "jd_558ed75f52d39", "15555448319_p", "wdhxZuEvXhhvCf", "jd_72b940be8c0f4", "congcong炒葱葱", "jd_7eb0de64eb25a", "13209558123_p", "jd_53bf7cb6fb8e6", "jd_4fe620f72fa7c", "夏雨的爱情", "jd_47ba82eb392a5", "jd_LXnFHXoJwXkW", "62160785-578856", "醒醒该睡了", "jd_LOEWgvNwQIWD", "xiiirww", "pet_virtual_friend_特兰克斯", "pet_virtual_friend_Talon", "jd_4f7cd5b108733", "jd_NgNWXMVkJIvk", "jadonglin", "玩家卫弈", "liangxuejingdong", "jd_627171efb7c0a", "jd_53bc7a14f64d6", "15809290902_p", "jd_65a2ab73d9aa5", "jd_6edb943cacbfb", "jd_7f7eabc5caf7d", "jd_725e17effb6a9", "蔡辉煌", "voxb", "gdxx_hhw_m", "jd_78f0d6524a1dc", "jd_sDtnONLeHwfG", "xyyshy1983", "yinlang46", "ypqian", "15817094457_p", "fdxwb", "wuyaoxin2012", "明子溪", "henry1927_m", "chamy99", "jd_461e384274c34", "248358330-645106", "jd_4fd63de4a6033", "蜜糖向日葵", "wonghe", "36453197-121619", "琳琅满目cbb", "jd_5b7cc9e532426", "134795344-89911673", "15211488203_p", "jd_6f1f0722f8365", "jd_JmGCpqgpCtqG", "墨明棋妙陈", "pet_virtual_friend_1314爱澳", "1209815-33190621", "zhouhuayh", "jd_6d3cbb8b0751a", "jd_6e00e826f939b", "mztvip", "davidharry", "sara35424", "sun5025", "jd_62ce2385bb364", "352834026-406289", "pet_virtual_friend_丁座的真爱粉", "jd_582eecf8d27a9", "jd_49acdb02e8514", "13976911784_p", "jd_uGzohbhFpRuz", "wzywolfgang", "yjbonny", "沧海不轮回", "649297742_327799447", "倚兰椒", "琳琳8796", "snzh2013", "jd_73751adc04afd", "wdNnlMzPGJJKgqI", "yygt1158", "jd_53df36eb204a0", "花开花花落", "jd_611e082213c89", "jd_71e77d9235cf5", "jd_596fd9fea411f", "jd_7277d200aa1ac", "15230573701_p", "zb19881021", "692620136落", "168876810-159969", "zhushidan100", "上自习的猪", "15602231009_p", "jd_5213fd3fd5e09", "jd_6711f97ee4dfe", "44787591-640051", "MisterGlasses", "jd_7b22bbfe1e7e5", "138555963-81748582", "jd_QEVVkkDTQAlJ", "4932713-24535180", "jd_6dce98c07a644", "jd_DUtPtiiDamDr", "wangyneu", "wBm1TsDy3p_m", "jd_6acd3a6cc79cc","jd_444f5c020f31c","jd_71caf6b3ec4cb", "shin_dynasty", "carola82", "jd_AOhLSBLdSnux", "ningbormb"]
 
@@ -167,7 +167,11 @@ async function main() {
         $.index = i + 1;
         $.inviteReward = 0;
         $.runReward = 0;
-        console.log(`\n开始【京东账号${$.index}】${UserName}\n`);
+        $.CryptoJS = require('crypto-js');
+        $.appId = 'd67c8'
+        $.fingerprint = await generateFp();
+        await requestAlgo();
+        console.log(`\n*************开始【京东账号${$.index}】${UserName}************\n`);
         $.jdLogin = true;
         $.LKYLLogin = true;
         console.log(`=============【开始邀请助力】===============`)
@@ -363,42 +367,35 @@ async function invite(invite_pins) {
   // }
 }
 function enterRoom(invitePin) {
-  return new Promise(resolve => {
-    headers.Cookie = cookie;
-    headers.LKYLToken = $.LKYLToken;
-    headers['Content-Type'] = "application/json";
-    let opt = {
-      // url: "//jdjoy.jd.com/common/pet/getPetTaskConfig?reqSource=h5",
-      url: `//draw.jdfcloud.com/common/pet/enterRoom/h5?reqSource=h5&invitePin=${encodeURI(invitePin)}&inviteSource=task_invite&shareSource=weapp&inviteTimeStamp=${Date.now()}&invokeKey=${invokeKey}`,
-      method: "GET",
-      data: {},
-      credentials: "include",
-      header: {"content-type": "application/json"}
-    }
-    const url = "https:"+ taroRequest(opt)['url'] + $.validate;
-    const options = {
-      url,
-      body: '{}',
-      headers: Object.assign(headers, {
-        'lkt': $.lkt,
-        'lks': $.md5(invokeKey + $.lkt)
-      })
-    }
-    $.post(options, (err, resp, data) => {
+  return new Promise(async resolve => {
+    const time = Date.now()
+    const body = {invitePin,"inviteSource":"task_invite","shareSource":"h5","inviteTimeStamp":time.toString(),"openId":"oPcgJ40Ol7BSTczZ2ok0WmfLWoAs","reqSource":"weapp"}
+    $.appId = '2bba1'
+    const h5st = await getH5stBody2('petEnterRoom', $.toStr(body));
+    const opt = {
+      url: `https://api.m.jd.com/api?client=iOS%2015.2&clientVersion=8.0.17&appid=jdchoujiang_h5&t=${time}&functionId=petEnterRoom&body=${encodeURIComponent($.toStr(body))}&h5st=${h5st}`,
+      headers: {
+        'Cookie': cookie,
+        "accept": "*/*",
+        "origin": "https://h5.m.jd.com",
+        "referer": "https://h5.m.jd.com/",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      },
+      timeout: 10000
+    };
+    $.post(opt, (err, resp, data) => {
       try {
         if (err) {
-          $.log(`${$.name} API请求失败`)
-          $.log(JSON.stringify(err))
+          console.log('\n京东宠汪汪: API查询请求失败 ‼️‼️')
         } else {
-          // console.log('进入房间', data)
-          data = JSON.parse(data);
+          data = $.toObj(data, {});
         }
       } catch (e) {
-        $.logErr(e, resp)
+        $.logErr(e, resp);
       } finally {
         resolve(data);
       }
-    });
+    })
   })
 }
 function helpInviteFriend(friendPin) {
@@ -509,7 +506,7 @@ function combatHelp(friendPin) {
           $.logErr(JSON.stringify(err));
         } else {
           $.log(`赛跑助力结果${data}`);
-          data = JSON.parse(data);
+          data = $.toObj(data);
           // {"errorCode":"help_ok","errorMessage":null,"currentTime":1600479266133,"data":{"rewardNum":5,"helpStatus":"help_ok","newUser":false},"success":true}
           if (data.errorCode === 'help_ok' && data.data.helpStatus === 'help_ok') {
             console.log(`助力${friendPin}成功\n获得狗粮${data.data.rewardNum}g\n`);
@@ -613,7 +610,145 @@ function getFriendPins() {
 }
 isRequest ? getToken() : main();
 
+async function getH5stBody2(functionId, bodyInfo, time = null) {
+  const signtime = time || Date.now();
+  const bodySign = $.CryptoJS.SHA256(decodeURIComponent(bodyInfo)).toString();
+  // $.fingerprint = 1171233728428164
+  // console.log('bodySign', bodySign)
+  let url = `https://api.m.jd.com/api?functionId=${functionId}&appid=jdchoujiang_h5&t=${signtime}&body=${bodySign}&client=iOS 15.2&clientVersion=8.0.17`;
+  const timestamp = new Date(signtime).Format("yyyyMMddhhmmssSSS");
+  let hash1 = $.enCryptMethodJD($.tk, $.fingerprint.toString(), timestamp.toString(), $.appId.toString(), $.CryptoJS).toString($.CryptoJS.enc.Hex);
+  let st = '';
+  const stk = "appid,body,client,clientVersion,functionId,t";
+  stk.split(',').map((item, index) => {
+    st += `${item}:${getUrlData(url, item)}${index === stk.split(',').length - 1 ? '' : '&'}`;
+  })
+  const hash2 = $.CryptoJS.HmacSHA256(st, hash1.toString()).toString($.CryptoJS.enc.Hex);
+  let h5st = ["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.tk), "".concat(hash2), "".concat('3.0'), "".concat(signtime)].join(";");
+  // console.log(h5st)
+  return `${encodeURIComponent(h5st)}`
+}
+async function requestAlgo() {
+  const options = {
+    "url": `https://cactus.jd.com/request_algo?g_ty=ajax`,
+    "headers": {
+      'Authority': 'cactus.jd.com',
+      'Pragma': 'no-cache',
+      'Cache-Control': 'no-cache',
+      'Accept': 'application/json',
+      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      'Content-Type': 'application/json',
+      'Origin': 'https://st.jingxi.com',
+      'Sec-Fetch-Site': 'cross-site',
+      'Sec-Fetch-Mode': 'cors',
+      'Sec-Fetch-Dest': 'empty',
+      'Referer': 'https://st.jingxi.com/',
+      'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7'
+    },
+    'body': JSON.stringify({
+      "version": "3.0",
+      "fp": $.fingerprint,
+      "appId": $.appId,
+      "timestamp": Date.now(),
+      "platform": "web",
+      "expandParams": ""
+    })
+  }
+  return new Promise(async resolve => {
+    $.post(options, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`request_algo 签名参数API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+            if (data['status'] === 200) {
+              $.tk = data.data.result.tk;
+              let enCryptMethodJDString = data.data.result.algo;
+              console.log(enCryptMethodJDString);
+              if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
+              console.log(`获取签名参数成功！`)
+              console.log(`tk: ${$.tk}`)
+            } else {
+              console.log('request_algo 签名参数API请求失败:')
+            }
+          } else {
+            console.log(`京东服务器返回空数据`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
 
+function generateFp() {
+  const str = "0123456789", rmStrLen = 3, rd = Math.random() * 10 | 0, fpLen = 16
+  let rmStr = "", notStr = ""
+  !((num, str) => {
+    let strArr = str.split(""), res = []
+    for (let i = 0; i < num; i++) {
+      let rd = Math.random() * (strArr.length - 1) | 0
+      res.push(strArr[rd])
+      strArr.splice(rd, 1)
+    }
+    rmStr = res.join(""), notStr = strArr.join("")
+  })(rmStrLen, str)
+
+  return ((size, num) => {
+    let u = size, u2 = (fpLen - rmStrLen - size.toString().length) - size, res = ""
+    while (u--) res += num[Math.random() * num.length | 0]
+    res += rmStr
+    while (u2--) res += num[Math.random() * num.length | 0]
+    res += size
+    return res
+  })(rd, notStr)
+}
+function getUrlData(url, name) {
+  if (typeof URL !== "undefined") {
+    let urls = new URL(url);
+    let data = urls.searchParams.get(name);
+    return data ? data : '';
+  } else {
+    const query = url.match(/\?.*/)[0].substring(1)
+    const vars = query.split('&')
+    for (let i = 0; i < vars.length; i++) {
+      const pair = vars[i].split('=')
+      if (pair[0] === name) {
+        // return pair[1];
+        return vars[i].substr(vars[i].indexOf('=') + 1);
+      }
+    }
+    return ''
+  }
+}
+Date.prototype.Format = function (fmt) {
+  var e,
+      n = this, d = fmt, l = {
+        "M+": n.getMonth() + 1,
+        "d+": n.getDate(),
+        "D+": n.getDate(),
+        "h+": n.getHours(),
+        "H+": n.getHours(),
+        "m+": n.getMinutes(),
+        "s+": n.getSeconds(),
+        "w+": n.getDay(),
+        "q+": Math.floor((n.getMonth() + 3) / 3),
+        "S+": n.getMilliseconds()
+      };
+  /(y+)/i.test(d) && (d = d.replace(RegExp.$1, "".concat(n.getFullYear()).substr(4 - RegExp.$1.length)));
+  for (var k in l) {
+    if (new RegExp("(".concat(k, ")")).test(d)) {
+      var t, a = "S+" === k ? "000" : "00";
+      d = d.replace(RegExp.$1, 1 == RegExp.$1.length ? l[k] : ("".concat(a) + l[k]).substr("".concat(l[k]).length))
+    }
+  }
+  return d;
+}
 function taroRequest(e) {
   const a = $.isNode() ? require('crypto-js') : CryptoJS;
   const i = "98c14c997fde50cc18bdefecfd48ceb7"

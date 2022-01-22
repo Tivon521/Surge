@@ -110,7 +110,6 @@ let joyRunNotify = true;//宠汪汪赛跑获胜后是否推送通知，true推�
   })
 async function jdJoy() {
   try {
-    // await launchInvite();
     // await feedPets(FEED_NUM);//喂食
     // await Promise.all([
     //   getPetTaskConfig(),//做日常任务
@@ -119,6 +118,7 @@ async function jdJoy() {
     //   joinTwoPeopleRun(),//参加双人赛跑
     //   getInviteFood()
     // ])
+    await launchInvite();
     await getPetTaskConfig()
     await appGetPetTaskConfig()
     await deskGoodsTask()
@@ -648,11 +648,24 @@ function appScanMarket(type, body) {
     })
   })
 }
-function launchInvite(body = {}) {
-  return new Promise(resolve => {
-    const invitePin = 'jd_6cd93e613b0e5';
-    const url = `https://draw.jdfcloud.com//common/pet/enterRoom/h5?invitePin=${encodeURIComponent(invitePin)}&inviteSource=friend_list&shareSource=weapp&openId=oPcgJ49Ea26t4OFpK9P2WoPwCh3I&reqSource=weapp&invokeKey=${invokeKey}`;
-    $.post(taskPostUrl(url, JSON.stringify(body), '', '', 'application/json'), async (err, resp, data) => {
+function launchInvite(invitePin = 'jd_qhsBrqHDPgNj') {
+  return new Promise(async resolve => {
+    const body = {invitePin,"inviteSource":"friend_list","shareSource":"h5","openId":"oPcgJ40Ol7BSTczZ2ok0WmfLWoAs","reqSource":"weapp"};
+    const time = Date.now()
+    $.appId = '2bba1'
+    const h5st = await getH5stBody2('petEnterRoom', $.toStr(body));
+    const opt = {
+      url: `https://api.m.jd.com/api?client=iOS%2015.2&clientVersion=8.0.17&appid=jdchoujiang_h5&t=${time}&functionId=petEnterRoom&body=${encodeURIComponent($.toStr(body))}&h5st=${h5st}`,
+      headers: {
+        'Cookie': cookie,
+        "accept": "*/*",
+        "origin": "https://h5.m.jd.com",
+        "referer": "https://h5.m.jd.com/",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      },
+      timeout: 10000
+    };
+    $.post(opt, (err, resp, data) => {
       try {
         if (err) {
           console.log('\n京东宠汪汪: API查询请求失败 ‼️‼️')
@@ -779,9 +792,9 @@ function followShop(shopId) {
     })
   })
 }
-function enterRoom() {
+function enterRoom(invitePin = '') {
   return new Promise(async resolve => {
-    const body = {invitePin: "", reqSource: "h5"};
+    const body = {invitePin, reqSource: "h5"};
     const time = Date.now()
     $.appId = '2bba1'
     const h5st = await getH5stBody('petEnterRoom', $.toStr(body));
@@ -803,9 +816,11 @@ function enterRoom() {
         } else {
           $.roomData = $.toObj(data, {});
           if ($.roomData && $.roomData.success && $.roomData.data) {
-            console.log(`现有狗粮: ${$.roomData.data.petFood}\n`)
-            subTitle = `【用户名】${$.roomData.data.pin}`
-            message = `现有积分: ${$.roomData.data.petCoin}\n现有狗粮: ${$.roomData.data.petFood}\n喂养次数: ${$.roomData.data.feedCount}\n宠物等级: ${$.roomData.data.petLevel}\n`
+            if (!invitePin) {
+              console.log(`现有狗粮: ${$.roomData.data.petFood}\n`)
+              subTitle = `【用户名】${$.roomData.data.pin}`
+              message = `现有积分: ${$.roomData.data.petCoin}\n现有狗粮: ${$.roomData.data.petFood}\n喂养次数: ${$.roomData.data.feedCount}\n宠物等级: ${$.roomData.data.petLevel}\n`
+            }
           } else {
             $.log(`enterRoom异常：${$.toStr($.roomData)}`)
           }
@@ -1384,7 +1399,24 @@ async function getH5stBody(functionId, bodyInfo, time = null) {
   // console.log(h5st)
   return `${encodeURIComponent(h5st)}`
 }
-
+async function getH5stBody2(functionId, bodyInfo, time = null) {
+  const signtime = time || Date.now();
+  const bodySign = $.CryptoJS.SHA256(decodeURIComponent(bodyInfo)).toString();
+  // $.fingerprint = 1171233728428164
+  // console.log('bodySign', bodySign)
+  let url = `https://api.m.jd.com/api?functionId=${functionId}&appid=jdchoujiang_h5&t=${signtime}&body=${bodySign}&client=iOS 15.2&clientVersion=8.0.17`;
+  const timestamp = new Date(signtime).Format("yyyyMMddhhmmssSSS");
+  let hash1 = $.enCryptMethodJD($.tk, $.fingerprint.toString(), timestamp.toString(), $.appId.toString(), $.CryptoJS).toString($.CryptoJS.enc.Hex);
+  let st = '';
+  const stk = "appid,body,client,clientVersion,functionId,t";
+  stk.split(',').map((item, index) => {
+    st += `${item}:${getUrlData(url, item)}${index === stk.split(',').length - 1 ? '' : '&'}`;
+  })
+  const hash2 = $.CryptoJS.HmacSHA256(st, hash1.toString()).toString($.CryptoJS.enc.Hex);
+  let h5st = ["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.tk), "".concat(hash2), "".concat('3.0'), "".concat(signtime)].join(";");
+  // console.log(h5st)
+  return `${encodeURIComponent(h5st)}`
+}
 async function requestAlgo() {
   const options = {
     "url": `https://cactus.jd.com/request_algo?g_ty=ajax`,
