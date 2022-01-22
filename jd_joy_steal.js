@@ -88,7 +88,7 @@ if ($.isNode() && process.env.jdJoyStealCoin) {
       $.HelpFeedFlag = ctrTemp;
       if (!ctrTemp) $.HelpFeedFlag = true
       await TotalBean();
-      console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
+      console.log(`\n************开始【京东账号${$.index}】${$.nickName || $.UserName}**********\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
@@ -336,9 +336,14 @@ function getFriends(currentPage = '1') {
           console.log('\n京东宠汪汪: API查询请求失败 ‼️‼️')
           throw new Error(err);
         } else {
-          // console.log('JSON.parse(data)', JSON.parse(data))
+          data = $.toObj(data);
           if (data) {
-            $.getFriendsData = JSON.parse(data);
+            if (data.success && data['datas']) {
+              $.getFriendsData = data;
+            } else {
+              $.getFriendsData = data;
+              console.log(`获取好友列表失败：${$.toStr(data)}\n`)
+            }
           } else {
             console.log(`京豆api返回数据为空，请检查自身原因`)
           }
