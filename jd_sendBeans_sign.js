@@ -26,10 +26,6 @@ const activityList = [
     shopId: 191929
   },
   {
-    turnTableId: 1316,
-    shopId: 1000075555
-  },
-  {
     turnTableId: 1349,
     shopId: 12137
   },
