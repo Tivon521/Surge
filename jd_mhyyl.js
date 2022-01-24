@@ -28,7 +28,7 @@ if ($.isNode()) {
       '活动地址：https://yearfestival.jd.com\n' +
       '集卡：2022.1.15到2022.1.31\n' +
       '开奖：1.31到2.6')
-  const promiseArr = cookiesArr.map((ck, index) => main(ck));
+  const promiseArr = cookiesArr.map((ck, index) => main(ck, index));
   await Promise.all(promiseArr);
   if (allInvite.length > 0) {
     console.log(`\n开始脚本内互助\n`);
@@ -76,7 +76,7 @@ if ($.isNode()) {
   $.done();
 })
 
-async function main(ck) {
+async function main(ck, index) {
   try {
     let usName = decodeURIComponent(ck.match(/pt_pin=([^; ]+)(?=;?)/) && ck.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     let UA = `jdapp;iPhone;10.0.8;14.6;${randomWord(false, 40, 40)};network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214222493;appBuild/168841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16E158;supportJDSHWK/1`;
@@ -156,6 +156,25 @@ async function main(ck) {
       console.log(`${usName},需要助力${need},助力码：${shareId}`);
       allInvite.push({'user': usName, 'need': need, 'code': shareId})
     }
+    let cardListData = await takePost('{"apiMapping":"/api/card/list"}', ck, UA);
+    if (cardListData) {
+      const { cardList = [] } = cardListData
+      for (const item of cardList) {
+        console.log(`账号 ${index + 1} ${usName} ${item['cardName']}，数量：${item['count']}，cardId：${item['cardId']}`)
+        /*
+        if (item['cardId'] === 775 && item['count']) {
+          let sendId = await takePost(`{"cardId":${item.cardId},"apiMapping":"/api/card/share"}`,ck,UA);
+          console.log('赠送 【一秒脱单卡】', $.toStr(sendId));
+        }
+        if (item['cardId'] === 1 && item['count']) {
+          let sendId = await takePost(`{"cardId":${item.cardId},"apiMapping":"/api/card/share"}`,ck,UA);
+          console.log('赠送 【万物更新卡】', $.toStr(sendId));
+        }
+        */
+      }
+    }
+    // let receiveCard = await takePost(`{"uuid":"a82f3bed-a1d3-40e8-a08d-d41392d39f8a","apiMapping":"/api/card/receiveCard"}`,ck,UA);
+    // console.log(`领取赠送卡片结果：\n${JSON.stringify(receiveCard)}`);
   } catch (e) {
     $.logErr(e)
   }
