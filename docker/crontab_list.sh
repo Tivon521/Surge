@@ -38,6 +38,8 @@
 1 0,21 6-31 1 * node /scripts/jd_xy.js >> /scripts/logs/jd_xy.log 2>&1
 #萌虎摇摇乐（1.15-2.6）
 0 0,12,21 * * * node /scripts/jd_mhyyl.js >> /scripts/logs/jd_mhyyl.log 2>&1
+#炸年兽20点开奖
+10 20 24 1 * node /scripts/jd_tigerNianDivideRedPacket.js >> /scripts/logs/jd_tigerNianDivideRedPacket.log 2>&1
 ##############长期活动##############
 # 签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
