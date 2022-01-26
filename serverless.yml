@@ -22,18 +22,18 @@ inputs:
           cronExpression: "0 0 0 * * * *"
           enable: true
           argument: jd_bean_sign
-    - timer: #东东超市兑换奖品 #摇京豆 #京东汽车兑换 #东东健康兑换商品 #内容鉴赏官 #连续签到送大额京豆
+    - timer: #摇京豆 #京东汽车兑换 #东东健康兑换商品 #内容鉴赏官 #连续签到送大额京豆
         parameters:
-          name: blueCoin_clublottery_carexchange_healthexchange_jsg_sendBeanssign
+          name: clublottery_carexchange_healthexchange_jsg_sendBeanssign
           cronExpression: "0 0 0 * * * *"
           enable: true
-          argument: jd_blueCoin&jd_club_lottery&jd_car_exchange&jd_health_exchange&jd_jsg&jd_sendBeans_sign
-    - timer: #东东农场 #东东萌宠 #京东极速版签到 #金榜创造营 #美食馆瓜分京豆 #特务Z #vivo活动 #逛好物赚京豆
+          argument: jd_club_lottery&jd_car_exchange&jd_health_exchange&jd_jsg&jd_sendBeans_sign
+    - timer: #东东农场 #东东萌宠 #京东极速版签到 #金榜创造营 #特务Z #vivo活动 #逛好物赚京豆
         parameters:
-          name: fruit_pet_speedsign_goldcreator_foodRunning_productBrand_vivo_ifanli
+          name: fruit_pet_speedsign_goldcreator_productBrand_vivo_ifanli
           cronExpression: "0 5 6-18/6,8 * * * *"
           enable: true
-          argument: jd_fruit&jd_pet&jd_speed_sign&jd_gold_creator&jd_foodRunning&jd_productBrand&jd_vivo&jd_ifanli
+          argument: jd_fruit&jd_pet&jd_speed_sign&jd_gold_creator&jd_productBrand&jd_vivo&jd_ifanli
     - timer: #摇钱树 #京东种豆得豆 #京喜工厂 #东东工厂 #京东到家农场收集水车水滴 #京东到家鲜豆庄园收水车水滴 #发财大赢家之翻翻乐
         parameters:
           name: moneyTree_plantBean_dreamFactory_jdfactory_jddjfruitcollect_jddjplantBeanscollect_bigwinner
@@ -46,24 +46,24 @@ inputs:
           cronExpression: "0 0 0-16/8,20 * * * *"
           enable: true
           argument: jd_cash&jd_jxbfd&jd_live&jd_nzmh&jd_esManager&jd_jddj_fruit&jd_jddj_plantBeans&jd_fcwb&jd_jxsign_xd&jd_hby&jd_nianRed&jd_productZ4Brand&jd_xy&jd_mhyyl
-    - timer: #京东全民开红包 #进店领豆 #取关京东店铺商品 #京东抽奖机 #京东汽车 #京东秒秒币 #东东健康社区 #幸运大转盘 #美丽研究院种植园 #清空购物车 #京豆兑换喜豆
+    - timer: #京东全民开红包 #取关京东店铺商品 #京东抽奖机 #京东汽车 #京东秒秒币 #东东健康社区 #美丽研究院种植园 #清空购物车 #京豆兑换喜豆
         parameters:
-          name: redPacket_shop_unsubscribe_lotteryMachine_car_ms_health_marketlottery_beautyplantation_clearcart_jd2xd
+          name: redPacket_unsubscribe_lotteryMachine_car_ms_health_beautyplantation_clearcart_jd2xd
           cronExpression: "0 10 0 * * * *"
           enable: true
-          argument: jd_redPacket&jd_shop&jd_unsubscribe&jd_lotteryMachine&jd_car&jd_ms&jd_health&jd_market_lottery&jd_beauty_plantation&jd_clear_cart&jd_jd2xd
+          argument: jd_redPacket&jd_unsubscribe&jd_lotteryMachine&jd_car&jd_ms&jd_health&jd_beauty_plantation&jd_clear_cart&jd_jd2xd
     - timer: #天天提鹅 #京喜牧场 #汪汪乐园合成 #财富岛捡贝壳 #京喜购物返红包 #东东健康社区收集能量
         parameters:
           name: dailyegg_jxmc_joyparkmerge_jxbfdcollect_rebate_healthcollect
           cronExpression: "0 8 */3 * * * *"
           enable: true
           argument: jd_daily_egg&jd_jxmc&jd_joy_park_merge&jd_jxbfd_collect&jx_rebate&jd_health_collect
-    - timer: #东东超市 #十元街 #财富岛热气球 #京喜财富岛合月饼
+    - timer: #十元街 #财富岛热气球 #京喜财富岛合月饼
         parameters:
-          name: superMarket_syj_jxbfdballoon_jxbfdpeargame
+          name: syj_jxbfdballoon_jxbfdpeargame
           cronExpression: "0 15 */1 * * * *"
           enable: true
-          argument: jd_superMarket&jd_syj&jd_jxbfd_balloon&jd_jxbfd_pear_game
+          argument: jd_syj&jd_jxbfd_balloon&jd_jxbfd_pear_game
     - timer: #京豆变动通知 #领京豆额外奖励 #京东到家鲜豆任务 #京东会员卡 #京东保价 #芥么小程序签到领现金 #京东半年红包明细 #京东购物车商品转链
         parameters:
           name: beanchange_beanhome_jddjdailyTask_unbind_price_jmsign_halfYearRed_jingfen
