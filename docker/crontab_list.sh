@@ -18,8 +18,6 @@
 
 #金榜创造营 活动时间：2021-05-21至2021-12-31
 0 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
-#酷跑零食街(活动时间：2021-06-20到2021-12-31)
-18 7,12,20 * * * node /scripts/jd_foodRunning.js >> /scripts/logs/jd_foodRunning.log 2>&1
 #内容鉴赏官 2021-09-1到2021-12-31
 0 0,22 * * * node /scripts/jd_jsg.js >> /scripts/logs/jd_jsg.log 2>&1
 #京喜财富岛——合成珍珠 2021-09-23到2021-9-30
@@ -32,8 +30,6 @@
 1 * 7 2 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
 #年货红包🧧
 0,10 0,20,23 * * * node /scripts/jd_nianRed.js >> /scripts/logs/jd_nianRed.log 2>&1
-#超级盒子（2022年1月25日截止）
-0 0,22,23 * * * node /scripts/jd_super_box.js >> /scripts/logs/jd_super_box.log 2>&1
 #轩辕虎越（2022年1月6日-2022年1月31日）
 1 0,21 6-31 1 * node /scripts/jd_xy.js >> /scripts/logs/jd_xy.log 2>&1
 #萌虎摇摇乐（1.15-2.6）

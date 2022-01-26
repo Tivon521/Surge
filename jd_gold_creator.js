@@ -60,9 +60,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/`, {"open-url": "https://bean.m.jd.com/"});
 
         if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        } else {
-          $.setdata('', `CookieJD${i ? i + 1 : ""}`);//cookie失效，故清空cookie。$.setdata('', `CookieJD${i ? i + 1 : "" }`);//cookie失效，故清空cookie。
+          // await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
         }
         continue
       }
@@ -78,9 +76,9 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     })
 async function main() {
   try {
-    await goldCreatorTab();//获取顶部主题
-    await getDetail();
-    await goldCreatorPublish();
+    // await goldCreatorTab();//获取顶部主题
+    // await getDetail();
+    // await goldCreatorPublish();
     await goldCenterHead();
     // await goldCenterDoTask()
     // await $.wait(2000)

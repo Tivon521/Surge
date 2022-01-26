@@ -2,7 +2,7 @@
 京东超级盒子
 活动时间：2021年10月25日～2021年11月11日
 活动入口：https://u.jd.com/3wW4fbd
-0 0,2 * * * jd_super_box.js
+0 0,22,23 * * * jd_super_box.js
 */
 const $ = new Env('京东超级盒子');
 const linkId = 'Ll3Qb2mhCXSEWxruhv8qIw'
