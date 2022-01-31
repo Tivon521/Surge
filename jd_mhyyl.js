@@ -86,6 +86,9 @@ async function main(ck, index) {
       return;
     }
     console.log(`\n${usName},获取活动详情成功`);
+    let receivePrize = await takePost('{"apiMapping":"/api/carveUp/receivePrize"}', ck, UA);
+    console.log("receivePrize", receivePrize);
+    
     let tabList = await takePost('{"apiMapping":"/api/task/brand/tabs"}', ck, UA);
     let doFlag = true;
     let fresh = false;
