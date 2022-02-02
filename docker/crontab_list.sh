@@ -4,8 +4,6 @@
 30 * * * * sh +x /scripts/docker/auto_help.sh collect >> /scripts/logs/auto_help_collect.log 2>&1
 
 ##############短期活动##############
-#女装盲盒 活动时间：2021-05-24到2021-06-22
-35 1,22 * * * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
 #京东极速版红包(活动时间：2021-5-5至2021-5-31)
 45 0,23 * * * node /scripts/jd_speed_redpocke.js >> /scripts/logs/jd_speed_redpocke.log 2>&1
 #芥么小程序签到领现金 活动时间：2021-09-16 - 2022-12-31
@@ -104,8 +102,6 @@
 0 0 * * * node /scripts/jd_health_exchange.js >> /scripts/logs/jd_health_exchange.log 2>&1
 #领金贴
 5 0 * * * node /scripts/jd_jin_tie.js >> /scripts/logs/jd_jin_tie.log 2>&1
-#跳跳乐瓜分京豆
-15 0,12,22 * * * node /scripts/jd_jump.js >> /scripts/logs/jd_jump.log 2>&1
 #京喜牧场
 25 * * * * node /scripts/jd_jxmc.js >> /scripts/logs/jd_jxmc.log 2>&1
 #电竞经理
