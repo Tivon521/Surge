@@ -22,8 +22,6 @@
 5 0,1 * * * node /scripts/jd_flsSign.js >> /scripts/logs/jd_flsSign.log 2>&1
 #红包雨2.7日整点
 1 * 7 2 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
-#年货红包🧧
-0,10 0,20,23 * * * node /scripts/jd_nianRed.js >> /scripts/logs/jd_nianRed.log 2>&1
 #萌虎摇摇乐（1.15-2.6）
 0 0,12,21 * * * node /scripts/jd_mhyyl.js >> /scripts/logs/jd_mhyyl.log 2>&1
 
