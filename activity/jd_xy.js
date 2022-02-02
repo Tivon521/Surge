@@ -6,8 +6,8 @@
 活动链接：https://lzdz1-isv.isvjcloud.com/dingzhi/tiger/gold/activity/6272050?activityId=dz2201100014002401&shareUuid=1778ca76b61d415b87582021ef5a785b&adsource=null&shareuserid4minipg=&shopid=1000140024
  */
 const $ = new Env("轩辕虎越,风生水起");
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 let cookiesArr = [], cookie = '', message = '';
 let ownCode = null;
 let lz_cookie = {}, originCookie = '';

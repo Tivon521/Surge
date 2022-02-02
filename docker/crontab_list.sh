@@ -4,8 +4,6 @@
 30 * * * * sh +x /scripts/docker/auto_help.sh collect >> /scripts/logs/auto_help_collect.log 2>&1
 
 ##############短期活动##############
-#发财大赢家之翻翻乐 10.26-11.30
-10,40 * * * * node /scripts/jd_big_winner.js >> /scripts/logs/jd_big_winner.log 2>&1
 #女装盲盒 活动时间：2021-05-24到2021-06-22
 35 1,22 * * * node /scripts/jd_nzmh.js >> /scripts/logs/jd_nzmh.log 2>&1
 #京东极速版红包(活动时间：2021-5-5至2021-5-31)
@@ -26,8 +24,6 @@
 1 * 7 2 * node /scripts/jd_hby.js >> /scripts/logs/jd_hby.log 2>&1
 #年货红包🧧
 0,10 0,20,23 * * * node /scripts/jd_nianRed.js >> /scripts/logs/jd_nianRed.log 2>&1
-#轩辕虎越（2022年1月6日-2022年1月31日）
-1 0,21 6-31 1 * node /scripts/jd_xy.js >> /scripts/logs/jd_xy.log 2>&1
 #萌虎摇摇乐（1.15-2.6）
 0 0,12,21 * * * node /scripts/jd_mhyyl.js >> /scripts/logs/jd_mhyyl.log 2>&1
 
