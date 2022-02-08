@@ -3,14 +3,12 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 const activityList = [
+    {'appId': '1GVFUx6g', 'endTime': 1646064000000,'name':'JOY的年味之旅'},
     {'appId': '1FFVQyqw', 'endTime': 1666344063000,'name':'1111点心动'},//京东APP--》玩一玩---》1111点心动
     {'appId': '1EFRQwA', 'endTime': 1704038400000,'name':'疯狂砸金蛋'},//京东APP--》每日特价---》疯狂砸金蛋
     {'appId': '1EFRRxA', 'endTime': 1704038400000,'name':'没找到活动在哪'},
     {'appId': '1EFRXxg', 'endTime': 1672415999000,'name':'闪购盲盒'},//京东APP--》品牌闪购---》右下闪购盲盒
-    {'appId': '1E1xZy6s', 'endTime': 1661356799000,'name':'PLUS生活特权'},//京东APP--》PLUS会员--》生活特权---》天天赚京豆（https://h5.m.jd.com/babelDiy/Zeus/6Z5oyrCaX6U7cZw8eNKABiYKKXx/index.html）
-    {'appId': '1GVFUx6g', 'endTime': 1646063999000,'name':'Joy的年味之旅'},//https://h5.m.jd.com/babelDiy/Zeus/Yk1NhYbyEAwUuJG3Vfa6KvEcgA5/index.html
-    {'appId': '1GVJWyqg', 'endTime': 1644249599000,'name':'虎娃迎福献好礼'},//https://h5.m.jd.com/babelDiy/Zeus/3DrSBr56ErsVxzB6KWg2jYydduTs/index.html
-    {'appId': '1GFRRyqo', 'endTime': 1644249600000,'name':'开新年礼'},
+    //{'appId': '1E1xZy6s', 'endTime': 1661356799000,'name':'PLUS生活特权'},//京东APP--》PLUS会员--》生活特权---》天天赚京豆（https://h5.m.jd.com/babelDiy/Zeus/6Z5oyrCaX6U7cZw8eNKABiYKKXx/index.html）
 ];
 let inviteInfo = {};
 let loginInfo = {};
