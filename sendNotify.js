@@ -666,7 +666,7 @@ function qywxamSplitNotify(text, desp, userId = '@all') {
               if (data.errcode === 0) {
                 console.log('\n成员ID:' + userId + ' 企业微信应用消息发送通知消息成功🎉。\n');
               } else {
-                console.log(`${data.errmsg}\n`);
+                console.log(`成员ID：${userId} 企业微信应用消息发送通知消息失败\n${data.errmsg}\n`);
               }
             }
           } catch (e) {
