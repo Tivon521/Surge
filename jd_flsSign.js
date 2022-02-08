@@ -30,7 +30,10 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   }
   try {
     let promiseArr = null;
-    
+
+    promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/2BspupMr6qenk9JUWpbAnepLHjwy/index.html'));
+    await Promise.all(promiseArr);
+
     promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/3EVVqbSAdb1jWkED4D6rhVX1Xyf4/index.html'));
     await Promise.all(promiseArr);
 
@@ -86,8 +89,9 @@ function getActInfo(taskCookie, index, url='') {
         "accept-language": "zh-CN,zh;q=0.9",
         "cookie": cookie,
         "referer": url,
+        "user-agent": "JD4iPhone/167220 (iPhone; iOS 13.7; Scale/3.00)"
         // "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
-        "user-agent": $.isNode() ? process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : require('./USER_AGENTS').USER_AGENT : $.getdata('JDUA') ? $.getdata('JDUA') : 'jdjchapp;jdlog;iPhone;1.2.0;15.2;09f660807a77e6a31f1ddad5beec9a56b194c0a5;Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;'
+        // "user-agent": $.isNode() ? process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : require('./USER_AGENTS').USER_AGENT : $.getdata('JDUA') ? $.getdata('JDUA') : 'jdjchapp;jdlog;iPhone;1.2.0;15.2;09f660807a77e6a31f1ddad5beec9a56b194c0a5;Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;'
       }
     },async (err,resp,data)=>{
       try {
