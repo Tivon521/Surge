@@ -18,16 +18,8 @@ let cookiesArr = [], cookie = '', message = '';
 $.invite_pins = [];
 const activityList = [
   {
-    turnTableId: 1351,
-    shopId: 1000340503
-  },
-  {
-    turnTableId: 1220,
-    shopId: 191929
-  },
-  {
-    turnTableId: 1356,
-    shopId:1000088787
+    turnTableId: 1358,
+    shopId:1000003015
   },
 ]
 if ($.isNode()) {
