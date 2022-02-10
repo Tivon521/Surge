@@ -18,7 +18,7 @@ Object.keys(jdCookieNode).forEach((item) => {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    let account = createMaxGroup() * 3 - 1;//保险起见，减去一个1
+    let account = createMaxGroup() * 3 - 2;//保险起见，减去一个2
     console.log(`\n开始前面${account}个账号进行开团\n`)
     for (let i = 0; i < account; i++) {
         $.index = i + 1;
@@ -55,46 +55,54 @@ Object.keys(jdCookieNode).forEach((item) => {
 });
 
 async function main() {
+  try {
     $.tuan = ''
     $.hasOpen = false;
     $.assistStatus = 0;
     $.uuid = randomWord(true,16,16)
     await getUserTuanInfo();
     if (!$.tuan && ($.assistStatus === 3 || $.assistStatus === 2 || $.assistStatus === 0) && $.canStartNewAssist) {
-        console.log(`准备再次开团`);
-        let openInfo = await sendInfo('vvipclub_distributeBean_startAssist',{"activityIdEncrypted": $.tuanActId, "channel": "FISSION_BEAN"},'dde2b');
-        if (openInfo['success']) {
-            console.log(`【赚京豆(微信小程序)-瓜分京豆】开团成功`)
-            $.hasOpen = true
-        } else {
-            console.log(`\n开团失败：${JSON.stringify(data)}\n`)
-        }
+      console.log(`准备再次开团`);
+      let openInfo = await sendInfo('vvipclub_distributeBean_startAssist',{"activityIdEncrypted": $.tuanActId, "channel": "FISSION_BEAN"},'dde2b');
+      if (openInfo['success']) {
+        console.log(`【赚京豆(微信小程序)-瓜分京豆】开团成功`)
+        $.hasOpen = true
+      } else {
+        console.log(`\n开团失败：${JSON.stringify(data)}\n`)
+      }
     }
     if ($.hasOpen) await getUserTuanInfo();
     if ($.tuan && $.tuan.hasOwnProperty('assistedPinEncrypted') && $.assistStatus !== 3) {
-        $.tuanList.push({'id':$.tuan,'user':$.UserName,'max':false});
+      $.tuanList.push({'id':$.tuan,'user':$.UserName,'max':false});
     }
+  } catch (e) {
+    $.logErr(e)
+  }
 }
 
 async function helpFriendTuan(body) {
+  try {
     let data = await sendInfo('vvipclub_distributeBean_assist',body,'b9790');
     if (data.success) {
-        console.log('助力结果：助力成功')
+      console.log('助力结果：助力成功')
     } else {
-        if (data.resultCode === '9200008'){
-            console.log('助力结果：不能助力自己')
-        } else if (data.resultCode === '9200011'){
-            console.log('助力结果：已经助力过')
-        } else if (data.resultCode === '2400205') {
-            console.log('助力结果：团已满'),$.oneInfo.max = true;
-        } else if (data.resultCode === '2400203') {
-            console.log('助力结果：助力次数已耗尽');$.canHelp = false
-        } else if (data.resultCode === '9000000') {
-            console.log('助力结果：活动火爆，跳出');$.canHelp = false
-        } else {
-            console.log(`助力结果：未知错误：${JSON.stringify(data)}`)
-        }
+      if (data.resultCode === '9200008'){
+        console.log('助力结果：不能助力自己')
+      } else if (data.resultCode === '9200011'){
+        console.log('助力结果：已经助力过')
+      } else if (data.resultCode === '2400205') {
+        console.log('助力结果：团已满'),$.oneInfo.max = true;
+      } else if (data.resultCode === '2400203') {
+        console.log('助力结果：助力次数已耗尽');$.canHelp = false
+      } else if (data.resultCode === '9000000') {
+        console.log('助力结果：活动火爆，跳出');$.canHelp = false
+      } else {
+        console.log(`助力结果：未知错误：${JSON.stringify(data)}`)
+      }
     }
+  } catch (e) {
+    $.logErr(e)
+  }
 }
 
 async function getUserTuanInfo(){
