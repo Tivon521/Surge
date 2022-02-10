@@ -29,6 +29,7 @@ Object.keys(jdCookieNode).forEach((item) => {
         await $.wait(2000);
     }
     cookiesArr = getRandomArrayElements(cookiesArr,cookiesArr.length);
+    console.log($.tuanList)
     for (let i = 0; i < cookiesArr.length; i++) {
         $.canHelp = true
         if (cookiesArr[i]) {
@@ -124,9 +125,12 @@ async function getUserTuanInfo(){
     if (activityInfo.assistStatus === 1 && !activityInfo.canStartNewAssist) {
         console.log(`已开团(未达上限)，但团成员人未满\n\n`)
     } else if (activityInfo.assistStatus === 3 && activityInfo.canStartNewAssist) {
-        console.log(`已开团(未达上限)，团成员人已满\n\n`)
+        console.log(`已开团(未达上限)，团成员人已满，可重新开下一队\n\n`)
     } else if (activityInfo.assistStatus === 3 && !activityInfo.canStartNewAssist) {
         console.log(`今日开团已达上限，且当前团成员人已满\n\n`)
+    } else if (activityInfo.assistStatus === 2 && !activityInfo.canStartNewAssist) {
+      console.log(`超时未助力成功(今日开团次数已达上限)\n\n`)
+      $.tuan = '';
     }
     $.tuanActId = activityInfo.id;
     $.assistNum = activityInfo['assistNum'] || 4;
