@@ -648,7 +648,7 @@ function appScanMarket(type, body) {
     })
   })
 }
-function launchInvite(invitePin = 'jd_qhsBrqHDPgNj') {
+function launchInvite(invitePin = 'jd_740927995363b') {
   return new Promise(async resolve => {
     const body = {invitePin,"inviteSource":"friend_list","shareSource":"h5","openId":"oPcgJ40Ol7BSTczZ2ok0WmfLWoAs","reqSource":"weapp"};
     const time = Date.now()
