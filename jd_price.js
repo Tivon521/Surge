@@ -86,6 +86,7 @@ if ($.isNode()) {
       } catch (e) {
         $.logErr(e)
       }
+      await $.wait(30 * 1000);
     }
   }
 })()
