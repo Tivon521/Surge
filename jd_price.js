@@ -17,6 +17,8 @@ cron 0 22 * * * jd_price.js
 const $ = new Env('京东保价');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jsdom = require("jsdom");
+const EncryptH5st = require('./utils/EncryptH5st');
 let cookiesArr = [];
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
@@ -47,7 +49,7 @@ if ($.isNode()) {
   $.appId = 'd2f64'
   $.fingerprint = await generateFp();
   $.tk = '';
-  await requestAlgo();
+  // await requestAlgo();
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       $.cookie = cookiesArr[i];
@@ -86,7 +88,7 @@ if ($.isNode()) {
       } catch (e) {
         $.logErr(e)
       }
-      await $.wait(30 * 1000);
+      // await $.wait(60000);
     }
   }
 })()
@@ -105,9 +107,21 @@ function skuApply() {
       token: $.token,
       feSt: 's'
     };
-    const h5st = await getH5stBody('siteppM_skuOnceApply', $.toStr(body));
+    const t = Date.now()
+    // const h5st = await getH5stBody('siteppM_skuOnceApply', $.toStr(body));
+    const h5st = await EncryptH5st(
+        'd2f64',
+        {
+          appid: 'siteppM',
+          functionId: 'siteppM_skuOnceApply',
+          t,
+          body,
+        },
+        $.dom.window.ParamsSign
+    );
+    // console.log('h5st', h5st, $.dom.window.ParamsSign)
     const opt = {
-      url: `https://api.m.jd.com/api?appid=siteppM&functionId=siteppM_skuOnceApply&forcebot=&t=${+ new Date()}`,
+      url: `https://api.m.jd.com/api?appid=siteppM&functionId=siteppM_skuOnceApply&forcebot=&t=${t}`,
       headers: {
         'Accept': '*/*',
         'Accept-Language': 'zh-cn',
@@ -155,7 +169,7 @@ function skuApply() {
 
 function getApplyResult() {
   return new Promise((resolve, reject) => {
-    let body = {"sid":"","type":"3","forcebot":"","num":15}
+    let body = {"sid":"","type":"25","forcebot":"","num":5}
     const opt = {
       url: `https://api.m.jd.com/api?appid=siteppM&functionId=siteppM_appliedSuccAmount&forcebot=&t=${+ new Date()}`,
       headers: {
@@ -219,35 +233,45 @@ async function showMsg() {
   }
 }
 async function jstoken() {
-  const jsdom = require("jsdom");
   const { JSDOM } = jsdom;
-  const resourceLoader = new jsdom.ResourceLoader({
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
-    referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
+  let resourceLoader = new jsdom.ResourceLoader({
+    userAgent:
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 15.0.2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1',
+    referrer: 'https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu',
   });
-  const options = {
-    url: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
-    referrer: "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0) Gecko/20100101 Firefox/91.0',
-    runScripts: "dangerously",
+  let virtualConsole = new jsdom.VirtualConsole();
+  var options = {
+    url: 'https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu',
+    referrer: 'https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu',
+    userAgent:
+        'Mozilla/5.0 (iPhone; CPU iPhone OS 15.0.2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1',
+    runScripts: 'dangerously',
     resources: resourceLoader,
     //  cookieJar,
     includeNodeLocations: true,
     storageQuota: 10000000,
     pretendToBeVisual: true,
-  }
-  $.dom = new JSDOM(`<body><script src="https://js-nocaptcha.jd.com/statics/js/main.min.js"></script></body>`, options);
-  await $.wait(1000)
+    virtualConsole,
+  };
+  $.dom = new JSDOM(
+      `<body><script src="https://js-nocaptcha.jd.com/statics/js/main.min.js"></script><script src="https://storage.360buyimg.com/webcontainer/js_security_v3.js"></script></body>`,
+      options
+  );
+  //
+  // 屏蔽error错误
+  //
+  $._error = console.error;
+  console.error = function () {};
+  await $.wait(1000);
   try {
-    const jab = new $.dom.window.JAB({
+    feSt = 's';
+    jab = new $.dom.window.JAB({
       bizId: 'jdjiabao',
-      initCaptcha: false
-    })
+      initCaptcha: false,
+    });
     $.token = jab.getToken();
-    console.log('token获取成功！\n')
-  } catch (e) {
-    $.logErr(e);
-  }
+  } catch (e) {}
+  console.error = $._error;
 }
 function totalBean() {
   return new Promise((resolve) => {
@@ -298,7 +322,7 @@ async function getH5stBody(functionId, bodyInfo) {
   const signtime = Date.now();
   const stk = "appid,body,t,functionId";
   const bodySign = $.CryptoJS.SHA256(bodyInfo).toString($.CryptoJS.enc.Hex);
-  let url = `https://api.m.jd.com?functionId=${functionId}&appid=siteppM&t=${signtime}&body=${bodySign}&forcebot=`;
+  let url = `https://api.m.jd.com?functionId=${functionId}&appid=siteppM&t=${signtime}&body=${bodySign}`;
   const timestamp = new Date(signtime).Format("yyyyMMddhhmmssSSS");
   let hash1 = $.enCryptMethodJD($.tk, $.fingerprint.toString(), timestamp.toString(), $.appId.toString(), $.CryptoJS).toString($.CryptoJS.enc.Hex);
   let st = '';
