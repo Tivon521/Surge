@@ -129,7 +129,7 @@ function skuApply() {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Origin': 'https://msitepp-fm.jd.com',
         'Connection': 'keep-alive',
-        'Referer': 'https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu',
+        'Referer': 'https://msitepp-fm.jd.com',
         'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
         'Cookie': $.cookie,
       },
@@ -152,6 +152,7 @@ function skuApply() {
             await getApplyResult();
           } else {
             console.log(`🚫 一键保价 申请失败：${data && data.responseMessage}`);
+            await $.wait(20 * 1000);
           }
         }
       } catch (e) {
