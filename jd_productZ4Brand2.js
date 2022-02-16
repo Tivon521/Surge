@@ -1,12 +1,11 @@
 /*
-特务Zx佳沛
-cron 23 0,9 24-27 7 *
+特务Z（打榜特务）
+cron 23 0,16,23 * * * jd_productZ4Brand2.js
 要跑2次，第一次做任务和脚本内互助，第二次才够币抽奖
-第一个CK会为作者助力，暂不知助力上限（貌似没上限）
 */
-const $ = new Env('特务Zx佳沛');
-const notify = $.isNode() ? require('../sendNotify') : '';
-const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
+const $ = new Env('特务Z');
+const notify = $.isNode() ? require('./sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [];
 let UA = ``;
 $.allInvite = [];
@@ -16,7 +15,6 @@ if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   });
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
   cookiesArr = [
     $.getdata("CookieJD"),
@@ -29,7 +27,7 @@ if ($.isNode()) {
     return;
   }
   for (let i = 0; i < cookiesArr.length; i++) {
-    UA = `jdapp;iPhone;10.0.8;14.6;${randomWord(false,40,40)};network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214222493;appBuild/168841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16E158;supportJDSHWK/1`;
+    UA = `jdapp;iPhone;10.0.8;14.6;${randomWord(false, 40, 40)};network/wifi;JDEbook/openapp.jdreader;model/iPhone9,2;addressid/2214222493;appBuild/168841;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/16E158;supportJDSHWK/1`;
     $.index = i + 1;
     $.cookie = cookiesArr[i];
     $.isLogin = true;
@@ -41,13 +39,13 @@ if ($.isNode()) {
       $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
       if ($.isNode()) {
-        await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+        // await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
       }
       continue
     }
-    try{
+    try {
       await main();
-    }catch (e) {
+    } catch (e) {
       console.log(JSON.stringify(e));
     }
     await $.wait(1000);
@@ -60,10 +58,10 @@ if ($.isNode()) {
     for (let j = 0; j < $.allInvite.length && $.canHelp; j++) {
       $.codeInfo = $.allInvite[j];
       $.code = $.codeInfo.code;
-      if($.UserName ===  $.codeInfo.userName){
+      if ($.UserName === $.codeInfo.userName) {
         continue;
       }
-      if( $.codeInfo.time > 4){
+      if ($.codeInfo.time > 4) {
         continue;
       }
       console.log(`${$.UserName},去助力:${$.code}`);
@@ -71,17 +69,21 @@ if ($.isNode()) {
       await $.wait(2000);
     }
   }
-})().catch((e) => {$.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')}).finally(() => {$.done();})
+})().catch((e) => {
+  $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+}).finally(() => {
+  $.done();
+})
 
 async function main() {
   $.activityInfo = {};
   await takePostRequest('showSecondFloorRunInfo');
-  if(JSON.stringify($.activityInfo) === '{}'){
+  if (JSON.stringify($.activityInfo) === '{}') {
     console.log(`获取活动详情失败`);
-    return ;
+    return;
   }
   console.log(`获取活动详情成功`);
-  if(!$.activityInfo.activityUserInfo || !$.activityInfo.activityBaseInfo || !$.activityInfo.activityBaseInfo.activityId){
+  if (!$.activityInfo.activityUserInfo || !$.activityInfo.activityBaseInfo || !$.activityInfo.activityBaseInfo.activityId) {
     console.log(`活动信息异常`);
     return;
   }
@@ -105,25 +107,25 @@ async function main() {
 
 }
 
-async function doTask(){
+async function doTask() {
   for (let i = 0; i < $.taskList.length; i++) {
     $.oneTask = $.taskList[i];
-    if($.oneTask.completionFlag){
+    if ($.oneTask.completionFlag) {
       console.log(`任务：${$.oneTask.assignmentName}，已完成`);
       continue;
     }
-    if($.oneTask.assignmentType === 3){
+    if ($.oneTask.assignmentType === 3) {
       console.log(`任务：${$.oneTask.assignmentName}，去执行`);
       $.runInfo = $.oneTask.ext.followShop[0];
       await takePostRequest('followShop');
     }
 
-    if($.oneTask.assignmentType === 2){
+    if ($.oneTask.assignmentType === 2) {
       console.log(`助力码：${$.oneTask.ext.assistTaskDetail.itemId}`);
       $.allInvite.push({
-        'userName':$.UserName,
-        'code':$.oneTask.ext.assistTaskDetail.itemId,
-        'time':0
+        'userName': $.UserName,
+        'code': $.oneTask.ext.assistTaskDetail.itemId,
+        'time': 0
       });
       $.helpEncryptAssignmentId = $.oneTask.encryptAssignmentId;
     }
@@ -170,54 +172,54 @@ async function takePostRequest(type) {
 function dealReturn(type, data) {
   try {
     data = JSON.parse(data);
-  }catch (e) {
+  } catch (e) {
     console.log(`返回信息异常：${data}\n`);
     return;
   }
   switch (type) {
     case 'showSecondFloorRunInfo':
-      if(data.code === '0' &&  data.data && data.data.result){
+      if (data.code === '0' && data.data && data.data.result) {
         $.activityInfo = data.data.result;
       }
       break;
     case 'superBrandTaskList':
       //console.log(JSON.stringify(data));
-      if(data.code === '0'){
+      if (data.code === '0') {
         $.taskList = data.data.result.taskList;
       }
       break;
     case 'superBrandTaskLottery':
-      if(data.code === '0' && data.data.bizCode !== 'TK000'){
+      if (data.code === '0' && data.data.bizCode !== 'TK000') {
         $.runFlag = false;
         console.log(`抽奖次数已用完`);
-      }else if(data.code === '0' && data.data.bizCode == 'TK000'){
-        if(data.data && data.data.result && data.data.result.rewardComponent && data.data.result.rewardComponent.beanList){
-          if(data.data.result.rewardComponent.beanList.length >0){
+      } else if (data.code === '0' && data.data.bizCode == 'TK000') {
+        if (data.data && data.data.result && data.data.result.rewardComponent && data.data.result.rewardComponent.beanList) {
+          if (data.data.result.rewardComponent.beanList.length > 0) {
             console.log(`获得豆子：${data.data.result.rewardComponent.beanList[0].quantity}`)
           }
         }
-      }else{
+      } else {
         $.runFlag = false;
         console.log(`抽奖失败`);
       }
       console.log(JSON.stringify(data));
       break;
     case 'followShop':
-      if(data.code === '0'){
+      if (data.code === '0') {
         console.log(JSON.stringify(data.data.bizMsg));
       }
       break;
     case 'help':
-      if(data.code === '0' && data.data.bizCode === '0'){
-        $.codeInfo.time ++;
+      if (data.code === '0' && data.data.bizCode === '0') {
+        $.codeInfo.time++;
         console.log(`助力成功`);
-      }else if (data.code === '0' && data.data.bizCode === '104'){
-        $.codeInfo.time ++;
+      } else if (data.code === '0' && data.data.bizCode === '104') {
+        $.codeInfo.time++;
         console.log(`已助力过`);
-      }else if (data.code === '0' && data.data.bizCode === '108'){
+      } else if (data.code === '0' && data.data.bizCode === '108') {
         $.canHelp = false;
         console.log(`助力次数已用完`);
-      }else{
+      } else {
         console.log(JSON.stringify(data));
       }
       break;
@@ -245,7 +247,7 @@ function getAuthorShareCode(url) {
           }
         })
       }
-      Object.assign(options, { agent })
+      Object.assign(options, {agent})
     }
     $.get(options, async (err, resp, data) => {
       try {
@@ -267,32 +269,32 @@ function getAuthorShareCode(url) {
 function getPostRequest(url) {
   const method = `POST`;
   const headers = {
-    'Origin' : `https://pro.m.jd.com`,
-    'Cookie' : $.cookie ,
-    'Connection' : `keep-alive`,
-    'Accept' : `application/json, text/plain, */*`,
-    'Referer' : `https://pro.m.jd.com/mall/active/47w2FM3CZDer1C7ASmiehTveqG3d/index.html`,
-    'Host' : `api.m.jd.com`,
-    'User-Agent' : UA,
-    'Accept-Language' : `zh-cn`,
-    'Accept-Encoding' : `gzip, deflate, br`
+    'Origin': `https://pro.m.jd.com`,
+    'Cookie': $.cookie,
+    'Connection': `keep-alive`,
+    'Accept': `application/json, text/plain, */*`,
+    'Referer': `https://pro.m.jd.com/mall/active/47w2FM3CZDer1C7ASmiehTveqG3d/index.html`,
+    'Host': `api.m.jd.com`,
+    'User-Agent': UA,
+    'Accept-Language': `zh-cn`,
+    'Accept-Encoding': `gzip, deflate, br`
   };
   const body = ``;
 
   return {url: url, method: method, headers: headers, body: body};
 }
 
-function randomWord(randomFlag, min, max){
+function randomWord(randomFlag, min, max) {
   var str = "",
-    range = min,
-    arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+      range = min,
+      arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
   // 随机产生
-  if(randomFlag){
-    range = Math.round(Math.random() * (max-min)) + min;
+  if (randomFlag) {
+    range = Math.round(Math.random() * (max - min)) + min;
   }
-  for(var i=0; i<range; i++){
-    pos = Math.round(Math.random() * (arr.length-1));
+  for (var i = 0; i < range; i++) {
+    pos = Math.round(Math.random() * (arr.length - 1));
     str += arr[pos];
   }
   return str;
@@ -307,7 +309,7 @@ function TotalBean() {
         Accept: "*/*",
         Connection: "keep-alive",
         Cookie: $.cookie,
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         "Accept-Language": "zh-cn",
         "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
         "Accept-Encoding": "gzip, deflate, br"

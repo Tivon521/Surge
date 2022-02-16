@@ -122,8 +122,6 @@
 14 0-23/3 * * * node /scripts/jd_joy_park_merge.js >> /scripts/logs/jd_joy_park_merge.log 2>&1
 #领京豆
 50 4 * * * node /scripts/jd_ljd.js >> /scripts/logs/jd_ljd.log 2>&1
-#特务Z，做任务抽奖，不定期出现活动
-50 14,19,22 * * * node /scripts/jd_productBrand.js >> /scripts/logs/jd_productBrand.log 2>&1
 #自动获取宠旺旺的invokeKey
 5 0-23/6 * * * node /scripts/jd_get_invokeKey.js >> /scripts/logs/jd_get_invokeKey.log 2>&1
 #京喜签到
@@ -152,5 +150,9 @@
 0 6,18 * * * node /scripts/jd_jingfen.js >> /scripts/logs/jd_jingfen.log 2>&1
 #京喜签到-喜豆
 10 2,9,21 * * * node /scripts/jd_jxsign_xd.js >> /scripts/logs/jd_jxsign_xd.log 2>&1
-#首页特务
+#特务Z，做任务抽奖，不定期出现活动
+50 14,19,22 * * * node /scripts/jd_productBrand.js >> /scripts/logs/jd_productBrand.log 2>&1
+#首页特务（选队）
 23 11,14,20 * * * node /scripts/jd_productZ4Brand.js >> /scripts/logs/jd_productZ4Brand.log 2>&1
+#首页特务（打榜）
+23 0,16,23 * * * node /scripts/jd_productZ4Brand2.js >> /scripts/logs/jd_productZ4Brand2.log 2>&1
