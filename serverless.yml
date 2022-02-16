@@ -28,24 +28,24 @@ inputs:
           cronExpression: "0 0 0 * * * *"
           enable: true
           argument: jd_club_lottery&jd_car_exchange&jd_health_exchange&jd_sendBeans_sign
-    - timer: #东东农场 #东东萌宠 #京东极速版签到 #金榜创造营 #特务Z #vivo活动 #逛好物赚京豆
+    - timer: #东东农场 #东东萌宠 #京东极速版签到 #金榜创造营 #vivo活动 #逛好物赚京豆
         parameters:
-          name: fruit_pet_speedsign_goldcreator_productBrand_vivo_ifanli
+          name: fruit_pet_speedsign_goldcreator_vivo_ifanli
           cronExpression: "0 5 6-18/6,8 * * * *"
           enable: true
-          argument: jd_fruit&jd_pet&jd_speed_sign&jd_gold_creator&jd_productBrand&jd_vivo&jd_ifanli
+          argument: jd_fruit&jd_pet&jd_speed_sign&jd_gold_creator&jd_vivo&jd_ifanli
     - timer: #摇钱树 #京东种豆得豆 #京喜工厂 #东东工厂 #京东到家农场收集水车水滴 #京东到家鲜豆庄园收水车水滴
         parameters:
           name: moneyTree_plantBean_dreamFactory_jdfactory_jddjfruitcollect_jddjplantBeanscollect
           cronExpression: "0 3 */1 * * * *"
           enable: true
           argument: jd_moneyTree&jd_plantBean&jd_dreamFactory&jd_jdfactory&jd_jddj_fruit_collect&jd_jddj_plantBeans_collect
-    - timer: #签到领现金 #京喜财富岛 #京东直播 #东东电竞经理 #京东到家农场 #京东到家鲜豆庄园 #发财挖宝 #京喜签到-喜豆 #特务Z
+    - timer: #签到领现金 #京喜财富岛 #京东直播 #东东电竞经理 #京东到家农场 #京东到家鲜豆庄园 #发财挖宝 #京喜签到-喜豆 #特务Z #首页特务(选队) #首页特务(打榜)
         parameters:
-          name: cash_jxbfd_live_esManager_jddjfruit_jddjplantBeans_fcwb_jxsignxd_productZ4Brand
+          name: cash_jxbfd_live_esManager_jddjfruit_jddjplantBeans_fcwb_jxsignxd_productBrand_productZ4Brand_productZ4Brand2
           cronExpression: "0 0 0-16/8,20 * * * *"
           enable: true
-          argument: jd_cash&jd_jxbfd&jd_live&jd_esManager&jd_jddj_fruit&jd_jddj_plantBeans&jd_fcwb&jd_jxsign_xd&jd_productZ4Brand
+          argument: jd_cash&jd_jxbfd&jd_live&jd_esManager&jd_jddj_fruit&jd_jddj_plantBeans&jd_fcwb&jd_jxsign_xd&jd_productBrand&jd_productZ4Brand&jd_productZ4Brand2
     - timer: #京东全民开红包 #取关京东店铺商品 #京东抽奖机 #京东汽车 #京东秒秒币 #东东健康社区 #美丽研究院种植园 #清空购物车 #京豆兑换喜豆
         parameters:
           name: redPacket_unsubscribe_lotteryMachine_car_ms_health_beautyplantation_clearcart_jd2xd
