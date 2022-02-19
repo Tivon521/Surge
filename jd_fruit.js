@@ -342,7 +342,7 @@ function newAppCenterInfo() {
 }
 async function predictionFruit() {
   console.log('开始预测水果成熟时间\n');
-  await initForFarm();
+  // await initForFarm();
   await taskInitForFarm();
   if (!$.farmTask) return
   let waterEveryDayT = $.farmTask.totalWaterTaskInit.totalWaterTaskTimes;//今天到到目前为止，浇了多少次水
@@ -451,7 +451,7 @@ async function getTenWaterAward() {
 //再次浇水
 async function doTenWaterAgain() {
   console.log('开始检查剩余水滴能否再次浇水再次浇水\n');
-  await initForFarm();
+  // await initForFarm();
   let totalEnergy  = $.farmInfo.farmUserPro.totalEnergy;
   console.log(`剩余水滴${totalEnergy}g\n`);
   await myCardInfoForFarm();
@@ -463,7 +463,7 @@ async function doTenWaterAgain() {
       await userMyCardForFarm('doubleCard');
       console.log(`使用翻倍水滴卡结果:${JSON.stringify($.userMyCardRes)}`);
     }
-    await initForFarm();
+    // await initForFarm();
     totalEnergy = $.farmInfo.farmUserPro.totalEnergy;
   }
   if (signCard > 0) {
@@ -472,7 +472,7 @@ async function doTenWaterAgain() {
       await userMyCardForFarm('signCard');
       console.log(`使用加签卡结果:${JSON.stringify($.userMyCardRes)}`);
     }
-    await initForFarm();
+    // await initForFarm();
     totalEnergy = $.farmInfo.farmUserPro.totalEnergy;
   }
   jdFruitBeanCard = $.getdata('jdFruitBeanCard') ? $.getdata('jdFruitBeanCard') : jdFruitBeanCard;
@@ -493,16 +493,17 @@ async function doTenWaterAgain() {
       console.log(`您目前水滴:${totalEnergy}g,水滴换豆卡${$.myCardInfoRes.beanCard}张,暂不满足水滴换豆的条件,为您继续浇水`)
     }
   }
-  // if (totalEnergy > 100 && $.myCardInfoRes.fastCard > 0) {
-  //   //使用快速浇水卡
-  //   await userMyCardForFarm('fastCard');
-  //   console.log(`使用快速浇水卡结果:${JSON.stringify($.userMyCardRes)}`);
-  //   if ($.userMyCardRes.code === '0') {
-  //     console.log(`已使用快速浇水卡浇水${$.userMyCardRes.waterEnergy}g`);
-  //   }
-  //   await initForFarm();
-  //   totalEnergy  = $.farmInfo.farmUserPro.totalEnergy;
-  // }
+  if (totalEnergy > 100 && $.myCardInfoRes.fastCard > 0) {
+    //使用快速浇水卡
+    await userMyCardForFarm('fastCard');
+    console.log(`使用快速浇水卡结果:${JSON.stringify($.userMyCardRes)}`);
+    if ($.userMyCardRes.code === '0') {
+      console.log(`已使用快速浇水卡浇水${$.userMyCardRes.waterEnergy}g`);
+    }
+    // await initForFarm();
+    totalEnergy  = $.farmInfo.farmUserPro.totalEnergy;
+  }
+  return
   // 所有的浇水(10次浇水)任务，获取水滴任务完成后，如果剩余水滴大于等于60g,则继续浇水(保留部分水滴是用于完成第二天的浇水10次的任务)
   let overageEnergy = totalEnergy - retainWater;
   if (totalEnergy >= ($.farmInfo.farmUserPro.treeTotalEnergy - $.farmInfo.farmUserPro.treeEnergy)) {
@@ -601,7 +602,7 @@ async function turntableFarm() {
   await initForTurntableFarm();
   if ($.initForTurntableFarmRes.code === '0') {
     //领取定时奖励 //4小时一次
-    let {timingIntervalHours, timingLastSysTime, sysTime, timingGotStatus, remainLotteryTimes, turntableInfos} = $.initForTurntableFarmRes;
+    let {timingIntervalHours, timingLastSysTime, sysTime, timingGotStatus, remainLotteryTimes = 10, turntableInfos} = $.initForTurntableFarmRes;
 
     if (!timingGotStatus) {
       console.log(`是否到了领取免费赠送的抽奖机会----${sysTime > (timingLastSysTime + 60*60*timingIntervalHours*1000)}`)
@@ -643,6 +644,7 @@ async function turntableFarm() {
         continue
       }
       await lotteryMasterHelp(code);
+      await $.wait(4000)
       // console.log('天天抽奖助力结果',lotteryMasterHelpRes.helpResult)
       if ($.lotteryMasterHelpRes.helpResult) {
         if ($.lotteryMasterHelpRes.helpResult.code === '0') {
@@ -753,6 +755,7 @@ async function masterHelpShare() {
       continue
     }
     await masterHelp(code);
+    await $.wait(4000)
     if ($.helpResult.code === '0') {
       if ($.helpResult.helpResult.code === '0') {
         //助力成功
@@ -919,16 +922,16 @@ async function getAwardInviteFriend() {
     //     }
     //   }
     // }
-    await receiveFriendInvite();//为他人助力,接受邀请成为别人的好友
-    if ($.friendList.inviteFriendCount > 0) {
-      if ($.friendList.inviteFriendCount > $.friendList.inviteFriendGotAwardCount) {
-        console.log('\n开始领取邀请好友的奖励');
-        await awardInviteFriendForFarm();
-        console.log(`领取邀请好友的奖励结果：：${JSON.stringify($.awardInviteFriendRes)}`);
-      }
-    } else {
-      console.log('今日未邀请过好友')
-    }
+    // await receiveFriendInvite();//为他人助力,接受邀请成为别人的好友
+    // if ($.friendList.inviteFriendCount > 0) {
+    //   if ($.friendList.inviteFriendCount > $.friendList.inviteFriendGotAwardCount) {
+    //     console.log('\n开始领取邀请好友的奖励');
+    //     await awardInviteFriendForFarm();
+    //     console.log(`领取邀请好友的奖励结果：：${JSON.stringify($.awardInviteFriendRes)}`);
+    //   }
+    // } else {
+    //   console.log('今日未邀请过好友')
+    // }
   } else {
     console.log(`查询好友列表失败\n`);
   }
@@ -1119,7 +1122,7 @@ async function gotStageAwardForFarm(type) {
 }
 //浇水API
 async function waterGoodForFarm() {
-  await $.wait(1000);
+  await $.wait(4000);
   console.log('等待了1秒');
 
   const functionId = arguments.callee.name.toString();
@@ -1284,7 +1287,7 @@ async function initForFarm() {
   return new Promise(resolve => {
     const option =  {
       url: `${JD_API_HOST}?functionId=initForFarm`,
-      body: `body=${escape(JSON.stringify({"version":14,"channel":1,"babelChannel":0}))}&appid=wh5&clientVersion=9.1.0`,
+      body: `body=${escape(JSON.stringify({"version":14,"channel":1,"babelChannel":0}))}&appid=wh5&client=apple&clientVersion=10.2.4`,
       headers: {
         "accept": "*/*",
         "accept-encoding": "gzip, deflate, br",
@@ -1620,7 +1623,7 @@ function request(function_id, body = {}, timeout = 1000){
 
 function taskUrl(function_id, body = {}) {
   return {
-    url: `${JD_API_HOST}?functionId=${function_id}&appid=wh5&body=${escape(JSON.stringify(body))}`,
+    url: `${JD_API_HOST}?functionId=${function_id}&appid=wh5&body=${escape(JSON.stringify(body))}&client=apple&clientVersion=10.2.4`,
     headers: {
       Cookie: cookie,
       UserAgent: $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
