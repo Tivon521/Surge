@@ -661,37 +661,33 @@ async function turntableFarm() {
     }
     console.log(`---天天抽奖次数remainLotteryTimes----${remainLotteryTimes}次`)
     //抽奖
-    if (remainLotteryTimes > 0) {
-      console.log('开始抽奖')
-      let lotteryResult = '';
-      for (let i = 0; i < new Array(remainLotteryTimes).fill('').length; i++) {
-        await lotteryForTurntableFarm()
-        console.log(`第${i + 1}次抽奖结果${JSON.stringify($.lotteryRes)}`);
-        if ($.lotteryRes.code === '0') {
-          turntableInfos.map((item) => {
-            if (item.type === $.lotteryRes.type) {
-              console.log(`lotteryRes.type${$.lotteryRes.type}`);
-              if ($.lotteryRes.type.match(/bean/g) && $.lotteryRes.type.match(/bean/g)[0] === 'bean') {
-                lotteryResult += `${item.name}个，`;
-              } else if ($.lotteryRes.type.match(/water/g) && $.lotteryRes.type.match(/water/g)[0] === 'water') {
-                lotteryResult += `${item.name}，`;
-              } else {
-                lotteryResult += `${item.name}，`;
-              }
+    console.log('开始抽奖')
+    let lotteryResult = '';
+    for (let i = 0; i < new Array(remainLotteryTimes || 10).fill('').length; i++) {
+      await lotteryForTurntableFarm()
+      console.log(`第${i + 1}次抽奖结果${JSON.stringify($.lotteryRes)}`);
+      if ($.lotteryRes.code === '0') {
+        turntableInfos.map((item) => {
+          if (item.type === $.lotteryRes.type) {
+            console.log(`lotteryRes.type${$.lotteryRes.type}`);
+            if ($.lotteryRes.type.match(/bean/g) && $.lotteryRes.type.match(/bean/g)[0] === 'bean') {
+              lotteryResult += `${item.name}个，`;
+            } else if ($.lotteryRes.type.match(/water/g) && $.lotteryRes.type.match(/water/g)[0] === 'water') {
+              lotteryResult += `${item.name}，`;
+            } else {
+              lotteryResult += `${item.name}，`;
             }
-          })
-          //没有次数了
-          if ($.lotteryRes.remainLotteryTimes === 0) {
-            break
           }
+        })
+        //没有次数了
+        if ($.lotteryRes.remainLotteryTimes === 0) {
+          break
         }
       }
-      if (lotteryResult) {
-        console.log(`【天天抽奖】${lotteryResult.substr(0, lotteryResult.length - 1)}\n`)
-        // message += `【天天抽奖】${lotteryResult.substr(0, lotteryResult.length - 1)}\n`;
-      }
-    }  else {
-      console.log('天天抽奖--抽奖机会为0次')
+    }
+    if (lotteryResult) {
+      console.log(`【天天抽奖】${lotteryResult.substr(0, lotteryResult.length - 1)}\n`)
+      // message += `【天天抽奖】${lotteryResult.substr(0, lotteryResult.length - 1)}\n`;
     }
   } else {
     console.log('初始化天天抽奖得好礼失败')
