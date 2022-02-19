@@ -661,9 +661,8 @@ async function turntableFarm() {
     }
     console.log(`---天天抽奖次数remainLotteryTimes----${remainLotteryTimes}次`)
     //抽奖
-    console.log('开始抽奖')
     let lotteryResult = '';
-    for (let i = 0; i < new Array(remainLotteryTimes || 10).fill('').length; i++) {
+    for (let i = 0; i < new Array(remainLotteryTimes).fill('').length; i++) {
       await lotteryForTurntableFarm()
       console.log(`第${i + 1}次抽奖结果${JSON.stringify($.lotteryRes)}`);
       if ($.lotteryRes.code === '0') {
