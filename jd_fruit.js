@@ -381,7 +381,6 @@ async function doTenWater() {
     for (; waterCount < $.farmTask.totalWaterTaskInit.totalWaterTaskLimit - $.farmTask.totalWaterTaskInit.totalWaterTaskTimes; waterCount++) {
       console.log(`第${waterCount + 1}次浇水`);
       await waterGoodForFarm();
-      console.log(`本次浇水结果:   ${JSON.stringify($.waterResult)}`);
       if ($.waterResult.code === '0') {
         console.log(`剩余水滴${$.waterResult.totalEnergy}g`);
         if ($.waterResult.finished) {
@@ -397,7 +396,7 @@ async function doTenWater() {
         }
       } else {
         console.log('浇水出现失败异常,跳出不在继续浇水')
-        break;
+        // break;
       }
     }
     if (isFruitFinished) {
@@ -523,7 +522,7 @@ async function doTenWaterAgain() {
         }
       } else {
         console.log('浇水出现失败异常,跳出不在继续浇水')
-        break;
+        // break;
       }
     }
     if (isFruitFinished) {
@@ -539,7 +538,6 @@ async function doTenWaterAgain() {
     isFruitFinished = false;
     for (let i = 0; i < parseInt(overageEnergy / 10); i++) {
       await waterGoodForFarm();
-      console.log(`本次浇水结果:   ${JSON.stringify($.waterResult)}`);
       if ($.waterResult.code === '0') {
         console.log(`\n浇水10g成功,剩余${$.waterResult.totalEnergy}\n`)
         if ($.waterResult.finished) {
@@ -551,7 +549,7 @@ async function doTenWaterAgain() {
         }
       } else {
         console.log('浇水出现失败异常,跳出不在继续浇水')
-        break;
+        // break;
       }
     }
     if (isFruitFinished) {
@@ -1122,6 +1120,7 @@ async function waterGoodForFarm() {
 
   const functionId = arguments.callee.name.toString();
   $.waterResult = await request(functionId);
+  console.log(`本次浇水结果:   ${JSON.stringify($.waterResult)}`);
 }
 // 初始化集卡抽奖活动数据API
 async function initForTurntableFarm() {
