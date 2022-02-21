@@ -1,6 +1,6 @@
 /*
-Last Modified time: 2021-7-7 12:27:09
-活动入口：京东APP首页-领京豆-摇京豆/京东APP首页-我的-京东会员-摇京豆
+Last Modified time: 2022-2-21 12:27:09
+活动入口：京东APP首页-领京豆-摇京豆/京东APP首页-领京豆-抽京豆
 增加京东APP首页超级摇一摇(不定时有活动)
 增加超级品牌日做任务及抽奖
 增加 京东小魔方 抽奖
@@ -147,6 +147,7 @@ async function clubLottery() {
     await superShakeBean();//京东APP首页超级摇一摇
     await superbrandShakeBean();//京东APP首页超级品牌日
     await mofang();//小魔方
+    await babelGetLotteryInfo();
   } catch (e) {
     $.logErr(e)
   }
@@ -1376,8 +1377,135 @@ function pg_interact_interface_invoke(body) {
     })
   })
 }
-
-
+function babelGetLotteryInfo(url= 'https://pro.m.jd.com/mall/active/2xoBJwC5D1Q3okksMUFHcJQhFq8j/index.html') {
+  return new Promise(resolve => {
+    $.get({
+      url,
+      headers: {
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "zh-CN,zh;q=0.9",
+        "cookie": cookie,
+        "referer": url,
+        // "user-agent": "JD4iPhone/167220 (iPhone; iOS 13.7; Scale/3.00)"
+        // "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
+        "user-agent": $.isNode() ? process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : require('./USER_AGENTS').USER_AGENT : $.getdata('JDUA') ? $.getdata('JDUA') : 'jdjchapp;jdlog;iPhone;1.2.0;15.2;09f660807a77e6a31f1ddad5beec9a56b194c0a5;Mozilla/5.0 (iPhone; CPU iPhone OS 15_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;'
+      }
+    },async (err,resp,data)=>{
+      try {
+        data = data.match(/window.__react_data__ = (.*)}/);
+        if (data && data[1]) {
+          data = $.toObj(data[1] + '}');
+          if (data && data.activityData && data.activityData.floorList) {
+            let paramsArr = data.activityData.floorList.filter(vo => vo.template === 'choujiang_wheel');
+            for (const item of paramsArr) {
+              if (item['lotteryGuaGuaLe'] && item['lotteryGuaGuaLe']['enAwardK']) {
+                $.boardParams = item['lotteryGuaGuaLe'];
+                break
+              }
+            }
+            if ($.boardParams) {
+              const { noChanceTips = "", enAwardK = '', encryptProjectId = '', encryptAssignmentId = '', srv = '' } = $.boardParams;
+              const body = {
+                "enAwardK": enAwardK,
+                "awardSource": "1",
+                "srv": srv,
+                "encryptProjectId": encryptProjectId,
+                "encryptAssignmentId": encryptAssignmentId,
+                "authType": "2",
+                "riskParam": {
+                  "platform": "3",
+                  "orgType": "2",
+                  "openId": "-1",
+                  "pageClickKey": "Babel_WheelSurf",
+                  "eid": "",
+                  "fp": "-1",
+                  "shshshfp": "fde110bc0d4ce06b17bd2486c2e78a66",
+                  "shshshfpa": "958d8fee-8957-5b00-4628-0e9303604294-1590722984",
+                  "shshshfpb": "cB4nbxV+HoqYCcmaBw3n5gw==",
+                  "childActivityUrl": "https%3A%2F%2Fpro.m.jd.com%2Fmall%2Factive%2F2xoBJwC5D1Q3okksMUFHcJQhFq8j%2Findex.html",
+                  "userArea": "-1",
+                  "client": "",
+                  "clientVersion": "",
+                  "uuid": "",
+                  "osVersion": "",
+                  "brand": "",
+                  "model": "",
+                  "networkType": "",
+                  "jda": "-1"
+                },
+                "siteClient": "apple",
+                "mitemAddrId": "",
+                "geo": {"lng": "", "lat": ""},
+                "addressId": "3398427099",
+                "posLng": "",
+                "posLat": "",
+                "focus": "",
+                "innerAnchor": "",
+                "cv": "2.0"
+              }
+              console.log(`京东账号 ${$.index} ${$.UserName} 开始【京东APP首页-领京豆-抽京豆】`)
+              await babelGetLottery(body);
+            } else {
+              console.log(`paramsArr获取失败：${$.toStr(paramsArr)}\n`);
+            }
+          } else {
+            console.log(`京东账号${$.index} ${$.UserName} 签到数据获取异常}\n`)
+          }
+        }
+      } catch (e) {
+        console.log(e)
+      }
+      finally {
+        resolve()
+      }
+    })
+  })
+}
+function babelGetLottery(body = {}) {
+  return new Promise(async resolve => {
+    const options = {
+      url: "https://api.m.jd.com/client.action?functionId=babelGetLottery",
+      body: `body=${encodeURIComponent($.toStr(body))}&screen=375*667&client=wh5&clientVersion=1.0.0&sid=&uuid=88732f840b77821b345bf07fd71f609e6ff12f43&area=`,
+      headers: {
+        Accept: "*/*",
+        Connection: "keep-alive",
+        Cookie: cookie,
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        "Accept-Language": "zh-cn",
+        "Referer": "https://pro.m.jd.com/",
+        "Accept-Encoding": "gzip, deflate, br"
+      }
+    }
+    $.post(options, (err, resp, data) => {
+      try {
+        if (err) {
+          $.logErr(err)
+        } else {
+          if (data) {
+            data = $.toObj(data);
+            if (data) {
+              const { responseMessage = '', promptMsg = '', prizeName = '', winner = '', prizeId = '' } = data;
+              if (winner === 'true' && prizeId) {
+                console.log(`京东账号${$.index} ${$.UserName} 抽京豆\n${promptMsg}：${prizeName}`)
+              } else {
+                console.log(`京东账号${$.index} ${$.UserName} 抽京豆\n${promptMsg}${responseMessage ? '：' + responseMessage : ''}`)
+              }
+            } else {
+              console.log(`【京东APP首页-领京豆-抽京豆】结果：${$.toStr(data)}`);
+            }
+          } else {
+            $.log('京东服务器返回空数据');
+          }
+        }
+      } catch (e) {
+        $.logErr(e)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {
