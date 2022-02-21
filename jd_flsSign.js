@@ -66,6 +66,9 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
     promiseArr = cookiesArr.map((ck, index) => getActInfo(ck, index, 'https://pro.m.jd.com/mall/active/kPM3Xedz1PBiGQjY4ZYGmeVvrts/index.html'));
     await Promise.all(promiseArr);
+
+    promiseArr = cookiesArr.map((ck, index) => signBeanIndex(ck, index));
+    await Promise.all(promiseArr);
   } catch (e) {
     $.logErr(e)
   }
@@ -171,6 +174,50 @@ function sign(taskCookie, index, params) {
               }
             } else {
               console.log(`京东账号${index + 1} ${userName} 签到失败：${$.toStr(data)}\n`);
+            }
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve()
+      }
+    })
+  })
+}
+function signBeanIndex(taskCookie, index) {
+  return new Promise(resolve => {
+    const options = {
+      url: `https://api.m.jd.com/client.action`,
+      body: `functionId=signBeanIndex&appid=ld`,
+      headers: {
+        'Host': 'api.m.jd.com',
+        'user-agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        'accept': '*/*',
+        'referer': 'https://pro.m.jd.com/',
+        'accept-language': 'zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
+        'content-type': 'application/x-www-form-urlencoded',
+        'Cookie': taskCookie
+      }
+    }
+    $.post(options, async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log($.toStr(err));
+        } else {
+          // console.log(`签到结果`, data)
+          const userName = decodeURIComponent(taskCookie.match(/pt_pin=([^; ]+)(?=;?)/) && taskCookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+          data = $.toObj(data);
+          if (data) {
+            if (data['code'] === '0' && data.data) {
+              const { status = '', dailyAward = {}, continuityAward = {}} = data.data;
+              if (status === '1') {
+                console.log(`京东账号${index + 1} ${userName}\n京东商城签到日历签到成功：${$.toStr(data)}\n`);
+              } else {
+                console.log(`京东账号${index + 1} ${userName}\n京东商城签到日历签到失败：${dailyAward.title ? dailyAward.title + dailyAward.subTitle + dailyAward.beanAward.beanCount : continuityAward['title'] + '：' + continuityAward.beanAward.beanCount}京豆\n`);
+              }
+            } else {
+              console.log(`京东账号${index + 1} ${userName}\n京东商城签到日历签到异常：${$.toStr(data)}\n`);
             }
           }
         }
