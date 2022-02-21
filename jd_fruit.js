@@ -1250,7 +1250,7 @@ async function gotClockInGift() {
 //定时领水API
 async function gotThreeMealForFarm() {
   const functionId = arguments.callee.name.toString();
-  $.threeMeal = await request(functionId);
+  $.threeMeal = await request(functionId, {"type":0,"version":14,"channel":1,"babelChannel":0});
 }
 /**
  * 浏览广告任务API
@@ -1260,9 +1260,9 @@ async function gotThreeMealForFarm() {
 async function browseAdTaskForFarm(advertId, type) {
   const functionId = arguments.callee.name.toString();
   if (type === 0) {
-    $.browseResult = await request(functionId, {advertId, type});
+    $.browseResult = await request(functionId, {advertId, type, "version":14,"channel":1,"babelChannel":0});
   } else if (type === 1) {
-    $.browseRwardResult = await request(functionId, {advertId, type});
+    $.browseRwardResult = await request(functionId, {advertId, type, "version":14,"channel":1,"babelChannel":0});
   }
 }
 // 被水滴砸中API
@@ -1621,6 +1621,10 @@ function taskUrl(function_id, body = {}) {
     headers: {
       Cookie: cookie,
       UserAgent: $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      "accept": "*/*",
+      "accept-encoding": "gzip, deflate, br",
+      "origin": "https://h5.m.jd.com",
+      "referer": "https://h5.m.jd.com/",
     },
     timeout: 10000,
   }
