@@ -88,6 +88,7 @@ let allMessage = '';
 async function jdCash() {
   $.signMoney = 0;
   $.hotAccount = false;
+  await ccSignInNew();//领现金签到（15天不签到，领现金余额清零）
   await index()
   if ($.hotAccount) return
   // await shareCodesFormat()
@@ -357,6 +358,49 @@ function exchange2(node) {
   })
 }
 
+function ccSignInNew() {
+  return new Promise(async resolve => {
+    const options = {
+      url: "https://api.m.jd.com/client.action?functionId=cash_sign&body=%7B%22remind%22%3A0%2C%22inviteCode%22%3A%22%22%2C%22type%22%3A0%2C%22breakReward%22%3A0%7D&client=apple&clientVersion=9.0.8&openudid=1fce88cd05c42fe2b054e846f11bdf33f016d676&sign=7e2f8bcec13978a691567257af4fdce9&st=1596954745073&sv=111",
+      headers: {
+        Accept: "*/*",
+        Connection: "keep-alive",
+        Cookie: cookie,
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        "Accept-Language": "zh-cn",
+        "Referer": "https://pro.m.jd.com/",
+        "Accept-Encoding": "gzip, deflate, br"
+      }
+    }
+    $.get(options, (err, resp, data) => {
+      try {
+        if (err) {
+          $.logErr(err)
+        } else {
+          if (data) {
+            data = $.toObj(data);
+            if (data.code === 0) {
+              const { bizCode = 0, bizMsg = '', success = false, result = {} } = data.data;
+              if (bizCode === 0 && success) {
+                console.log(`京东账号${$.index} ${$.UserName}\n领现金签到成功：${bizMsg}：${result['signCash']} 现金💰`)
+              } else {
+                console.log(`京东账号${$.index} ${$.UserName}\n领现金签到失败：${bizMsg}`)
+              }
+            } else {
+              console.log(`领现金签到失败：${$.toStr(data)}`);
+            }
+          } else {
+            $.log('京东服务器返回空数据');
+          }
+        }
+      } catch (e) {
+        $.logErr(e)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
 function showMsg() {
   return new Promise(resolve => {
     if (!jdNotify) {
