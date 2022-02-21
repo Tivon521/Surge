@@ -15,6 +15,7 @@ cron 0 22 * * * jd_price.js
  */
 
 const $ = new Env('京东保价');
+const request = require('request');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const jsdom = require("jsdom");
@@ -81,6 +82,7 @@ if ($.isNode()) {
       );
       try {
         $.token = '';
+        $.timestamp = new Date().getTime();
         await jstoken();
         if (!$.token) return
         await skuApply();
@@ -88,7 +90,7 @@ if ($.isNode()) {
       } catch (e) {
         $.logErr(e)
       }
-      await $.wait(60000);
+      // await $.wait(60000);
     }
   }
 })()
@@ -107,59 +109,51 @@ function skuApply() {
       token: $.token,
       feSt: 's'
     };
-    const t = Date.now()
     // const h5st = await getH5stBody('siteppM_skuOnceApply', $.toStr(body));
     const h5st = await EncryptH5st(
         'd2f64',
         {
           appid: 'siteppM',
           functionId: 'siteppM_skuOnceApply',
-          t,
+          t: $.timestamp,
           body,
         },
         $.dom.window.ParamsSign
     );
     // console.log('h5st', h5st, $.dom.window.ParamsSign)
-    const opt = {
-      url: `https://api.m.jd.com/api?appid=siteppM&functionId=siteppM_skuOnceApply&forcebot=&t=${t}`,
+    const options = {
+      method: 'POST',
+      url: `https://api.m.jd.com/api?appid=siteppM&functionId=siteppM_skuOnceApply&forcebot=&t=${$.timestamp}`,
       headers: {
-        'Accept': '*/*',
-        'Accept-Language': 'zh-cn',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Origin': 'https://msitepp-fm.jd.com',
-        'Connection': 'keep-alive',
-        'Referer': 'https://msitepp-fm.jd.com',
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1',
-        'Cookie': $.cookie,
+        "content-type": "application/json",
+        "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 15.0.2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1",
+        "referer": "https://msitepp-fm.jd.com/rest/priceprophone/priceProPhoneMenu",
+        "cookie": $.cookie,
       },
-      body: `body=${encodeURIComponent(JSON.stringify(body))}&h5st=${h5st}`,
+      form: {
+        body: JSON.stringify(body),
+        h5st,
+      },
     };
-    $.post(opt, async (err, resp, data) => {
+    request(options, async function (error, response, body) {
       try {
-        if (err) {
-          console.log(
-            `🚫 ${arguments.callee.name.toString()} API请求失败，请检查网路\n${JSON.stringify(
-              err
-            )}`
-          );
-        } else {
-          console.log(`一键保价申请结果：`, data);
-          data = JSON.parse(data);
-          if (data && data.flag) {
+        if (!error) {
+          console.log(`一键保价申请结果：${body}\n`);
+          body = $.toObj(body);
+          if (body && body.flag) {
             console.log(`一键保价申请成功，等待20秒后查询结果！`);
             await $.wait(20 * 1000);
             await getApplyResult();
           } else {
-            console.log(`🚫 一键保价 申请失败：${data && data.responseMessage}`);
+            console.log(`🚫 一键保价 申请失败：${body && body.responseMessage}`);
             await $.wait(20 * 1000);
           }
         }
       } catch (e) {
         reject(
-          `⚠️ ${arguments.callee.name.toString()} API返回结果解析出错\n${e}\n${JSON.stringify(
-            data
-          )}`
+            `⚠️ ${arguments.callee.name.toString()} API返回结果解析出错\n${e}\n${JSON.stringify(
+                body
+            )}`
         );
       } finally {
         resolve();
