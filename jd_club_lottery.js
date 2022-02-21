@@ -52,7 +52,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  await welcomeHome()
+  // await welcomeHome()
   if ($.superShakeUrl) {
     await getActInfo($.superShakeUrl);
   }
@@ -75,7 +75,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
         if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+          // await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
         }
         continue
       }
@@ -138,8 +138,8 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
 async function clubLottery() {
   try {
-    await doTasks();//做任务
-    await getFreeTimes();//获取摇奖次数
+    // await doTasks();//做任务
+    // await getFreeTimes();//获取摇奖次数
     await vvipclub_receive_lottery_times();//京东会员：领取一次免费的机会
     await vvipclub_shaking_info();//京东会员：查询多少次摇奖次数
     await shaking();//开始摇奖
@@ -193,14 +193,14 @@ async function doTasks() {
 }
 async function shaking() {
   for (let i = 0; i < new Array($.leftShakingTimes).fill('').length; i++) {
-    console.log(`开始 【京东会员】 摇奖`)
+    console.log(`开始 【京东APP首页→我的→京享值-→摇京豆】 摇奖`)
     await $.wait(1000);
     const newShakeBeanRes = await vvipclub_shaking_lottery();
     if (newShakeBeanRes.success) {
-      console.log(`京东会员-剩余摇奖次数：${newShakeBeanRes.data.remainLotteryTimes}`)
+      console.log(`京东APP首页→我的→京享值-→摇京豆-剩余摇奖次数：${newShakeBeanRes.data.remainLotteryTimes}`)
       if (newShakeBeanRes.data && newShakeBeanRes.data.rewardBeanAmount) {
         $.prizeBeanCount += newShakeBeanRes.data.rewardBeanAmount;
-        console.log(`恭喜你，京东会员中奖了，获得${newShakeBeanRes.data.rewardBeanAmount}京豆\n`)
+        console.log(`恭喜你，摇京豆中奖了，获得${newShakeBeanRes.data.rewardBeanAmount}京豆\n`)
       } else {
         console.log(`未中奖\n`)
       }
@@ -221,6 +221,8 @@ async function shaking() {
       } else {
         console.log(`摇奖其他未知结果：${JSON.stringify(shakeBeanRes)}\n`)
       }
+    } else {
+      console.log(`失败：${$.toStr(shakeBeanRes)}`)
     }
   }
   if ($.prizeBeanCount > 0) message += `摇京豆：获得${$.prizeBeanCount}京豆`;
@@ -259,7 +261,7 @@ function vvipclub_shaking_info() {
           data = JSON.parse(data);
           if (data.success) {
             $.leftShakingTimes = data.data.leftShakingTimes;//剩余抽奖次数
-            console.log(`京东会员——摇奖次数${$.leftShakingTimes}`);
+            console.log(`京东APP首页→我的→京享值-→摇京豆次数：${$.leftShakingTimes}`);
           }
         }
       } catch (e) {
@@ -1284,17 +1286,17 @@ async function shakeSign() {
   if ($.token && $.currSignCursor && $.signStatus === -1) {
     const body = {"floorToken": $.token, "dataSourceCode": "signIn", "argMap": { "currSignCursor": $.currSignCursor }};
     const signRes = await pg_interact_interface_invoke(body);
-    console.log(`京东会员第${$.currSignCursor}天签到结果；${JSON.stringify(signRes)}`)
+    console.log(`京东APP首页→我的→京享值-→摇京豆 第${$.currSignCursor}天签到结果；${JSON.stringify(signRes)}`)
     let beanNum = 0;
     if (signRes.success && signRes['data']) {
-      console.log(`京东会员第${$.currSignCursor}天签到成功。获得${signRes['data']['rewardVos'] && signRes['data']['rewardVos'][0]['jingBeanVo'] && signRes['data']['rewardVos'][0]['jingBeanVo']['beanNum']}京豆\n`)
+      console.log(`京东APP首页→我的→京享值-→摇京豆 第${$.currSignCursor}天签到成功。获得${signRes['data']['rewardVos'] && signRes['data']['rewardVos'][0]['jingBeanVo'] && signRes['data']['rewardVos'][0]['jingBeanVo']['beanNum']}京豆\n`)
       beanNum = signRes['data']['rewardVos'] && signRes['data']['rewardVos'][0]['jingBeanVo'] && signRes['data']['rewardVos'][0]['jingBeanVo']['beanNum']
     }
     if (beanNum) {
-      message += `\n京东会员签到：获得${beanNum}京豆\n`;
+      message += `\n京东APP首页→我的→京享值-→摇京豆\n签到：获得${beanNum}京豆\n`;
     }
   } else {
-    console.log(`京东会员第${$.currSignCursor}天已签到`)
+    console.log(`京东APP首页→我的→京享值-→摇京豆 第${$.currSignCursor}天已签到`)
   }
 }
 function pg_channel_page_data() {
