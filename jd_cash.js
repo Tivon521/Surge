@@ -88,7 +88,7 @@ let allMessage = '';
 async function jdCash() {
   $.signMoney = 0;
   $.hotAccount = false;
-  await ccSignInNew();//领现金签到（15天不签到，领现金余额清零）
+  await cash_sign();//领现金签到（15天不签到，领现金余额清零）
   await index()
   if ($.hotAccount) return
   // await shareCodesFormat()
@@ -358,7 +358,7 @@ function exchange2(node) {
   })
 }
 
-function ccSignInNew() {
+function cash_sign() {
   return new Promise(async resolve => {
     const options = {
       url: "https://api.m.jd.com/client.action?functionId=cash_sign&body=%7B%22remind%22%3A0%2C%22inviteCode%22%3A%22%22%2C%22type%22%3A0%2C%22breakReward%22%3A0%7D&client=apple&clientVersion=9.0.8&openudid=1fce88cd05c42fe2b054e846f11bdf33f016d676&sign=7e2f8bcec13978a691567257af4fdce9&st=1596954745073&sv=111",
