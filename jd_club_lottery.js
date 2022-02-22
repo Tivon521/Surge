@@ -138,7 +138,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 
 async function clubLottery() {
   try {
-    // await doTasks();//做任务
+    await doTasks();//做任务
     // await getFreeTimes();//获取摇奖次数
     await vvipclub_receive_lottery_times();//京东会员：领取一次免费的机会
     await vvipclub_shaking_info();//京东会员：查询多少次摇奖次数

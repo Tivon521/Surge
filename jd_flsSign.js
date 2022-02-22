@@ -212,7 +212,7 @@ function signBeanIndex(taskCookie, index) {
             if (data['code'] === '0' && data.data) {
               const { status = '', dailyAward = {}, continuityAward = {}} = data.data;
               if (status === '1') {
-                console.log(`京东账号${index + 1} ${userName}\n京东商城签到日历签到成功：${$.toStr(data)}\n`);
+                console.log(`京东账号${index + 1} ${userName}\n京东商城签到日历签到成功：${dailyAward.title ? dailyAward.title + dailyAward.subTitle + dailyAward.beanAward.beanCount : continuityAward['title'] + '：' + continuityAward.beanAward.beanCount}京豆\n`);
               } else {
                 console.log(`京东账号${index + 1} ${userName}\n京东商城签到日历签到失败：${dailyAward.title ? dailyAward.title + dailyAward.subTitle + dailyAward.beanAward.beanCount : continuityAward['title'] + '：' + continuityAward.beanAward.beanCount}京豆\n`);
               }
