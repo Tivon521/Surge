@@ -8,7 +8,7 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let activityList = [
-  {'url':'https://anmp.jd.com/babelDiy/Zeus/3ZHWXfEDpu5GyX1BgCEN3qQwrC4K/index.html','endTime':'1646063999000'},
+  {'url':'https://anmp.jd.com/babelDiy/Zeus/3z12ngsd27UR1KfRqdMrMSSg3uxg/index.html','endTime':'1648742399000'},
 ]
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
