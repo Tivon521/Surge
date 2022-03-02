@@ -1181,7 +1181,7 @@ async function lotteryMasterHelp() {
 //领取5人助力后的额外奖励API
 async function receiveStageEnergy() {
   const functionId = arguments.callee.name.toString();
-  $.masterGotFinished = await request(functionId, {"version":14,"channel":1,"babelChannel":0});
+  $.masterGotFinished = await request(functionId, {"version":14,"channel":1,"babelChannel":0}, 2000);
 }
 //助力好友信息API
 async function farmAssistInit() {
