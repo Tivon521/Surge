@@ -20,6 +20,8 @@
 5 0,1 * * * node /scripts/jd_flsSign.js >> /scripts/logs/jd_flsSign.log 2>&1
 #一加活动（3.25结束）
 20 0 * * * node /scripts/jd_yijia_task.js >> /scripts/logs/jd_yijia_task.log 2>&1
+#京喜领88元红包
+34 2,10,15,20 * * * node /scripts/jd_jxlhb.js >> /scripts/logs/jd_jxlhb.log 2>&1
 ##############长期活动##############
 #签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
