@@ -149,10 +149,16 @@ const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
     })
 
 async function main() {
-  if (cookie.includes("pt_pin")) await getJxToken();
-  await joinActive();
-  await $.wait(5 * 1000);
-  await getUserInfo()
+  try {
+    $.blackAccount = false;
+    if (cookie.includes("pt_pin")) await getJxToken();
+    await joinActive();
+    if ($.blackAccount) return
+    await $.wait(5 * 1000);
+    await getUserInfo()
+  } catch (e) {
+    $.log(e)
+  }
 }
 
 //参与活动
@@ -171,7 +177,8 @@ function joinActive() {
           if (data.iRet === 0) {
             console.log(`活动开启成功,助力邀请码为:${data.Data.strUserPin}\n`);
           } else {
-            console.log(`活动开启失败：${data.sErrMsg}\n`);
+            console.log(`活动开启失败：${data.sErrMsg}，${data.iRet}\n`);
+            if (data.iRet === 2016) $.blackAccount = true;
           }
         }
       } catch (e) {
