@@ -10,7 +10,7 @@ const zlib = require('zlib');
 const vm = require('vm');
 const PNG = require('png-js');
 const UA = require('../USER_AGENTS.js').USER_AGENT;
-const JDJR_validator_Count = process.env.JDJR_validator_Count || 100
+const validatorCount = process.env.JDJR_validator_Count || 100
 
 Math.avg = function average() {
   var sum = 0;
@@ -223,72 +223,64 @@ class JDJRValidator {
     this.t = Date.now();
     this.count = 0;
   }
-
-  async run(scene = 'cww') {
-    try {
-      const tryRecognize = async () => {
-        const x = await this.recognize(scene);
-
-        if (x > 0) {
-          return x;
-        }
-        // retry
-        return await tryRecognize();
-      };
-      const puzzleX = await tryRecognize();
-      // console.log(puzzleX);
-      const pos = new MousePosFaker(puzzleX).run();
-      const d = getCoordinate(pos);
-
-      // console.log(pos[pos.length-1][2] -Date.now());
-      // await sleep(4500);
-      await sleep(pos[pos.length - 1][2] - Date.now());
-      const result = await JDJRValidator.jsonp('/slide/s.html', {d, ...this.data}, scene);
-      this.count ++;
-      if (result.message === 'success') {
-        // console.log(result);
-        console.log('JDJR验证用时: %fs', (Date.now() - this.t) / 1000);
-        return result;
-      } else {
-        console.count("验证失败总次数");
-        console.log(`此账号验证失败次数：${this.count}/${JDJR_validator_Count}`);
-        if (this.count >= JDJR_validator_Count) {
-          console.log(`JDJR验证次数已达设定的上限：${JDJR_validator_Count}，现退出验证`);
-          console.log(`result`, result)
-          return result;
-        }
-        // console.count(JSON.stringify(result));
-        await sleep(300);
-        return await this.run(scene);
+  async run(scene = 'cww', $, eid='') {
+    const tryRecognize = async () => {
+      const x = await this.recognize(scene, eid, $);
+      if (x > 0) {
+        return x;
       }
-    } catch (e) {
-      console.error(e)
+      // retry
+      return await tryRecognize();
+    };
+    const puzzleX = await tryRecognize();
+    // console.log(puzzleX);
+    const pos = new MousePosFaker(puzzleX).run();
+    const d = getCoordinate(pos);
+    // console.log(pos[pos.length-1][2] -Date.now());
+    // await sleep(4500);
+    await sleep(pos[pos.length - 1][2] - Date.now());
+    this.count++;
+    const result = await JDJRValidator.jsonp('/slide/s.html', {d, ...this.data}, scene);
+    if (result.message === 'success') {
+      // console.log(result);
+      $.validatorTime = (Date.now() - this.t) / 1000
+      console.log(`JDJR验证用时: ${$.validatorTime}秒`);
+      return result;
+    } else {
+      console.log(`验证失败: ${this.count}/${validatorCount}`);
+      // console.log(JSON.stringify(result));
+      if(this.count >= validatorCount){
+        console.log("JDJR验证次数已达上限，退出验证");
+        return result;
+      }else{
+        // await sleep(300);
+        return await this.run(scene, $, eid);
+      }
     }
   }
 
-  async recognize(scene) {
-    try {
-      const data = await JDJRValidator.jsonp('/slide/g.html', {e: ''}, scene);
-      const {bg, patch, y} = data;
-      // const uri = 'data:image/png;base64,';
-      // const re = new PuzzleRecognizer(uri+bg, uri+patch, y);
-      const re = new PuzzleRecognizer(bg, patch, y);
-      const puzzleX = await re.run();
+  async recognize(scene, eid, $) {
+    const data = await JDJRValidator.jsonp('/slide/g.html', {e: eid}, scene);
+    const {bg, patch, y} = data;
+    // const uri = 'data:image/png;base64,';
+    // const re = new PuzzleRecognizer(uri+bg, uri+patch, y);
+    const re = new PuzzleRecognizer(bg, patch, y);
+    // console.log(JSON.stringify(re))
+    const puzzleX = await re.run();
 
-      if (puzzleX > 0) {
-        this.data = {
-          c: data.challenge,
-          w: re.w,
-          e: '',
-          s: '',
-          o: '',
-        };
-        this.x = puzzleX;
-      }
-      return puzzleX;
-    } catch (e) {
-      console.error(e)
+    if (puzzleX > 0) {
+      this.data = {
+        c: data.challenge,
+        w: re.w,
+        e: eid,
+        s: '',
+        o: '',
+        o1: 0,
+        u: $.validatorUrl || 'https://prodev.m.jd.com',
+      };
+      this.x = puzzleX;
     }
+    return puzzleX;
   }
 
   async report(n) {
@@ -305,6 +297,7 @@ class JDJRValidator {
     }
 
     console.log('验证成功: %f\%', (count / n) * 100);
+    console.clear()
     console.timeEnd('PuzzleRecognizer');
   }
 
@@ -312,16 +305,14 @@ class JDJRValidator {
     return new Promise((resolve, reject) => {
       const fnId = `jsonp_${String(Math.random()).replace('.', '')}`;
       const extraData = {callback: fnId};
-      const query = new URLSearchParams({...DATA, ...{"scene": scene}, ...extraData, ...data}).toString();
+      const query = new URLSearchParams({...DATA,...{"scene": scene}, ...data, ...extraData}).toString();
       const url = `https://${SERVER}${api}?${query}`;
       const headers = {
         'Accept': '*/*',
         'Accept-Encoding': 'gzip,deflate,br',
         'Accept-Language': 'zh-CN,en-US',
         'Connection': 'keep-alive',
-        'Host': SERVER,
-        'Proxy-Connection': 'keep-alive',
-        'Referer': 'https://h5.m.jd.com/babelDiy/Zeus/2wuqXrZrhygTQzYA7VufBEpj4amH/index.html',
+        'Referer': 'https://prodev.m.jd.com/',
         'User-Agent': UA,
       };
 
@@ -518,7 +509,7 @@ class MousePosFaker {
   }
 }
 
-function injectToRequest(fn, scene = 'cww') {
+function injectToRequest(fn, scene = 'cww', $ = {}) {
   return (opts, cb) => {
     fn(opts, async (err, resp, data) => {
       if (err) {
@@ -527,7 +518,7 @@ function injectToRequest(fn, scene = 'cww') {
       }
       if (data.search('验证') > -1) {
         console.log('JDJR验证中......');
-        const res = await new JDJRValidator().run(scene);
+        const res = await new JDJRValidator().run(scene, $);
         if (res) {
           opts.url += `&validate=${res.validate}`;
         }
@@ -538,10 +529,10 @@ function injectToRequest(fn, scene = 'cww') {
     });
   };
 }
-async function injectToRequest2(scene = 'cww') {
+async function injectToRequest2(scene = 'cww', $) {
   console.log('JDJRValidator trying......');
-  const res = await new JDJRValidator().run(scene);
-  return `&validate=${res.validate}`
+  const res = await new JDJRValidator().run(scene, $);
+  return `${res.validate}`
 }
 module.exports = {
   injectToRequest,
