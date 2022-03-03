@@ -18,7 +18,8 @@
 20 * * * * node /scripts/jd_jxbfd_pear_game.js >> /scripts/logs/jd_jxbfd_pear_game.log 2>&1
 #京东小家福利社签到（2021年9月10日-2021年12月31日）
 5 0,1 * * * node /scripts/jd_flsSign.js >> /scripts/logs/jd_flsSign.log 2>&1
-
+#京喜领88元红包
+34 2,10,15,20 * * * 5 0,1 * * * node /scripts/jd_jxlhb.js >> /scripts/logs/jd_jxlhb.log 2>&1
 ##############长期活动##############
 #签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1

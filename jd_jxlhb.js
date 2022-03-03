@@ -8,17 +8,7 @@
 ==============Quantumult X==============
 [task_local]
 #京喜领88元红包
-34 2,10,19 * * * jd_jxlhb.js, tag=京喜领88元红包, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-
-==============Loon==============
-[Script]
-cron "34 2,10,19 * * *" script-path=jd_jxlhb.js,tag=京喜领88元红包
-
-================Surge===============
-京喜领88元红包 = type=cron,cronexp="34 2,10,19 * * *",wake-system=1,timeout=3600,script-path=jd_jxlhb.js
-
-===============小火箭==========
-京喜领88元红包 = type=cron,script-path=jd_jxlhb.js, cronexpr="34 2,10,19 * * *", timeout=3600, enable=true
+34 2,10,15,20 * * * jd_jxlhb.js, tag=京喜领88元红包, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
  */
 const $ = new Env('京喜领88元红包');
 const notify = $.isNode() ? require('./sendNotify') : {};
@@ -28,7 +18,6 @@ if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
   });
-  if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => {};
 } else {
   cookiesArr = [
     $.getdata("CookieJD"),
@@ -36,9 +25,9 @@ if ($.isNode()) {
     ...$.toObj($.getdata("CookiesJD") || "[]").map((item) => item.cookie)].filter((item) => !!item);
 }
 $.packetIdArr = [];
-$.activeId = '525597';
+$.activeId = '529439';
 let currentToken = {}
-const BASE_URL = 'https://wq.jd.com/cubeactive/steprewardv3'
+const BASE_URL = 'https://m.jingxi.com/cubeactive/steprewardv3'
 
 
 !(async () => {
@@ -46,20 +35,29 @@ const BASE_URL = 'https://wq.jd.com/cubeactive/steprewardv3'
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
+  $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
+  $.appId = "e395f"
+  await requestAlgo()
+  await $.wait(1000)
   console.log('京喜领88元红包\n' +
       '活动入口：京喜app-》我的-》京喜领88元红包\n' +
       '助力逻辑：所有的账号先助力自己的第一个CK，剩下的助力会助力作者\n' +
       '温馨提示：如提示助力火爆，可尝试寻找京东客服')
   let res = await getAuthorShareCode();
-  if (!res) res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/gitupdate/updateTeam@master/shareCodes/jxhb.json');
+  if (!res) {
+    $.http.get({url: 'https://purge.jsdelivr.net/gh/gitupdate/updateTeam@master/shareCodes/jxhb.json'}).then((resp) => {
+    }).catch((e) => $.log('刷新CDN异常', e));
+    await $.wait(500)
+    res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/gitupdate/updateTeam@master/shareCodes/jxhb.json');
+  }
   if (res && res.activeId) $.activeId = res.activeId;
+  console.log(`活动ID：${$.activeId}\n`)
   $.authorMyShareIds = [...((res && res.codes) || [])];
   //开启红包,获取互助码
   for (let i = 0; i < cookiesArr.length; i++) {
     $.index = i + 1;
     cookie = cookiesArr[i];
     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-    await TotalBean();
     console.log(`\n*****开始【京东账号${$.index}】${$.nickName || $.UserName}*****\n`);
     await main();
   }
@@ -106,7 +104,7 @@ const BASE_URL = 'https://wq.jd.com/cubeactive/steprewardv3'
     const data = await getUserInfo(true);
     $.grades = [1, 2, 3, 4, 5, 6, 7];
     if (data.iRet === 0) {
-      const { strUserPin, dwCurrentGrade, gradeConfig = [], dwHelpedTimes = 0, dwRemainInvite = 90, dwTotalNum = 0 } = data['Data'];
+      const {strUserPin, dwCurrentGrade, gradeConfig = [], dwHelpedTimes = 0, dwRemainInvite = 90, dwTotalNum = 0} = data['Data'];
       console.log(`${dwCurrentGrade}号红包还需${dwRemainInvite}人助力可领取，当前已获得红包：${dwTotalNum / 100}元\n`);
       for (const item of gradeConfig) {
         if (item['dwIsHasDraw'] === 0) {
@@ -137,22 +135,24 @@ const BASE_URL = 'https://wq.jd.com/cubeactive/steprewardv3'
     .finally(() => {
       $.done();
     })
+
 async function main() {
   if (cookie.includes("pt_pin")) await getJxToken();
   await joinActive();
   await $.wait(5 * 1000);
   await getUserInfo()
 }
+
 //参与活动
 function joinActive() {
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     const body = ""
-    const options = taskurl('JoinActive', body, 'activeId,channel,phoneid,publishFlag,stepreward_jstoken,timestamp');
+    const options = await taskurl('JoinActive', body, 'activeId,channel,phoneid,publishFlag,stepreward_jstoken,timestamp');
     $.get(options, (err, resp, data) => {
       try {
         if (err) {
-          console.log(`\n${$.name}:  API查询请求失败 ‼️‼️`)
-          $.logErr(err);
+          console.log(`\n${$.name}:  JoinActive API查询请求失败 ‼️‼️`)
+          $.log(err);
         } else {
           // console.log('开启活动', data)
           data = JSON.parse(data)
@@ -170,11 +170,12 @@ function joinActive() {
     })
   })
 }
+
 //获取助力码
 function getUserInfo(flag = false) {
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     const body = `joinDate=${$.time('yyyyMMdd')}`;
-    const options = taskurl('GetUserInfo', body, 'activeId,channel,joinDate,phoneid,publishFlag,timestamp');
+    const options = await taskurl('GetUserInfo', '', 'activeId');
     $.get(options, (err, resp, data) => {
       try {
         if (err) {
@@ -205,12 +206,13 @@ function getUserInfo(flag = false) {
     })
   })
 }
+
 //助力好友
 function enrollFriend(strPin) {
-  return new Promise(resolve => {
+  return new Promise(async resolve => {
     // console.log('\nstrPin ' + strPin);
-    const body = `strPin=${strPin}&joinDate=${$.time('yyyyMMdd')}`
-    const options = taskurl('EnrollFriend', body, 'activeId,phoneid,stepreward_jstoken,strPin,timestamp');
+    const body = `strPin=${strPin}`
+    const options = await taskurl('EnrollFriend', body, 'activeId,phoneid,stepreward_jstoken,strPin,timestamp');
     $.get(options, async (err, resp, data) => {
       try {
         if (err) {
@@ -218,8 +220,8 @@ function enrollFriend(strPin) {
           $.log(JSON.stringify(err));
           await $.wait(15 * 1000)
         } else {
-          // console.log('助力结果', data)
           data = JSON.parse(data)
+          console.log('助力结果', data.iRet, data.sErrMsg)
           if (data.iRet === 0) {
             //{"Data":{"prizeInfo":[]},"iRet":0,"sErrMsg":"成功"}
             console.log(`助力成功🎉:${data.sErrMsg}\n`);
@@ -228,7 +230,7 @@ function enrollFriend(strPin) {
             if (data.iRet === 2015) $.canHelp = false;//助力已达上限
             if (data.iRet === 2016) {
               $.canHelp = false;//助力火爆
-              console.log(`温馨提示：如提示助力火爆，可尝试寻找京东客服`);
+              // console.log(`温馨提示：如提示助力火爆，可尝试寻找京东客服`);
             }
             if (data.iRet === 2013) $.max = true;
             console.log(`助力失败:${data.sErrMsg}\n`);
@@ -244,9 +246,9 @@ function enrollFriend(strPin) {
 }
 
 function openRedPack(strPin, grade) {
-  return new Promise(resolve => {
-    const body = `strPin=${strPin}&grade=${grade}`
-    const options = taskurl('DoGradeDraw', body, 'activeId,channel,grade,phoneid,publishFlag,stepreward_jstoken,strPin,timestamp');
+  return new Promise(async resolve => {
+    const body = `grade=${grade}`
+    const options = await taskurl('DoGradeDraw', body, '');
     $.get(options, async (err, resp, data) => {
       try {
         if (err) {
@@ -256,7 +258,7 @@ function openRedPack(strPin, grade) {
           // console.log(`拆红包结果：${data}`);
           data = JSON.parse(data)
           if (data.iRet === 0) {
-            const { prizeInfo } = data.Data;
+            const {prizeInfo} = data.Data;
             for (const item of prizeInfo) {
               console.log(`拆红包成功：获得红包：${item.dwAmount / 100}元\n`);
               if ((item.dwAmount / 100) >= 88) {
@@ -303,7 +305,7 @@ function getAuthorShareCode(url = "https://raw.githubusercontent.com/gitupdate/u
           }
         })
       }
-      Object.assign(options, { agent })
+      Object.assign(options, {agent})
     }
     $.get(options, async (err, resp, data) => {
       try {
@@ -319,15 +321,23 @@ function getAuthorShareCode(url = "https://raw.githubusercontent.com/gitupdate/u
     })
   })
 }
+
 //关键地方
-function taskurl(functionId, body = '', stk) {
-  let url = `${BASE_URL}/${functionId}?activeId=${$.activeId}&publishFlag=1&channel=7&${body}&sceneval=2&g_login_type=1&timestamp=${currentToken['timestamp']}&_=${Date.now() + 2}&_ste=1`
-  const phoneId = currentToken['phoneid'];
-  url += `&phoneid=${phoneId}`;
-  url += `&stepreward_jstoken=${currentToken['farm_jstoken']}`;
+async function taskurl(functionId = '', body = '', stk = '') {
+  let url = `${BASE_URL}/${functionId}?activeId=${$.activeId}&publishFlag=1&channel=7&${body}&sceneval=2&g_login_type=1&_=${Date.now() + 2}&_ste=1`
   if (stk) {
     url += `&_stk=${encodeURIComponent(stk)}`;
   }
+  const h5st = await decrypt(Date.now(), '', url);
+  // console.log('h5st', h5st)
+  url += `&h5st=${h5st}`;
+  const phoneId = currentToken['phoneid'];
+  if (['JoinActive', 'EnrollFriend'].includes(functionId)) {
+    url += `&phoneid=${phoneId}`;
+    url += `&timestamp=${currentToken['timestamp']}`;
+    url += `&stepreward_jstoken=${currentToken['farm_jstoken']}`;
+  }
+  // console.log(functionId, url)
   return {
     url,
     headers: {
@@ -341,46 +351,148 @@ function taskurl(functionId, body = '', stk) {
   }
 }
 
-function TotalBean() {
-  return new Promise(async resolve => {
-    const options = {
-      url: "https://me-api.jd.com/user_new/info/GetJDUserInfoUnion",
-      headers: {
-        Host: "me-api.jd.com",
-        Accept: "*/*",
-        Connection: "keep-alive",
-        Cookie: cookie,
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-        "Accept-Language": "zh-cn",
-        "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
-        "Accept-Encoding": "gzip, deflate, br"
-      }
+async function decrypt(time = Date.now(), stk = '', url = '') {
+  stk = stk || (url ? getUrlData(url, '_stk') : '')
+  if (stk) {
+    const timestamp = new Date(time).Format("yyyyMMddhhmmssSSS");
+    let hash1 = '';
+    if ($.fingerprint && $.token && $.enCryptMethodJD) {
+      hash1 = $.enCryptMethodJD($.token, $.fingerprint.toString(), timestamp.toString(), $.appId.toString(), $.CryptoJS).toString($.CryptoJS.enc.Hex);
     }
-    $.get(options, (err, resp, data) => {
+    let st = '';
+    stk.split(',').map((item, index) => {
+      st += `${item}:${getUrlData(url, item)}${index === stk.split(',').length - 1 ? '' : '&'}`;
+    })
+    const hash2 = $.CryptoJS.HmacSHA256(st, hash1.toString()).toString($.CryptoJS.enc.Hex);
+    // console.log(`\nst:${st}`)
+    // console.log(`h5st:${["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.token), "".concat(hash2), "".concat("3.0"), "".concat(time)].join(";")}\n`)
+    return (["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.token), "".concat(hash2), "".concat("3.0"), "".concat(time)].join(";"))
+  }
+}
+
+async function requestAlgo() {
+  $.fingerprint = await generateFp();
+  const options = {
+    "url": `https://cactus.jd.com/request_algo?g_ty=ajax`,
+    "headers": {
+      'Authority': 'cactus.jd.com',
+      'Pragma': 'no-cache',
+      'Cache-Control': 'no-cache',
+      'Accept': 'application/json',
+      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      'Content-Type': 'application/json',
+      'Origin': 'https://st.jingxi.com',
+      'Sec-Fetch-Site': 'cross-site',
+      'Sec-Fetch-Mode': 'cors',
+      'Sec-Fetch-Dest': 'empty',
+      'Referer': 'https://st.jingxi.com/',
+      'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7'
+    },
+    'body': JSON.stringify({
+      "version": "3.0",
+      "fp": $.fingerprint,
+      "appId": $.appId,
+      "timestamp": Date.now(),
+      "platform": "web",
+      "expandParams": ""
+    })
+  }
+  return new Promise(async resolve => {
+    $.post(options, (err, resp, data) => {
       try {
         if (err) {
-          $.logErr(err)
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`request_algo 签名参数API请求失败，请检查网路重试`)
         } else {
           if (data) {
             data = JSON.parse(data);
-            if (data['retcode'] === "1001") {
-              $.isLogin = false; //cookie过期
-              return;
-            }
-            if (data['retcode'] === "0" && data.data && data.data.hasOwnProperty("userInfo")) {
-              $.nickName = data.data.userInfo.baseInfo.nickname;
+            if (data['status'] === 200) {
+              $.token = data.data.result.tk;
+              let enCryptMethodJDString = data.data.result.algo;
+              // console.log(enCryptMethodJDString);
+              if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
+              console.log(`获取签名参数成功！`)
+              console.log(`token: ${$.token}`)
+            } else {
+              console.log('request_algo 签名参数API请求失败:')
             }
           } else {
-            $.log('京东服务器返回空数据');
+            console.log(`京东服务器返回空数据`)
           }
         }
       } catch (e) {
-        $.logErr(e)
+        $.logErr(e, resp)
       } finally {
         resolve();
       }
     })
   })
+}
+
+function generateFp() {
+  const str = "0123456789", rmStrLen = 3, rd = Math.random() * 10 | 0, fpLen = 16
+  let rmStr = "", notStr = ""
+  !((num, str) => {
+    let strArr = str.split(""), res = []
+    for (let i = 0; i < num; i++) {
+      let rd = Math.random() * (strArr.length - 1) | 0
+      res.push(strArr[rd])
+      strArr.splice(rd, 1)
+    }
+    rmStr = res.join(""), notStr = strArr.join("")
+  })(rmStrLen, str)
+
+  return ((size, num) => {
+    let u = size, u2 = (fpLen - rmStrLen - size.toString().length) - size, res = ""
+    while (u--) res += num[Math.random() * num.length | 0]
+    res += rmStr
+    while (u2--) res += num[Math.random() * num.length | 0]
+    res += size
+    return res
+  })(rd, notStr)
+}
+
+function getUrlData(url, name) {
+  if (typeof URL !== "undefined") {
+    let urls = new URL(url);
+    let data = urls.searchParams.get(name);
+    return data ? data : '';
+  } else {
+    const query = url.match(/\?.*/)[0].substring(1)
+    const vars = query.split('&')
+    for (let i = 0; i < vars.length; i++) {
+      const pair = vars[i].split('=')
+      if (pair[0] === name) {
+        // return pair[1];
+        return vars[i].substr(vars[i].indexOf('=') + 1);
+      }
+    }
+    return ''
+  }
+}
+
+Date.prototype.Format = function (fmt) {
+  var e,
+      n = this, d = fmt, l = {
+        "M+": n.getMonth() + 1,
+        "d+": n.getDate(),
+        "D+": n.getDate(),
+        "h+": n.getHours(),
+        "H+": n.getHours(),
+        "m+": n.getMinutes(),
+        "s+": n.getSeconds(),
+        "w+": n.getDay(),
+        "q+": Math.floor((n.getMonth() + 3) / 3),
+        "S+": n.getMilliseconds()
+      };
+  /(y+)/i.test(d) && (d = d.replace(RegExp.$1, "".concat(n.getFullYear()).substr(4 - RegExp.$1.length)));
+  for (var k in l) {
+    if (new RegExp("(".concat(k, ")")).test(d)) {
+      var t, a = "S+" === k ? "000" : "00";
+      d = d.replace(RegExp.$1, 1 == RegExp.$1.length ? l[k] : ("".concat(a) + l[k]).substr("".concat(l[k]).length))
+    }
+  }
+  return d;
 }
 function getJxToken() {
   function uuid(count) {
