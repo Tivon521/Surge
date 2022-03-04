@@ -26,6 +26,8 @@ let shareList = [
   {'code': '9E56nQr37v/RlB+z9uzuvzFsocq5rYFQ8FBxSEjgerNnRCUaYC5FrqExBBYqkArm0/A/RHptEtCRWQxjHa0Ovw==', 'max': 50},
   {'code': 'skK0vxb1G7fhgKLObtVoAzcTImSA+wOhmUmEnU0XKWX/Arfc9auKU6+yU5isJiYW', 'max': 50},
   {'code': 'mXVqcBAstSB4ZrO4koluGx74xzUU2B676iAmaaOj9HJGMVLItVNXL2XDwJeNxJgTkdK3rLBQpEQH9V4tdrrh0w==', 'max': 50},
+  {'code': 'IWZ9Y/lh0ch6PdK5y0OTmR74xzUU2B676iAmaaOj9HJGMVLItVNXL2XDwJeNxJgTkdK3rLBQpEQH9V4tdrrh0w==', 'max': 50},
+  {'code': 'sWDTZwRtTXR5mh7W8BdD1R74xzUU2B676iAmaaOj9HJGMVLItVNXL2XDwJeNxJgTkdK3rLBQpEQH9V4tdrrh0w==', 'max': 50},
 ]
 !(async () => {
   if (!cookiesArr[0]) {
@@ -57,93 +59,97 @@ let shareList = [
 });
 
 async function main() {
-  if ((!shareCode || Number(max) <= 0) && shareList.length > 0) {
-    let oneCodeInfo = shareList[Math.floor((Math.random() * shareList.length))];
-    shareCode = oneCodeInfo.code;
-    max = oneCodeInfo.max;
-  }
-  let ua = getUA();
-  $.token = '';
-  await getToken();
-  if (!$.token) {
-    console.log(`获取Token失败`);
-    return;
-  }
-  console.log(`Token:${$.token}`);
-  $.buyerNick = '';
-  let bodyInfo = {"jdToken": $.token, "method": "/yijia/activity_load"};
-  if (shareCode) {
-    bodyInfo['inviteNick'] = shareCode;
-  }
-  let mainInfo = await takePost(ua, 'activity_load', bodyInfo);
-  //console.log(JSON.stringify(mainInfo));
-  if (JSON.stringify(mainInfo) === '{}') {
-    console.log(`获取活动异常1`);
-    return;
-  }
-  if (mainInfo.success && mainInfo.data && mainInfo.data.status === 200) {
+  try {
+    if ((!shareCode || Number(max) <= 0) && shareList.length > 0) {
+      let oneCodeInfo = shareList[Math.floor((Math.random() * shareList.length))];
+      shareCode = oneCodeInfo.code;
+      max = oneCodeInfo.max;
+    }
+    let ua = getUA();
+    $.token = '';
+    await getToken();
+    if (!$.token) {
+      console.log(`获取Token失败`);
+      return;
+    }
+    console.log(`Token:${$.token}`);
+    $.buyerNick = '';
+    let bodyInfo = {"jdToken": $.token, "method": "/yijia/activity_load"};
+    if (shareCode) {
+      bodyInfo['inviteNick'] = shareCode;
+    }
+    let mainInfo = await takePost(ua, 'activity_load', bodyInfo);
+    //console.log(JSON.stringify(mainInfo));
+    if (JSON.stringify(mainInfo) === '{}') {
+      console.log(`获取活动异常1`);
+      return;
+    }
+    if (mainInfo.success && mainInfo.data && mainInfo.data.status === 200) {
 
-  } else {
-    console.log(`获取活动异常2`);
-    return;
-  }
-  mainInfo = mainInfo.data.data;
-  let remainChance = mainInfo.missionCustomer.remainChance;
-  console.log(`获取活动成功,当前积分：${remainChance}`);
-  $.buyerNick = mainInfo.missionCustomer.buyerNick;
-  console.log($.buyerNick);
-  let showBarrage = await takePost(ua, 'showBarrage', {"method": "/yijia/showBarrage"});
-  let showProduct = await takePost(ua, 'showProduct', {"type": "prepayGoods", "method": "/yijia/showProduct"});
-  let showCards = await takePost(ua, 'showCards', {"method": "/yijia/showCards"});
-  let showExchangeGoods = await takePost(ua, 'showExchangeGoods', {
-    "type": "exchange",
-    "method": "/yijia/showExchangeGoods"
-  });
-  let showProduct2 = await takePost(ua, 'showProduct', {"type": "hotSale", "method": "/yijia/showProduct"});
-  let showHitNum = await takePost(ua, 'showHitNum', {"type": "hotSale", "method": "/yijia/showHitNum"});
-  let taskInfo = await takePost(ua, 'mission/complete/state', {"method": "/yijia/mission/complete/state"});
-  let logInfo = await takePost(ua, 'invite/log/list', {
-    "missionType": "shareAct",
-    "pageNo": 1,
-    "pageSize": 7,
-    "method": "/yijia/invite/log/list"
-  });
-  await $.wait(2000);
-  if (mainInfo.missionCustomer.isOpenCard !== 1 && shareCode && shareCode !== $.buyerNick) {
-    let bodyInfo = {
-      "missionType": "openCard",
-      "shopId": 1000001947,
-      "type": "help",
-      "method": "/yijia/complete/mission",
+    } else {
+      console.log(`获取活动异常2`);
+      return;
     }
-    let taskInfo = await takePost(ua, 'complete/mission', bodyInfo);
-    console.log(JSON.stringify(taskInfo));
-    // console.log(`入会`);
-    // $.UA = ua;
-    // $.venderId = 1000001947;
-    // await join($)
-    bodyInfo = {"jdToken": $.token, "method": "/yijia/activity_load", "inviteNick": shareCode};
-    mainInfo = await takePost(ua, 'activity_load', bodyInfo);
     mainInfo = mainInfo.data.data;
-    bodyInfo = {
+    let remainChance = mainInfo.missionCustomer.remainChance;
+    console.log(`获取活动成功,当前积分：${remainChance}`);
+    $.buyerNick = mainInfo.missionCustomer.buyerNick;
+    console.log($.buyerNick);
+    let showBarrage = await takePost(ua, 'showBarrage', {"method": "/yijia/showBarrage"});
+    let showProduct = await takePost(ua, 'showProduct', {"type": "prepayGoods", "method": "/yijia/showProduct"});
+    let showCards = await takePost(ua, 'showCards', {"method": "/yijia/showCards"});
+    let showExchangeGoods = await takePost(ua, 'showExchangeGoods', {
+      "type": "exchange",
+      "method": "/yijia/showExchangeGoods"
+    });
+    let showProduct2 = await takePost(ua, 'showProduct', {"type": "hotSale", "method": "/yijia/showProduct"});
+    let showHitNum = await takePost(ua, 'showHitNum', {"type": "hotSale", "method": "/yijia/showHitNum"});
+    let taskInfo = await takePost(ua, 'mission/complete/state', {"method": "/yijia/mission/complete/state"});
+    let logInfo = await takePost(ua, 'invite/log/list', {
       "missionType": "shareAct",
-      "inviterNick": shareCode,
-      "realNick": mainInfo.missionCustomer.nickName,
-      "headImg": mainInfo.missionCustomer.headPicUrl,
-      "method": "/yijia/complete/mission",
+      "pageNo": 1,
+      "pageSize": 7,
+      "method": "/yijia/invite/log/list"
+    });
+    await $.wait(2000);
+    if (mainInfo.missionCustomer.isOpenCard !== 1 && shareCode && shareCode !== $.buyerNick) {
+      let bodyInfo = {
+        "missionType": "openCard",
+        "shopId": 1000001947,
+        "type": "help",
+        "method": "/yijia/complete/mission",
+      }
+      let taskInfo = await takePost(ua, 'complete/mission', bodyInfo);
+      console.log(JSON.stringify(taskInfo));
+      // console.log(`入会`);
+      // $.UA = ua;
+      // $.venderId = 1000001947;
+      // await join($)
+      bodyInfo = {"jdToken": $.token, "method": "/yijia/activity_load", "inviteNick": shareCode};
+      mainInfo = await takePost(ua, 'activity_load', bodyInfo);
+      mainInfo = mainInfo.data.data;
+      bodyInfo = {
+        "missionType": "shareAct",
+        "inviterNick": shareCode,
+        "realNick": mainInfo.missionCustomer.nickName,
+        "headImg": mainInfo.missionCustomer.headPicUrl,
+        "method": "/yijia/complete/mission",
+      }
+      taskInfo = await takePost(ua, 'complete/mission', bodyInfo);
+      if (taskInfo && taskInfo.data && taskInfo.data.status === 200) {
+        max--;
+      }
+      console.log(JSON.stringify(taskInfo));
     }
-    taskInfo = await takePost(ua, 'complete/mission', bodyInfo);
-    if (taskInfo && taskInfo.data && taskInfo.data.status === 200) {
-      max--;
-    }
-    console.log(JSON.stringify(taskInfo));
+    await $.wait(3000);
+    await doTask(ua, taskInfo.data.data);
+    await $.wait(3000);
+    console.log(`进行打榜`);
+    let hitNewGoods = await takePost(ua, 'hitNewGoods', {"method": "/yijia/hitNewGoods"});
+    console.log(JSON.stringify(hitNewGoods));
+  } catch (e) {
+    $.log(e)
   }
-  await $.wait(3000);
-  await doTask(ua, taskInfo.data.data);
-  await $.wait(3000);
-  console.log(`进行打榜`);
-  let hitNewGoods = await takePost(ua, 'hitNewGoods', {"method": "/yijia/hitNewGoods"});
-  console.log(JSON.stringify(hitNewGoods));
 }
 
 async function doTask(ua, taskList) {
