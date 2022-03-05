@@ -120,7 +120,7 @@ async function main() {
           let successRewards = doInteractiveAssignment.rewardsInfo.successRewards[key]
           if (key === "3") {
             console.log(`抽奖成功：获得${successRewards[0].quantity}京豆`);
-            lotteryBean += `${successRewards[0].quantity * 1 || 0}`;
+            lotteryBean += successRewards[0].quantity * 1 || 0;
           } else {
             console.log('抽奖结果：' + JSON.stringify(successRewards));
           }
