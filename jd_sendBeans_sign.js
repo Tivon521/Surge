@@ -21,6 +21,10 @@ const activityList = [
     turnTableId: 1356,
     shopId:1000088787
   },
+  {
+    turnTableId: 1365,
+    shopId: 1000161301
+  }
 ]
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
