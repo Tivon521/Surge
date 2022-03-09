@@ -57,6 +57,7 @@ $.shareCodes = []
       }
     }
   }
+  console.log(`\n\n=============开始好友助力===============`)
   try {
     for (let j = 0; j < cookiesArr.length; j++) {
       if (!cookiesArr[j]) continue;
@@ -113,7 +114,10 @@ async function main() {
   await initForFarm();
   if ($.farmInfo && $.farmInfo.farmUserPro) {
     const { treeState } = $.farmInfo;
-    if (treeState === 0 || treeState === 2 || treeState === 3) return
+    if (treeState === 0 || treeState === 2 || treeState === 3) {
+      console.log(`好友互助码获取失败：水果可领取/水果未种植`)
+      return
+    }
     if ($.farmInfo.farmUserPro.shareCode) {
       console.log(`【好友互助码】获取成功：${$.farmInfo.farmUserPro.shareCode}`);
       $.shareCodes.push({
@@ -122,6 +126,8 @@ async function main() {
         index: $.index,
         shareCode: $.farmInfo.farmUserPro.shareCode
       })
+    } else {
+      console.log(`【好友互助码】获取失败：${$.toStr($.farmInfo)}`)
     }
   } else {
     console.log(`初始化农场数据异常: ${$.toStr($.farmInfo)}`);

@@ -54,6 +54,7 @@ $.shareCodes = []
       await main();
     }
   }
+  console.log(`\n\n=============开始好友助力===============`)
   try {
     for (let j = 0; j < cookiesArr.length; j++) {
       if (!cookiesArr[j]) continue;
@@ -65,7 +66,7 @@ $.shareCodes = []
         if ($.userInviteInfo['user'] === $.UserName) continue;
         if ($.userInviteInfo['max']) continue;
         console.log(`\n京东账号 ${$.index} ${$.UserName} 开始助力好友 ${$.userInviteInfo['user']}，邀请码为：${$.userInviteInfo['shareCode']}`);
-        let response = await request("slaveHelp", {'shareCode': $.userInviteInfo['shareCode']});
+        let response = await request("slaveHelp", {'shareCode': $.userInviteInfo['shareCode']}, 1000);
         if (response) {
           if (response.code === '0' && response.resultCode === '0') {
             if (response.result.helpStatus === 0) {
@@ -107,7 +108,10 @@ async function main() {
     if (initPetTownRes && initPetTownRes.code === '0' && initPetTownRes.resultCode === '0' && initPetTownRes.message === 'success') {
       $.petInfo = initPetTownRes.result;
       const { userStatus = 0, shareCode = '' } = $.petInfo;
-      if (userStatus === 0 || userStatus === 5 || userStatus === 6) return
+      if (userStatus === 0 || userStatus === 5 || userStatus === 6) {
+        console.log(`好友互助码获取失败：活动未开启/商品可兑换/未选商品`)
+        return
+      }
       if (shareCode) {
         console.log(`【好友互助码】获取成功：${$.petInfo.shareCode}`);
         $.shareCodes.push({
@@ -116,6 +120,8 @@ async function main() {
           index: $.index,
           shareCode
         })
+      } else {
+        console.log(`【好友互助码】获取失败：${$.toStr(initPetTownRes)}`)
       }
     } else {
       console.log(`初始化萌宠失败:  ${$.toStr(initPetTownRes)}\n`);
@@ -169,7 +175,7 @@ function TotalBean() {
   })
 }
 // 请求
-async function request(function_id, body = {}, timeout = 3000) {
+async function request(function_id, body = {}, timeout = 0) {
   //延迟3秒, 不然会报操作频繁
   return new Promise((resolve, reject) => {
     setTimeout(() => {
