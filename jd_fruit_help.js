@@ -1,19 +1,18 @@
 /*
-东东萌宠助力 更新地址： jd_pet_help.js
+东东农场助力
 更新时间：2022-3-9
-互助码shareCode请先手动运行脚本查看打印可看到
-一天只能帮助5个人。多出的助力码无效
-
-#东东萌宠
-15 1 * * * jd_pet_help.js
-
+活动入口：京东APP我的-更多工具-东东农场
+东东农场活动链接：https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html
+一天只能帮助3个人。多出的助力码无效
+#东东农场
+5 1 * * * jd_fruit_help.js
 */
 try {
   var { Env } = require('./Env')
 } catch (e) {}
-const $ = new Env('东东萌宠助力');
+const $ = new Env('东东农场助力');
+let cookiesArr = [], cookie = '', allMessage = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let cookiesArr = [], cookie = '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -41,7 +40,7 @@ $.shareCodes = []
       $.isLogin = true;
       $.nickName = '';
       await TotalBean();
-      console.log(`\n**********开始【京东账号${$.index}】${$.nickName || $.UserName}**********\n`);
+      console.log(`\n*************开始【京东账号${$.index}】${$.nickName || $.UserName}*************\n`);
       if (!$.isLogin) {
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
@@ -52,6 +51,10 @@ $.shareCodes = []
         continue
       }
       await main();
+      if ($.index % 5 === 0) {
+        console.log(`访问接口次数达到5次，休息一分钟.....`);
+        await $.wait(60 * 1000);
+      }
     }
   }
   try {
@@ -65,33 +68,39 @@ $.shareCodes = []
         if ($.userInviteInfo['user'] === $.UserName) continue;
         if ($.userInviteInfo['max']) continue;
         console.log(`\n京东账号 ${$.index} ${$.UserName} 开始助力好友 ${$.userInviteInfo['user']}，邀请码为：${$.userInviteInfo['shareCode']}`);
-        let response = await request("slaveHelp", {'shareCode': $.userInviteInfo['shareCode']});
-        if (response) {
-          if (response.code === '0' && response.resultCode === '0') {
-            if (response.result.helpStatus === 0) {
-              console.log('已给好友: 【' + response.result.masterNickName + '】助力成功');
-            } else if (response.result.helpStatus === 1) {
-              // 您今日已无助力机会
-              console.log(`助力好友${response.result.masterNickName}失败，您今日已无助力机会`);
-              break;
-            } else if (response.result.helpStatus === 2) {
-              //该好友已满5人助力，无需您再次助力
-              console.log(`该好友${response.result.masterNickName}已满5人助力，无需您再次助力`);
-              $.shareCodes[index]['max'] = true;
-              // console.log($.shareCodes)
-            } else {
-              console.log(`助力其他情况：${JSON.stringify(response)}`);
-            }
+        await masterHelp($.userInviteInfo['shareCode']);
+        await $.wait(4000)
+        if ($.helpResult && $.helpResult.code === '0' && $.helpResult.helpResult) {
+          if ($.helpResult.helpResult.code === '0') {
+            //助力成功
+            console.log(`助力好友【${$.helpResult.helpResult.masterUserInfo.nickName}】成功`);
+            console.log(`给好友【${$.helpResult.helpResult.masterUserInfo.nickName}】助力获得${$.helpResult.helpResult.salveHelpAddWater}g水滴`)
+          } else if ($.helpResult.helpResult.code === '8') {
+            console.log(`【助力好友失败】: 助力【${$.helpResult.helpResult.masterUserInfo.nickName}】失败，您今天助力次数已耗尽`);
+          } else if ($.helpResult.helpResult.code === '9') {
+            console.log(`【助力好友失败】: 已给【${$.helpResult.helpResult.masterUserInfo.nickName}】助力过了`);
+          } else if ($.helpResult.helpResult.code === '10') {
+            console.log(`【助力好友失败】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
+            $.shareCodes[index]['max'] = true;
+            // console.log($.shareCodes)
           } else {
-            console.log(`助力好友结果: ${response.message}`);
+            console.log(`助力失败：${JSON.stringify($.helpResult.helpResult)}`);
+          }
+          console.log(`【今日助力次数还剩】${$.helpResult.helpResult.remainTimes}次`);
+          if ($.helpResult.helpResult.remainTimes === 0) {
+            console.log(`您当前助力次数已耗尽，跳出助力`);
+            break
           }
         } else {
-          console.log(`助力异常：${$.toStr(response)}\n`)
+          console.log(`助力失败：${JSON.stringify($.helpResult)}`);
         }
       }
     }
   } catch (e) {
     $.log(e)
+  }
+  if ($.isNode() && allMessage && $.ctrTemp) {
+    await notify.sendNotify(`${$.name}`, `${allMessage}`)
   }
 })()
     .catch((e) => {
@@ -101,29 +110,79 @@ $.shareCodes = []
       $.done();
     })
 async function main() {
-  try {
-    //查询jd宠物信息
-    const initPetTownRes = await request('initPetTown');
-    if (initPetTownRes && initPetTownRes.code === '0' && initPetTownRes.resultCode === '0' && initPetTownRes.message === 'success') {
-      $.petInfo = initPetTownRes.result;
-      const { userStatus = 0, shareCode = '' } = $.petInfo;
-      if (userStatus === 0 || userStatus === 5 || userStatus === 6) return
-      if (shareCode) {
-        console.log(`【好友互助码】获取成功：${$.petInfo.shareCode}`);
-        $.shareCodes.push({
-          user: $.UserName,
-          max: false,
-          index: $.index,
-          shareCode
-        })
-      }
-    } else {
-      console.log(`初始化萌宠失败:  ${$.toStr(initPetTownRes)}\n`);
+  await initForFarm();
+  if ($.farmInfo && $.farmInfo.farmUserPro) {
+    const { treeState } = $.farmInfo;
+    if (treeState === 0 || treeState === 2 || treeState === 3) return
+    if ($.farmInfo.farmUserPro.shareCode) {
+      console.log(`【好友互助码】获取成功：${$.farmInfo.farmUserPro.shareCode}`);
+      $.shareCodes.push({
+        user: $.UserName,
+        max: false,
+        index: $.index,
+        shareCode: $.farmInfo.farmUserPro.shareCode
+      })
     }
-  } catch (e) {
-    $.log(e)
+  } else {
+    console.log(`初始化农场数据异常: ${$.toStr($.farmInfo)}`);
   }
 }
+
+// ========================API调用接口========================
+// 助力好友API
+async function masterHelp() {
+  $.helpResult = await request(`initForFarm`, {
+    imageUrl: "",
+    nickName: "",
+    shareCode: arguments[0],
+    babelChannel: "3",
+    version: 2,
+    channel: 1
+  });
+}
+/**
+ * 初始化农场, 可获取果树及用户信息API
+ */
+async function initForFarm() {
+  return new Promise(resolve => {
+    const option =  {
+      url: `${JD_API_HOST}?functionId=initForFarm`,
+      body: `body=${escape(JSON.stringify({"version":14,"channel":1,"babelChannel":0}))}&appid=wh5&client=apple&clientVersion=10.2.4`,
+      headers: {
+        "accept": "*/*",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "zh-CN,zh;q=0.9",
+        "cache-control": "no-cache",
+        "cookie": cookie,
+        "origin": "https://home.m.jd.com",
+        "pragma": "no-cache",
+        "referer": "https://home.m.jd.com/myJd/newhome.action",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-site",
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      timeout: 10000,
+    };
+    $.post(option, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log('\n东东农场: API查询请求失败 ‼️‼️');
+          console.log(JSON.stringify(err));
+          $.logErr(err);
+        } else {
+          $.farmInfo = $.toObj(data, {})
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {
@@ -153,9 +212,6 @@ function TotalBean() {
             if (data['retcode'] === "0" && data.data && data.data.hasOwnProperty("userInfo")) {
               $.nickName = data.data.userInfo.baseInfo.nickname;
             }
-            if (data['retcode'] === '0' && data.data && data.data['assetInfo']) {
-              $.beanCount = data.data && data.data['assetInfo']['beanNum'];
-            }
           } else {
             $.log('京东服务器返回空数据');
           }
@@ -168,24 +224,23 @@ function TotalBean() {
     })
   })
 }
-// 请求
-async function request(function_id, body = {}, timeout = 3000) {
-  //延迟3秒, 不然会报操作频繁
-  return new Promise((resolve, reject) => {
+function request(function_id, body = {}, timeout = 0){
+  return new Promise(resolve => {
     setTimeout(() => {
       $.post(taskUrl(function_id, body), (err, resp, data) => {
         try {
           if (err) {
-            console.log('\n东东萌宠: API查询请求失败 ‼️‼️');
+            console.log('\n东东农场: API查询请求失败 ‼️‼️')
             console.log(JSON.stringify(err));
-            $.logErr(err);
+            console.log(`function_id:${function_id}`)
+            // $.logErr(err);
           } else {
-            data = $.toObj(data);
+            data = $.toObj(data, {})
           }
         } catch (e) {
           $.logErr(e, resp);
         } finally {
-          resolve(data)
+          resolve(data);
         }
       })
     }, timeout)
@@ -193,18 +248,22 @@ async function request(function_id, body = {}, timeout = 3000) {
 }
 
 function taskUrl(function_id, body = {}) {
-  body["version"] = 2;
-  body["channel"] = 'app';
   return {
+    // url: `${JD_API_HOST}?functionId=${function_id}&appid=wh5&body=${escape(JSON.stringify(body))}&client=apple&clientVersion=10.2.4`,
     url: `${JD_API_HOST}?functionId=${function_id}`,
-    body: `body=${escape(JSON.stringify(body))}&appid=wh5&loginWQBiz=pet-town&clientVersion=9.0.4`,
+    body: `body=${escape(JSON.stringify(body))}&appid=wh5&client=apple&clientVersion=10.2.4`,
     headers: {
-      'Cookie': cookie,
-      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-      'Host': 'api.m.jd.com',
-      'Content-Type': 'application/x-www-form-urlencoded',
-    }
-  };
+      "Host": "api.m.jd.com",
+      "Accept": "*/*",
+      "Origin": "https://carry.m.jd.com",
+      "Accept-Encoding": "gzip, deflate, br",
+      "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+      "Referer": "https://carry.m.jd.com/",
+      "Cookie": cookie
+    },
+    timeout: 10000,
+  }
 }
 
 // prettier-ignore
