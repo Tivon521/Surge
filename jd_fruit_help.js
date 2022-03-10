@@ -89,6 +89,7 @@ $.shareCodes = []
             console.log(`【助力好友失败】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
             $.shareCodes[index]['max'] = true;
             $.shareCodes.splice(index, 1);
+            index--
             // console.log($.shareCodes)
           } else {
             console.log(`助力失败：${JSON.stringify($.helpResult.helpResult)}`);
