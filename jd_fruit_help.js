@@ -64,6 +64,7 @@ $.shareCodes = []
       cookie = cookiesArr[j];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = j + 1;
+      if ($.shareCodes && $.shareCodes.length <= 0) break
       if ($.index % 5 === 0) {
         console.log(`访问助力接口次数达到多次，休息一分钟.....`);
         await $.wait(65 * 1000);
@@ -87,6 +88,7 @@ $.shareCodes = []
           } else if ($.helpResult.helpResult.code === '10') {
             console.log(`【助力好友失败】: 好友【${$.helpResult.helpResult.masterUserInfo.nickName}】已满五人助力`);
             $.shareCodes[index]['max'] = true;
+            $.shareCodes.splice(index, 1);
             // console.log($.shareCodes)
           } else {
             console.log(`助力失败：${JSON.stringify($.helpResult.helpResult)}`);
