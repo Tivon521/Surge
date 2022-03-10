@@ -50,7 +50,7 @@ $.shareCodes = []
         $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
         if ($.isNode()) {
-          // await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
         }
         cookiesArr.splice(i, 1);
         continue
@@ -65,7 +65,6 @@ $.shareCodes = []
       cookie = cookiesArr[j];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = j + 1;
-      if ($.shareCodes && $.shareCodes.length <= 0) break
       if ($.index % 5 === 0) {
         console.log(`访问助力接口次数达到多次，休息一分钟.....`);
         await $.wait(65 * 1000);
@@ -86,15 +85,15 @@ $.shareCodes = []
               break;
             } else if (response.result.helpStatus === 2) {
               //该好友已满5人助力，无需您再次助力
-              console.log(`该好友${response.result.masterNickName}已满5人助力，无需您再次助力`);
+              console.log(`助力好友失败：好友${response.result.masterNickName}已满5人助力，无需您再次助力`);
               $.shareCodes[index]['max'] = true;
-              $.shareCodes.splice(index, 1);
               // console.log($.shareCodes)
             } else {
-              console.log(`助力其他情况：${JSON.stringify(response)}`);
+              console.log(`助力好友失败，详情：${JSON.stringify(response)}`);
             }
           } else {
-            console.log(`助力好友结果: ${response.message}`);
+            console.log(`助力好友失败: ${response.message}`);
+            if (response.message && response.message.includes('风控')) break
           }
         } else {
           console.log(`助力异常：${$.toStr(response)}\n`)
