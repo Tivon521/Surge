@@ -40,6 +40,10 @@ $.shareCodes = []
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
+      if ($.index % 5 === 0) {
+        console.log(`访问接口次数达到多次，休息一分钟.....`);
+        await $.wait(65 * 1000);
+      }
       await TotalBean();
       console.log(`\n**********开始【京东账号${$.index}】${$.nickName || $.UserName}**********\n`);
       if (!$.isLogin) {
@@ -61,6 +65,10 @@ $.shareCodes = []
       cookie = cookiesArr[j];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = j + 1;
+      if ($.index % 5 === 0) {
+        console.log(`访问助力接口次数达到多次，休息一分钟.....`);
+        await $.wait(65 * 1000);
+      }
       for (let index = 0; index < $.shareCodes.length; index ++) {
         $.userInviteInfo = $.shareCodes[index];
         if ($.userInviteInfo['user'] === $.UserName) continue;

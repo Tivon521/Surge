@@ -64,6 +64,10 @@ $.shareCodes = []
       cookie = cookiesArr[j];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = j + 1;
+      if ($.index % 5 === 0) {
+        console.log(`访问助力接口次数达到多次，休息一分钟.....`);
+        await $.wait(65 * 1000);
+      }
       for (let index = 0; index < $.shareCodes.length; index ++) {
         $.userInviteInfo = $.shareCodes[index];
         if ($.userInviteInfo['user'] === $.UserName) continue;
@@ -144,7 +148,7 @@ async function masterHelp() {
     babelChannel: "3",
     version: 2,
     channel: 1
-  });
+  }, 3000);
 }
 /**
  * 初始化农场, 可获取果树及用户信息API
