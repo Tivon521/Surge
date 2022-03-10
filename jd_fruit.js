@@ -98,12 +98,14 @@ if ($.isNode()) {
         await $.wait(4000)
         if ($.lotteryMasterHelpRes.helpResult) {
           if ($.lotteryMasterHelpRes.helpResult.code === '0') {
-            console.log(`天天抽奖-助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}成功\n`)
+            console.log(`天天抽奖-助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}成功`)
           } else if ($.lotteryMasterHelpRes.helpResult.code === '11') {
-            console.log(`天天抽奖-不要重复助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}\n`)
+            console.log(`天天抽奖-助力失败：重复助力好友 ${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}`)
           } else if ($.lotteryMasterHelpRes.helpResult.code === '13') {
-            console.log(`天天抽奖-助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}失败,助力次数耗尽\n`);
+            console.log(`天天抽奖 助力${$.lotteryMasterHelpRes.helpResult.masterUserInfo.nickName}失败失败：助力次数耗尽`);
             break;
+          } else {
+            console.log(`天天抽奖助力失败：${$.toStr($.lotteryMasterHelpRes.helpResult)}\n`)
           }
         } else {
           console.log(`天天抽奖助力异常：${$.toStr($.lotteryMasterHelpRes)}\n`)
