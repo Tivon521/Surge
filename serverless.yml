@@ -58,12 +58,12 @@ inputs:
           cronExpression: "0 8 */3 * * * *"
           enable: true
           argument: jd_daily_egg&jd_jxmc&jd_joy_park_merge&jd_jxbfd_collect&jx_rebate&jd_health_collect
-    - timer: #十元街 #财富岛热气球 #京喜财富岛合月饼
+    - timer: #十元街 #财富岛热气球
         parameters:
-          name: syj_jxbfdballoon_jxbfdpeargame
+          name: syj_jxbfdballoon
           cronExpression: "0 15 */1 * * * *"
           enable: true
-          argument: jd_syj&jd_jxbfd_balloon&jd_jxbfd_pear_game
+          argument: jd_syj&jd_jxbfd_balloon
     - timer: #京豆变动通知 #领京豆额外奖励 #京东到家鲜豆任务 #京东会员卡 #京东保价 #芥么小程序签到领现金 #京东半年红包明细 #京东购物车商品转链 #女装魔盒
         parameters:
           name: beanchange_beanhome_jddjdailyTask_unbind_price_jmsign_halfYearRed_jingfen_nzmh
