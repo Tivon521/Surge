@@ -64,12 +64,12 @@ inputs:
           cronExpression: "0 15 */1 * * * *"
           enable: true
           argument: jd_syj&jd_jxbfd_balloon
-    - timer: #京豆变动通知 #领京豆额外奖励 #京东到家鲜豆任务 #京东会员卡 #京东保价 #芥么小程序签到领现金 #京东半年红包明细 #京东购物车商品转链 #女装魔盒
+    - timer: #京豆变动通知 #领京豆额外奖励 #京东到家鲜豆任务 #京东会员卡 #京东保价 #芥么小程序签到领现金 #京东半年红包明细 #京东购物车商品转链 #女装魔盒 #清空购物车
         parameters:
-          name: beanchange_beanhome_jddjdailyTask_unbind_price_jmsign_halfYearRed_jingfen_nzmh
+          name: beanchange_beanhome_jddjdailyTask_unbind_price_jmsign_halfYearRed_jingfen_nzmh_clearcart
           cronExpression: "0 30 7 * * * *"
           enable: true
-          argument: jd_bean_change&jd_bean_home&jd_jddj_dailyTask&jd_unbind&jd_price&jd_jm_sign&jd_halfYearRed&jd_jingfen&jd_nzmh
+          argument: jd_bean_change&jd_bean_home&jd_jddj_dailyTask&jd_unbind&jd_price&jd_jm_sign&jd_halfYearRed&jd_jingfen&jd_nzmh&jd_clear_cart
     - timer: #金融养猪 #京东赚赚 #京东极速版红包 #领金贴 #送豆得豆 #汪汪乐园 #领京豆 #京喜签到 #东东世界 #京东小家福利社签到 #京东情书 #频道签到 #东东农场助力 #东东萌宠助力
         parameters:
           name: pigPet_jdzz_speedredpocke_jintie_sendBeans_joypark_ljd_jxsign_ddworld_flsSign_love_pdsign_fruithelp_pethelp
