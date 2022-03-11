@@ -155,3 +155,5 @@
 23 0,16,23 * * * node /scripts/jd_productZ4Brand2.js >> /scripts/logs/jd_productZ4Brand2.log 2>&1
 #PLUS互动大转盘
 1 8,15 * * * node /scripts/jd_Plus.js >> /scripts/logs/jd_Plus.log 2>&1
+#清空购物车
+15 9 * * * node /scripts/jd_clear_cart.js >> /scripts/logs/jd_clear_cart.log 2>&1
