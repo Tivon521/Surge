@@ -4,9 +4,9 @@ PLUS互动大转盘
 1 8,15 * * * jd_Plus.js
 */
 const $ = new Env('PLUS互动大转盘');
-const notify = $.isNode() ? require('./sendNotify') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message = '';
 let lotteryBean = 0;
@@ -148,7 +148,7 @@ function request(function_id, body = {}, timeout = 0) {
           "Accept": "*/*",
           "Content-Type": "application/x-www-form-urlencoded",
           "Accept-Language": "zh-CN,zh-Hans;q=0.9",
-          "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+          "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
           "Referer": "https://prodev.m.jd.com/mall/active/2HtgSSsyn1MNsuQFD88bJ7XxJxHs/index.html",
           "Accept-Encoding": "gzip, deflate, br",
           "Cookie": cookie
@@ -181,7 +181,7 @@ function TotalBean() {
         Accept: "*/*",
         Connection: "keep-alive",
         Cookie: cookie,
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         "Accept-Language": "zh-cn",
         "Referer": "https://home.m.jd.com/myJd/newhome.action?sceneval=2&ufc=&",
         "Accept-Encoding": "gzip, deflate, br"
