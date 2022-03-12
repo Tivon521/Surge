@@ -66,7 +66,7 @@ $.helpAuthor = true;
           { 'open-url': 'https://bean.m.jd.com/' }
         );
         if ($.isNode()) {
-          await notify.sendNotify(
+          // await notify.sendNotify(
             `${$.name}cookie已失效 - ${$.UserName}`,
             `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`
           );
