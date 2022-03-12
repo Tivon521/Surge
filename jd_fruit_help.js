@@ -101,6 +101,7 @@ $.shareCodes = []
           }
         } else {
           console.log(`助力失败：${JSON.stringify($.helpResult)}`);
+          if ($.helpResult && $.helpResult.code === '3') break
         }
       }
     }

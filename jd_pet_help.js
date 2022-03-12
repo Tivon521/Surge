@@ -95,7 +95,7 @@ $.shareCodes = []
               console.log(`助力好友失败，详情：${JSON.stringify(response)}`);
             }
           } else {
-            console.log(`助力好友失败: ${response.message}`);
+            if (response && response['resultCode'] === '2001') break
             if (response.message && response.message.includes('风控')) break
           }
         } else {
