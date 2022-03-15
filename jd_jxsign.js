@@ -316,7 +316,7 @@ function doubleSign() {
           if (data.retCode === 0){
             console.log(`双签成功`)
           } else {
-            console.log(`任务完成失败，错误信息${data.errMsg}`)
+            console.log(`京喜双签任务完成失败，错误信息${data.errMsg}`)
           }
         }
       } catch (e) {
