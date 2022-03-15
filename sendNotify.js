@@ -540,24 +540,50 @@ async function qywxamNotify(text, desp) {
   let accIdx, userId, remainDes = [];
   for (let i = 0; i < despTmp.length; i++) {
     if (despTmp[i].match(accIdxRE) && despTmp[i].indexOf('账号') > -1) {
+      try {
+        const fs = require('fs')
+        const res = fs.readFileSync('./utils/qywxSendData.json', { encoding: 'utf-8' })
+        var QywxData = JSON.parse(res)
+      } catch (e) {}
       accIdx = parseInt(despTmp[i].match(accIdxRE)[0]);
-      if (userIdsTmp.length === 1) {
-        //如果只配置了一个微信ID，则把已经拆分的消息合并起来再一次性发送给这个已配置的微信ID
-        accIdx = 0;
-        remainDes.push(despTmp[i]);
-        continue;
-      }
-      userId = userIdsTmp[accIdx];
-      if (typeof userId == "undefined") {
-        //如果账号数量比配置的微信ID数量要多，则超出的账号消息合并到一块，再一次性发送给第一个配置的微信ID
-        remainDes.push(despTmp[i]);
-      } else if (userId === "@N") {
-        console.log("\n账户" + despTmp[i].match(accIdxRE)[0] + " 企业微信应用通知配置ID为@N，跳过通知\n");
-      } else if (!!userId) {
-        //账号与对应微信userId存在
-        await qywxamSplitNotify(text, despTmp[i], userIdsTmp[accIdx]);
+      if (QywxData && Array.isArray(QywxData) && QywxData.length) {
+        if (QywxData.length === 1) {
+          //如果只配置了一个微信ID，则把已经拆分的消息合并起来再一次性发送给这个已配置的微信ID
+          remainDes.push(despTmp[i]);
+        } else {
+          for (const item of QywxData) {
+            const { pin = '京东用户名', userId = '微信应用微信ID', nickName = '京东昵称' } = item;
+            // console.log(nickName && despTmp[i].includes(nickName), pin && despTmp[i].includes(decodeURIComponent(pin)))
+            if ((pin && despTmp[i].includes(decodeURIComponent(pin)) || nickName && despTmp[i].includes(nickName)) && userId === '@N') {
+              console.log("\n账户" + despTmp[i].match(accIdxRE)[0] + " 企业微信应用通知配置ID为@N，跳过通知\n");
+              break
+            } else if ((pin && despTmp[i].includes(decodeURIComponent(pin)) || nickName && despTmp[i].includes(nickName)) && !!userId) {
+              // console.log('\n\n开始推送userId', userId)
+              await qywxamSplitNotify(text, despTmp[i], userId);
+              break
+            }
+          }
+        }
+      } else {
+        if (userIdsTmp.length === 1) {
+          //如果只配置了一个微信ID，则把已经拆分的消息合并起来再一次性发送给这个已配置的微信ID
+          accIdx = 0;
+          remainDes.push(despTmp[i]);
+          continue;
+        }
+        userId = userIdsTmp[accIdx];
+        if (typeof userId == "undefined") {
+          //如果账号数量比配置的微信ID数量要多，则超出的账号消息合并到一块，再一次性发送给第一个配置的微信ID
+          remainDes.push(despTmp[i]);
+        } else if (userId === "@N") {
+          console.log("\n账户" + despTmp[i].match(accIdxRE)[0] + " 企业微信应用通知配置ID为@N，跳过通知\n");
+        } else if (!!userId) {
+          //账号与对应微信userId存在
+          await qywxamSplitNotify(text, despTmp[i], userIdsTmp[accIdx]);
+        }
       }
     } else if (!isBlank(despTmp[i])) {
+      //不包含类似账号 1的推送文案，直接发送给第一个微信ID
       await qywxamSplitNotify(text, despTmp[i], userIdsTmp[0]);
     }
   }

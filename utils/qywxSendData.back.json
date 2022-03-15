@@ -1,0 +1,8 @@
+[
+  {
+    "pin": "京东 COOKIE pin（必填）",
+    "remark": "备注信息（非必填）",
+    "nickname": "京东账号的昵称 （必填）",
+    "userId": "企业微信应用通知的 userId （必填）"
+  }
+]
