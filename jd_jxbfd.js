@@ -314,7 +314,7 @@ function GetActTask() {
                   await Award(task['ddwTaskId'])
                   await $.wait(1000);
                 }
-                if ((task.dwCompleteNum !== task.dwTargetNum) && task.dwPointType === 301) {
+                if ((task.dwCompleteNum !== task.dwTargetNum) && (task.dwPointType === 301 || task.dwPointType === 15 || task.dwPointType === 16)) {
                   //浏览1次爆款活动
                   console.log(`开始做 【${task.strTaskName}】任务`)
                   await DoTask(task['ddwTaskId'], 'newtasksys')

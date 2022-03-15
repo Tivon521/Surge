@@ -6,17 +6,7 @@
 ============Quantumultx===============
 [task_local]
 #京喜签到
-5 0 * * * jx_sign.js, tag=京喜签到, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-
-================Loon==============
-[Script]
-cron "5 0 * * *" script-path=jx_sign.js,tag=京喜签到
-
-===============Surge=================
-京喜签到 = type=cron,cronexp="5 0 * * *",wake-system=1,timeout=3600,script-path=jx_sign.js
-
-============小火箭=========
-京喜签到 = type=cron,script-path=jx_sign.js, cronexpr="5 0 * * *", timeout=3600, enable=true
+5 0,3 * * * jx_sign.js
  */
 const $ = new Env('京喜签到');
 const JD_API_HOST = "https://m.jingxi.com/";
@@ -135,8 +125,17 @@ if ($.isNode()) {
             await $.wait(2000)
           }
         }
-        await doubleSign()
-        await jndraw()
+        //京喜双签(财富岛)
+        console.log(`提示：京喜财富岛那边签到了，这边才能领取京喜双签的奖励`)
+        console.log('\n==============京喜双签(财富岛)==================')
+        await doubleSign('IssueReward', `_t=${Date.now()}`, '_t')
+        console.log('\n==============京喜双签(种豆得豆)==================')
+        //京喜双签(种豆得豆)
+        await doubleSign('IssueReward', `channel=jx_zdddsq&_t=${Date.now()}`, '_t,channel')
+        console.log('\n==============查询京喜和京东双签信息==================')
+        //查询京喜和京东双签信息
+        await doubleSign('SignedInfo', `_t=${Date.now()}`, '_t')
+        // await jndraw()
       } else {
         console.log(`京东账号 ${$.index} ${$.UserName} 已黑`)
       }
@@ -304,17 +303,43 @@ function bxdraw() {
 }
 
 // 双签
-function doubleSign() {
+function doubleSign(fun = 'IssueReward', body = `_t=${Date.now()}`, stk = `_t`) {
   return new Promise((resolve) => {
-    $.get(taskUrl("double_sign/IssueReward"), async (err, resp, data) => {
+    const opt = taskUrl(`jxjdsignin/${fun}`, body, stk);
+    $.get(opt, async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} IssueReward API请求失败，请检查网路重试`)
         } else {
-          data = JSON.parse(data);
-          if (data.retCode === 0){
+          data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
+          if (data.retCode === 0) {
             console.log(`双签成功`)
+            console.log($.toStr(data))
+          } else {
+            console.log(`京喜双签任务完成失败，错误信息${data.errMsg}`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
+function doubleSign2() {
+  return new Promise((resolve) => {
+    const opt = taskUrl("jxjdsignin/IssueReward", `channel=jx_zdddsq&_t=${Date.now()}`, '_t,channel');
+    $.get(opt, async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} IssueReward API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
+          if (data.retCode === 0){
+            console.log(`种豆任务——京喜双签成功`)
           } else {
             console.log(`京喜双签任务完成失败，错误信息${data.errMsg}`)
           }
@@ -356,18 +381,10 @@ function jndraw() {
 }
 function taskUrl(functionId, body = '', stk) {
   let url = ``
-  if (body) {
-    url = `${JD_API_HOST}${functionId}?${body ? `${body}&` : ''}sceneval=2&g_login_type=1&_=${Date.now()}&_ste=1&callback=jsonpCBKC&g_ty=ls`;
-    url += `&h5st=${decrypt(Date.now(), stk, '', url)}`;
-    if (stk) {
-      url += `&_stk=${encodeURIComponent(stk)}`;
-    }
-  } else {
-    if (functionId === 'double_sign/IssueReward') {
-      url = `${JD_API_HOST}${functionId}?sceneval=2&g_login_type=1&_ste=1&g_ty=ajax`;
-    } else {
-      url = `${JD_API_HOST}${functionId}?_=${Date.now()}&sceneval=2&g_login_type=1&callback=jsonpCBKC&g_ty=ls`
-    }
+  url = `${JD_API_HOST}${functionId}?${body ? `${body}&` : ''}sceneval=2&g_login_type=1&_=${Date.now()}&_ste=1&callback=jsonpCBKC&g_ty=ls`;
+  url += `&h5st=${decrypt(Date.now(), stk, '', url)}`;
+  if (stk) {
+    url += `&_stk=${encodeURIComponent(stk)}`;
   }
   return {
     url: url,
@@ -432,17 +449,7 @@ function TotalBean() {
     })
   })
 }
-function jsonParse(str) {
-  if (typeof str == "string") {
-    try {
-      return JSON.parse(str);
-    } catch (e) {
-      console.log(e);
-      $.msg($.name, '', '请勿随意在BoxJs输入框修改内容\n建议通过脚本去获取cookie')
-      return [];
-    }
-  }
-}
+
 /*
 修改时间戳转换函数，京喜工厂原版修改
  */
@@ -489,7 +496,7 @@ async function requestAlgo() {
       'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7'
     },
     'body': JSON.stringify({
-      "version": "1.0",
+      "version": "3.0",
       "fp": $.fingerprint,
       "appId": $.appId.toString(),
       "timestamp": Date.now(),
@@ -552,7 +559,8 @@ function decrypt(time, stk, type, url) {
     const hash2 = $.CryptoJS.HmacSHA256(st, hash1.toString()).toString($.CryptoJS.enc.Hex);
     // console.log(`\nst:${st}`)
     // console.log(`h5st:${["".concat(timestamp.toString()), "".concat(fingerprint.toString()), "".concat($.appId.toString()), "".concat(token), "".concat(hash2)].join(";")}\n`)
-    return encodeURIComponent(["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.token), "".concat(hash2)].join(";"))
+    // return encodeURIComponent(["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.token), "".concat(hash2)].join(";"))
+    return (["".concat(timestamp.toString()), "".concat($.fingerprint.toString()), "".concat($.appId.toString()), "".concat($.token), "".concat(hash2), "".concat("3.0"), "".concat(time)].join(";"))
   } else {
     return '20210318144213808;8277529360925161;10001;tk01w952a1b73a8nU0luMGtBanZTHCgj0KFVwDa4n5pJ95T/5bxO/m54p4MtgVEwKNev1u/BUjrpWAUMZPW0Kz2RWP8v;86054c036fe3bf0991bd9a9da1a8d44dd130c6508602215e50bb1e385326779d'
   }
