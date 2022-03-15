@@ -82,7 +82,7 @@
 #京喜财富岛
 5 1,3-8/1,12,13,18,19 * * * node /scripts/jd_jxbfd.js >> /scripts/logs/jd_jxbfd.log 2>&1
 #京喜财富岛-收集贝壳，每20分钟一次，可根据自己账号数量进行修改cron
-0-59/20 * * * * node /scripts/jd_jxbfd_collect.js >> /scripts/logs/jd_jxbfd_collect.log 2>&1
+20 * * * * node /scripts/jd_jxbfd_collect.js >> /scripts/logs/jd_jxbfd_collect.log 2>&1
 #财富岛-热气球接待游客和雇佣导游
 10 * * * * node /scripts/jd_jxbfd_balloon.js >> /scripts/logs/jd_jxbfd_balloon.log 2>&1
 #京东直播（又回来了）
