@@ -78,6 +78,16 @@ if ($.isNode()) {
         continue
       }
       UA = UAInfo[$.UserName]
+      //京喜双签(财富岛)
+      console.log(`提示：京喜财富岛那边签到了，这边才能领取京喜双签的奖励`)
+      console.log('\n==============京喜双签(财富岛)==================')
+      await doubleSign('IssueReward', `_t=${Date.now()}`, '_t')
+      console.log('\n==============京喜双签(种豆得豆)==================')
+      //京喜双签(种豆得豆)
+      await doubleSign('IssueReward', `channel=jx_zdddsq&_t=${Date.now()}`, '_t,channel')
+      console.log('\n==============查询京喜和京东双签信息==================')
+      //查询京喜和京东双签信息
+      await doubleSign('SignedInfo', `_t=${Date.now()}`, '_t')
       await signhb(2)
       await $.wait(2000)
       if ($.canHelp) {
@@ -125,16 +135,6 @@ if ($.isNode()) {
             await $.wait(2000)
           }
         }
-        //京喜双签(财富岛)
-        console.log(`提示：京喜财富岛那边签到了，这边才能领取京喜双签的奖励`)
-        console.log('\n==============京喜双签(财富岛)==================')
-        await doubleSign('IssueReward', `_t=${Date.now()}`, '_t')
-        console.log('\n==============京喜双签(种豆得豆)==================')
-        //京喜双签(种豆得豆)
-        await doubleSign('IssueReward', `channel=jx_zdddsq&_t=${Date.now()}`, '_t,channel')
-        console.log('\n==============查询京喜和京东双签信息==================')
-        //查询京喜和京东双签信息
-        await doubleSign('SignedInfo', `_t=${Date.now()}`, '_t')
         // await jndraw()
       } else {
         console.log(`京东账号 ${$.index} ${$.UserName} 已黑`)
