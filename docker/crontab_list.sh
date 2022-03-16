@@ -12,8 +12,6 @@
 20 1,12,21 * * * node /scripts/jd_jm_sign.js >> /scripts/logs/jd_jm_sign.log 2>&1
 #超级直播间红包雨(活动时间不定期，出现异常提示请忽略。红包雨期间会正常)
 1,31 0-23/1 * * * node /scripts/jd_live_redrain.js >> /scripts/logs/jd_live_redrain.log 2>&1
-#金榜创造营 活动时间：2021-05-21至2021-12-31
-0 1,22 * * * node /scripts/jd_gold_creator.js >> /scripts/logs/jd_gold_creator.log 2>&1
 #京东小家福利社签到（2021年9月10日-2021年12月31日）
 5 0,1 * * * node /scripts/jd_flsSign.js >> /scripts/logs/jd_flsSign.log 2>&1
 #一加活动（3.25结束）
