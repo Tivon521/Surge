@@ -18,6 +18,8 @@
 20 0 * * * node /scripts/jd_yijia_task.js >> /scripts/logs/jd_yijia_task.log 2>&1
 #京喜领88元红包
 34 2,10,15,20 * * * node /scripts/jd_jxlhb.js >> /scripts/logs/jd_jxlhb.log 2>&1
+#小魔方（3.21日结束）
+1 0,19,22 16-21/1 3 * node /scripts/jd_desire.js >> /scripts/logs/jd_desire.log 2>&1
 ##############长期活动##############
 #签到
 7 0,17 * * * cd /scripts && node jd_bean_sign.js >> /scripts/logs/jd_bean_sign.log 2>&1
