@@ -270,7 +270,7 @@ async function doTask() {
         await shopTaskList();
         const { data } = $.shopTaskListRes;
         let goodShopListARR = [], moreShopListARR = [], shopList = [];
-        const { goodShopList, moreShopList } = data;
+        const { goodShopList = [], moreShopList = [] } = data;
         for (let i of goodShopList) {
           if (i.taskState === '2') {
             goodShopListARR.push(i);
