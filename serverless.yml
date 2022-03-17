@@ -46,12 +46,12 @@ inputs:
           cronExpression: "0 0 0-16/8,20 * * * *"
           enable: true
           argument: jd_cash&jd_jxbfd&jd_live&jd_esManager&jd_jddj_fruit&jd_jddj_plantBeans&jd_fcwb&jd_jxsign_xd&jd_productBrand&jd_productZ4Brand&jd_productZ4Brand2&jd_jxlhb
-    - timer: #取关京东店铺商品 #京东抽奖机 #京东秒秒币 #东东健康社区 #美丽研究院种植园 #京豆兑换喜豆 #一加活动
+    - timer: #取关京东店铺商品 #京东抽奖机 #京东秒秒币 #东东健康社区 #美丽研究院种植园 #京豆兑换喜豆 #一加活动 #金榜创造营
         parameters:
-          name: unsubscribe_lotteryMachine_ms_health_beautyplantation_jd2xd_yijiatask
+          name: unsubscribe_lotteryMachine_ms_health_beautyplantation_jd2xd_yijiatask_goldcreator
           cronExpression: "0 10 0 * * * *"
           enable: true
-          argument: jd_unsubscribe&jd_lotteryMachine&jd_ms&jd_health&jd_beauty_plantation&jd_jd2xd&jd_yijia_task
+          argument: jd_unsubscribe&jd_lotteryMachine&jd_ms&jd_health&jd_beauty_plantation&jd_jd2xd&jd_yijia_task&jd_gold_creator
     - timer: #天天提鹅 #京喜牧场 #汪汪乐园合成 #财富岛捡贝壳 #京喜购物返红包 #东东健康社区收集能量
         parameters:
           name: dailyegg_jxmc_joyparkmerge_jxbfdcollect_rebate_healthcollect
