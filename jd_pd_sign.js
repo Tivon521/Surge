@@ -17,6 +17,8 @@ if ($.isNode()) {
         return;
     }
     let activityList = [
+        {'name':'京东小家','end':'1651334400000','url':'https://prodev.m.jd.com/mall/active/hPJiMgUQmc34bamrApLUBRUy82W/index.html'},//2022-03-17 ---2022-5-1
+        {'name':'医药馆','end':'1672502400000','url':'https://prodev.m.jd.com/mall/active/2FzVtkSfUtvU8YoiTeALkJ68PxAs/index.html'},//2022-03-10 ---2022-12-31
         {'name':'陪伴频道','end':'1654012800000','url':'https://pro.m.jd.com/mall/active/kPM3Xedz1PBiGQjY4ZYGmeVvrts/index.html'},//2021-12-12---2022-5-31
         {'name':'箱包签到','end':'1672502400000','url':'https://pro.m.jd.com/mall/active/ZrH7gGAcEkY2gH8wXqyAPoQgk6t/index.html'},//2021-12-31---2022-12-31
         {'name':'鞋靴签到','end':'1672502400000','url':'https://pro.m.jd.com/mall/active/4RXyb1W4Y986LJW8ToqMK14BdTD/index.html'},//2021-12-31---2022-12-31
