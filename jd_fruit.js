@@ -561,7 +561,7 @@ async function doTenWaterAgain() {
     // await initForFarm();
     totalEnergy  = $.farmInfo.farmUserPro.totalEnergy;
   }
-  return
+  // return
   // 所有的浇水(10次浇水)任务，获取水滴任务完成后，如果剩余水滴大于等于60g,则继续浇水(保留部分水滴是用于完成第二天的浇水10次的任务)
   let overageEnergy = totalEnergy - retainWater;
   if (totalEnergy >= ($.farmInfo.farmUserPro.treeTotalEnergy - $.farmInfo.farmUserPro.treeEnergy)) {
