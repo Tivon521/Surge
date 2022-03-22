@@ -162,6 +162,8 @@ async function doTask() {
         await $.wait(2000);
       }
     } else if ($.oneTask.assignmentType === 7) {
+      $.runInfo = {'itemId': $.oneTask.ext.brandMemberList[0]['itemId']}
+      await takeRequest('superBrandDoTask');
       console.log(`任务：${$.oneTask.assignmentDesc}，跳过！`);
     } else if ($.oneTask.assignmentType !== 30) {
       // assignmentType 30为抽奖
