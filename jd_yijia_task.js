@@ -2,6 +2,9 @@
 20 0 * * * jd_yijia_task.js
 活动地址：https://mpdz-isv.isvjcloud.com/yijia/pages/home/home
  */
+try {
+  var { Env } = require('./Env')
+} catch (e) {}
 const $ = new Env('一加');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
