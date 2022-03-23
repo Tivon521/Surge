@@ -149,6 +149,8 @@
 10 2,9,21 * * * node /scripts/jd_jxsign_xd.js >> /scripts/logs/jd_jxsign_xd.log 2>&1
 #特务Z，做任务抽奖，不定期出现活动
 50 14,19,22 * * * node /scripts/jd_productBrand.js >> /scripts/logs/jd_productBrand.log 2>&1
+#特务Z，只抽奖，不做任务
+50,55 23 * * * node /scripts/jd_productBrandLottery.js >> /scripts/logs/jd_productBrandLottery.log 2>&1
 #首页特务（选队）
 23 11,14,20 * * * node /scripts/jd_productZ4Brand.js >> /scripts/logs/jd_productZ4Brand.log 2>&1
 #首页特务（打榜）
