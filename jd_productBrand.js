@@ -104,18 +104,19 @@ async function main() {
     $.callNumber = $.activityInfo.activityUserInfo.userStarNum;
     console.log(`可抽奖次数:${$.callNumber}`);
   }
-  if (new Date().getHours() < 22) {
-    console.log(`\n当前时间：${$.time('yyyy-MM-dd HH:mm:ss')}，不抽奖，晚上22点开始进行抽奖！`)
-    return
-  }
-  for (let i = 0; i < $.callNumber; i++) {
-    console.log(`进行抽奖`);
-    await takeRequest('superBrandTaskLottery');//抽奖
-    await $.wait(2000);
-  }
-  if ($.beanNum) {
-    message += `账号 ${$.index} ${$.UserName}\n恭喜你 获得 ${$.beanNum}京豆🐶\n\n`;
-  }
+  console.log(`\n当前时间：${$.time('yyyy-MM-dd HH:mm:ss')}，不抽奖，抽奖请使用jd_productBrandLottery.js！`)
+  // if (new Date().getHours() < 22) {
+  //   console.log(`\n当前时间：${$.time('yyyy-MM-dd HH:mm:ss')}，不抽奖，晚上22点开始进行抽奖！`)
+  //   return
+  // }
+  // for (let i = 0; i < $.callNumber; i++) {
+  //   console.log(`进行抽奖`);
+  //   await takeRequest('superBrandTaskLottery');//抽奖
+  //   await $.wait(2000);
+  // }
+  // if ($.beanNum) {
+  //   message += `账号 ${$.index} ${$.UserName}\n恭喜你 获得 ${$.beanNum}京豆🐶\n\n`;
+  // }
 }
 
 async function doTask() {
