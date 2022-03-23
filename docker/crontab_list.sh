@@ -153,5 +153,7 @@
 23 11,14,20 * * * node /scripts/jd_productZ4Brand.js >> /scripts/logs/jd_productZ4Brand.log 2>&1
 #首页特务（打榜）
 23 0,16,23 * * * node /scripts/jd_productZ4Brand2.js >> /scripts/logs/jd_productZ4Brand2.log 2>&1
+#首页特务（集卡）
+10 9,13,16,19,20 * * * node /scripts/jd_superBrand.js >> /scripts/logs/jd_superBrand.log 2>&1
 #清空购物车
 15 9 * * * node /scripts/jd_clear_cart.js >> /scripts/logs/jd_clear_cart.log 2>&1
