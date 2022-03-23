@@ -47,6 +47,9 @@ let res = [];
   }
   if (!res) {
     try {
+      $.http.get({url: 'https://purge.jsdelivr.net/gh/gitupdate/updateTeam@master/shareCodes/fcwb.json'}).then((resp) => {
+      }).catch((e) => $.log('刷新CDN异常', e));
+      await $.wait(500)
       res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/gitupdate/updateTeam@master/shareCodes/fcwb.json');
     } catch (e) {
     }
