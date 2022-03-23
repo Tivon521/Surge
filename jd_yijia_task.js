@@ -25,7 +25,7 @@ if ($.isNode()) {
 }
 let shareCode = '', max = 0;
 let shareList = [
-  {'code': 's82Jb7v954JMEmEqnhXnL2jXDEUft7eSADEuzgQ/bQ4stkzU13FYqvTELMmaQp0j', 'max': 50},
+  {'code': 'FaXD4wiqHEZOfxmuuZSfyTcTImSA+wOhmUmEnU0XKWX/Arfc9auKU6+yU5isJiYW', 'max': 50},
 ]
 !(async () => {
   if (!cookiesArr[0]) {
@@ -145,6 +145,13 @@ async function main() {
     console.log(`进行打榜`);
     let hitNewGoods = await takePost(ua, 'hitNewGoods', {"method": "/yijia/hitNewGoods"});
     console.log(JSON.stringify(hitNewGoods));
+    if (remainChance < 500) {
+      for (let i = 0; i < new Array(5).fill('').length; i++) {
+        const res = await takePost(ua, 'draw/post', {"method": "/yijia/draw/post"});
+        console.log(res);
+        await $.wait(2000)
+      }
+    }
   } catch (e) {
     $.log(e)
   }
