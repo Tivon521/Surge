@@ -157,3 +157,5 @@
 10 9,13,16,19,20 * * * node /scripts/jd_superBrand.js >> /scripts/logs/jd_superBrand.log 2>&1
 #清空购物车
 15 9 * * * node /scripts/jd_clear_cart.js >> /scripts/logs/jd_clear_cart.log 2>&1
+#签到合集
+15 1 * * * node /scripts/jd_pd_sign.js >> /scripts/logs/jd_pd_sign.log 2>&1

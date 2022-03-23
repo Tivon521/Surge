@@ -22,7 +22,9 @@ cron "0 7,17 * * *" script-path=jd_speed_sign.js,tag=京东极速版
 ============小火箭=========
 京东极速版 = type=cron,script-path=jd_speed_sign.js, cronexpr="0 7,17 * * *", timeout=33600, enable=true
 */
-
+try {
+  var { Env } = require('./Env')
+} catch (e) {}
 const $ = new Env('京东极速版');
 
 const notify = $.isNode() ? require('./sendNotify') : '';
