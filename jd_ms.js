@@ -75,15 +75,19 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
   })
 
 async function jdMs() {
-  $.score = 0
-  await getActInfo()
-  await getUserInfo()
-  $.cur = $.score
-  if ($.encryptProjectId) {
-    await getTaskList()
+  try {
+    $.score = 0
+    await getActInfo()
+    await getUserInfo()
+    $.cur = $.score
+    if ($.encryptProjectId) {
+      await getTaskList()
+    }
+    await getUserInfo(false)
+    await showMsg()
+  } catch (e) {
+    $.log(e)
   }
-  await getUserInfo(false)
-  await showMsg()
 }
 
 function getActInfo() {
