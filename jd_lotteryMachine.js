@@ -3,7 +3,6 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
 let cookiesArr = [];
 const activityList = [
-    {'appId': '1EFdRwqyF', 'endTime': 1648137600000,'name':'京东服饰春尚新'},//京东APP--》玩一玩--》送好礼(https://h5.m.jd.com/babelDiy/Zeus/2PrZbkmYTATDLZoWjkZj6CxLFzYo/index.html)
     {'appId': '1EFZWxKqP', 'endTime': 1647964800000,'name':'redmi K50'},
     {'appId': '1FFVQyqw', 'endTime': 1666344063000,'name':'1111点心动'},//京东APP--》玩一玩---》1111点心动
     {'appId': '1EFRQwA', 'endTime': 1704038400000,'name':'疯狂砸金蛋'},//京东APP--》每日特价---》疯狂砸金蛋
