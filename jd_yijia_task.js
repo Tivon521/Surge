@@ -93,7 +93,7 @@ async function main() {
     console.log(`获取活动成功,当前积分：${remainChance}`);
     $.buyerNick = mainInfo.missionCustomer.buyerNick;
     console.log($.buyerNick);
-    let showBarrage = await takePost(ua, 'showBarrage', {"method": "/yijia/showBarrage"});
+    /*let showBarrage = await takePost(ua, 'showBarrage', {"method": "/yijia/showBarrage"});
     let showProduct = await takePost(ua, 'showProduct', {"type": "prepayGoods", "method": "/yijia/showProduct"});
     let showCards = await takePost(ua, 'showCards', {"method": "/yijia/showCards"});
     let showExchangeGoods = await takePost(ua, 'showExchangeGoods', {
@@ -144,14 +144,22 @@ async function main() {
     await $.wait(3000);
     console.log(`进行打榜`);
     let hitNewGoods = await takePost(ua, 'hitNewGoods', {"method": "/yijia/hitNewGoods"});
-    console.log(JSON.stringify(hitNewGoods));
-    if (remainChance < 500) {
+    console.log(JSON.stringify(hitNewGoods));*/
+    if (remainChance > 20) {
       for (let i = 0; i < new Array(5).fill('').length; i++) {
         const res = await takePost(ua, 'draw/post', {"method": "/yijia/draw/post"});
-        console.log(res);
+        console.log($.toStr(res));
+        if ($.toStr(res) && ($.toStr(res).includes('今日已达抽奖次数上限') || $.toStr(res).includes('您没有足够的加油值'))) {
+          break
+        }
         await $.wait(2000)
       }
     }
+    const carveUpBeans1 = await takePost(ua, 'carveUpBeans', {"method": "/yijia/carveUpBeans", "type": "1"})
+    console.log($.toStr(carveUpBeans1))
+    await $.wait(2000)
+    const carveUpBeans2 = await takePost(ua, 'carveUpBeans', {"method": "/yijia/carveUpBeans", "type": "2"})
+    console.log($.toStr(carveUpBeans2))
   } catch (e) {
     $.log(e)
   }

@@ -144,6 +144,9 @@ async function jdFruit() {
       console.log(`\n【已成功兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`);
       message += `【已兑换水果】${$.farmInfo.farmUserPro.winTimes}次\n`;
       if ($.farmInfo.treeState === 2 || $.farmInfo.treeState === 3) {
+        //领取兑换红包
+        //let coupon = await request('gotCouponForFarm', {"version": 11, "channel": 3, "babelChannel": 0});
+        //$.log(coupon)
         option['open-url'] = urlSchema;
         $.msg($.name, ``, `【京东账号${$.index}】${$.nickName || $.UserName}\n【提醒⏰】${$.farmInfo.farmUserPro.name}已可领取\n请去京东APP或微信小程序查看\n点击弹窗即达`, option);
         if ($.isNode()) {
