@@ -14,8 +14,6 @@
 1,31 0-23/1 * * * node /scripts/jd_live_redrain.js >> /scripts/logs/jd_live_redrain.log 2>&1
 #京东小家福利社签到（2021年9月10日-2021年12月31日）
 5 0,1 * * * node /scripts/jd_flsSign.js >> /scripts/logs/jd_flsSign.log 2>&1
-#一加活动（3.25结束）
-20 0 * * * node /scripts/jd_yijia_task.js >> /scripts/logs/jd_yijia_task.log 2>&1
 #京喜领88元红包
 34 2,10,15,20 * * * node /scripts/jd_jxlhb.js >> /scripts/logs/jd_jxlhb.log 2>&1
 #金榜创造营 活动时间：2022-02-1至2022-12-31

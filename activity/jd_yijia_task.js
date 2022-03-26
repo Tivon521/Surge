@@ -3,11 +3,11 @@
 活动地址：https://mpdz-isv.isvjcloud.com/yijia/pages/home/home
  */
 try {
-  var { Env } = require('./Env')
+  var { Env } = require('../Env')
 } catch (e) {}
 const $ = new Env('一加');
-const notify = $.isNode() ? require('./sendNotify') : '';
-const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+const notify = $.isNode() ? require('../sendNotify') : '';
+const jdCookieNode = $.isNode() ? require('../jdCookie.js') : '';
 $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
 $.helpCodes = [];
 $.useInfo = {};
@@ -257,7 +257,7 @@ async function getToken() {
       body: `body=%7B%22url%22%3A%22https%3A//mpdz-isv.isvjcloud.com/yijia/pages/home/home%3Fsid%3D%26un_area%3D%22%2C%22id%22%3A%22%22%7D&uuid=cc00682ba4cb46d483a3596d0ef2cbae&ep=%7B%22hdid%22%3A%22%22%2C%22ts%22%3A%221645879159000%22%2C%22ridx%22%3A-1%2C%22cipher%22%3A%7B%22uuid%22%3A%22Y2CmCNY4CwTrDQDsDNZuDNqzYJC1EJZuCQVwCwDsYWU%3D%22%2C%22osVersion%22%3A%22CJCkDG%3D%3D%22%7D%2C%22ciphertype%22%3A5%2C%22version%22%3A%221.0.3%22%2C%22appname%22%3A%22com.360buy.jdmobile%22%7D&ef=1&client=android&clientVersion=10.4.0&st=1645879159000&sv=111&sign=a2c815646f98852b77b0a171db6aeb8b`,
       headers: {
         "Host": "api.m.jd.com",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('../USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         "Cookie": $.cookie,
       }
     }
