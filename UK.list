@@ -17,7 +17,9 @@ DOMAIN-SUFFIX,monzo.com
 DOMAIN-SUFFIX,www.ifastgb.com
 DOMAIN-SUFFIX,uk.check-ip.online
 DOMAIN-SUFFIX,payzilch.com
+DOMAIN-SUFFIX,assets.payzilch.com
 DOMAIN-KEYWORD,payzilch
+DOMAIN-KEYWORD,assets.payzilch
 DOMAIN-KEYWORD,trading212
 DOMAIN-KEYWORD,eu-
 DOMAIN-KEYWORD,-eu
